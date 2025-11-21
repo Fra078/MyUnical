@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">MyUnical</string>
+
+    <string name="ok">OK</string>
+    <string name="put_credentials">Put your credentials</string>
+    <string name="select_career">Select career</string>
+    <string name="codice_fiscale">Tax ID Code</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="error">Error</string>
+    <string name="error_no_connection">Connection error!</string>
+    <string name="error_wrong_credentials">Wrong credentials!</string>
+    <string name="error_change_password">Update your password from website!</string>
+
+    <string name="student">Student</string>
+    <string name="matricola">ID</string>
+    <string name="news">News</string>
+    <string name="show_more">Show more</string>
+    <string name="libretto">Transcript</string>
+    <string name="esami">Exams</string>
+    <string name="orario">Schedule</string>
+    <string name="tasse">Billing</string>
+    <string name="university">University</string>
+    <string name="website">Website</string>
+    <string name="map">Map</string>
+    <string name="social">Social</string>
+    <string name="esse3">Esse3</string>
+    <string name="unical_life">Unical Life</string>
+    <string name="instagram">Instagram</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter_x">X</string>
+    <string name="youtube">Youtube</string>
+
+    <string name="proiezione_laurea">Expected graduation grade</string>
+    <string name="cfu">Credits</string>
+    <string name="media">GPA</string>
+    <string name="corsi">Courses</string>
+
+
+    <string name="booked_exams">Booked</string>
+    <string name="available_exams">Available</string>
+
+
+    <string name="gennaio">January</string>
+    <string name="febbraio">February</string>
+    <string name="marzo">March</string>
+    <string name="aprile">April</string>
+    <string name="maggio">May</string>
+    <string name="giugno">June</string>
+    <string name="luglio">July</string>
+    <string name="agosto">August</string>
+    <string name="settembre">September</string>
+    <string name="ottobre">October</string>
+    <string name="novembre">November</string>
+    <string name="dicembre">December</string>
+
+</resources>
