@@ -13,12 +13,12 @@ val generatedDir = "${buildDir}/generated/openapi"
 
 android {
     namespace = "it.appm.myunical"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "it.appm.myunical"
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
