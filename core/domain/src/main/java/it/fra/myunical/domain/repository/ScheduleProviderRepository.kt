@@ -4,6 +4,8 @@ import it.fra.myunical.domain.model.schedule.ScheduleProvider
 import kotlinx.coroutines.flow.Flow
 
 interface ScheduleProviderRepository {
-    suspend fun addProvider(item: ScheduleProvider)
     fun getProviders(): Flow<List<ScheduleProvider>>
+    suspend fun getProvider(id: String): ScheduleProvider?
+    suspend fun upsertProvider(item: ScheduleProvider)
+    suspend fun removeProvider(id: String)
 }

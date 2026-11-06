@@ -2,9 +2,11 @@ package it.fra.myunical.datastore.di
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
+import it.fra.myunical.datastore.repository.ScheduleProviderRepositoryImpl
 import it.fra.myunical.datastore.repository.UserPreferencesRepositoryImpl
 import it.fra.myunical.datastore.sources.AuthLocalDataSourceImpl
 import it.fra.myunical.datastore.sources.UserInfoDataSourceImpl
+import it.fra.myunical.domain.repository.ScheduleProviderRepository
 import it.fra.myunical.domain.repository.UserPreferenceRepository
 import it.fra.myunical.domain.sources.AuthLocalDataSource
 import it.fra.myunical.domain.sources.UserInfoDataSource
@@ -36,6 +38,16 @@ val datastoreModule = module {
             dataStore = PreferenceDataStoreFactory.create(
                 scope = CoroutineScope(Dispatchers.IO),
                 produceFile = { androidContext().preferencesDataStoreFile("user_info.preference") }
+            )
+        )
+    }
+
+    single<ScheduleProviderRepository> {
+        ScheduleProviderRepositoryImpl(
+            json = Json { ignoreUnknownKeys = true },
+            dataStore = PreferenceDataStoreFactory.create(
+                scope = CoroutineScope(Dispatchers.IO),
+                produceFile = { androidContext().preferencesDataStoreFile("schedule_providers.preference") }
             )
         )
     }

@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import it.appm.myunical.ui.screen.main.MainScreen
+import it.appm.myunical.ui.navigation.AppNavigation
 import it.appm.myunical.ui.theme.AppTheme
 import it.fra.myunical.domain.model.auth.AuthState
 import it.fra.myunical.domain.usecase.GetAuthStateUseCase
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
     private fun MyUnicalApp(authState: AuthState){
         AppTheme {
             when(authState){
-                AuthState.Authenticated -> MainScreen({})
+                AuthState.Authenticated -> AppNavigation()
                 AuthState.Unauthenticated -> LoginScreen()
                 AuthState.Unknown -> Unit
             }

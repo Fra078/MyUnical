@@ -66,10 +66,7 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
-    implementation(libs.room.core)
     implementation(libs.androidx.compose.runtime)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
     implementation(libs.androidx.datastore.preferences.android)
     implementation(libs.androidx.material.icons.extended.android)
 
@@ -81,6 +78,11 @@ dependencies {
     implementation(project(":features:today"))
     implementation(project(":features:career"))
     implementation(project(":features:schedule"))
+    implementation(project(":features:taxes"))
+    implementation(project(":core:ui"))
+    implementation(project(":features:news"))
+    implementation(project(":features:documents"))
+    implementation(project(":features:directory"))
 
     //TEMP
     implementation(libs.koin.compose.viewmodel)

@@ -19,6 +19,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    buildFeatures {
+        // BuildConfig.DEBUG turns HTTP logging on only in debug builds
+        buildConfig = true
+    }
 
 }
 

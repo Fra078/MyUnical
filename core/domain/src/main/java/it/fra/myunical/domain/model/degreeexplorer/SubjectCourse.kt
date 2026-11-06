@@ -3,5 +3,6 @@ data class SubjectCourse(
     val id: String,
     val code: String,
     val name: String,
-    val credits: Int
+    val credits: Int,
+    val moduleCodes: List<String> = emptyList()
 )

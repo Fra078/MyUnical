@@ -1,58 +1,57 @@
 package it.fra.myunical.today.composables
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material.icons.rounded.PriorityHigh
+import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.Verified
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import it.fra.myunical.today.R
-import it.fra.myunical.today.models.TuitionStatus
+import androidx.graphics.shapes.RoundedPolygon
+import it.fra.myunical.today.models.TuitionState
+import it.fra.myunical.ui.components.ShapeBadge
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun TuitionStatusCard(
-    status: TuitionStatus,
+    state: TuitionState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val containerColor = if (status.isUpToDate) {
-        MaterialTheme.colorScheme.surfaceContainerLow
-    } else {
-        MaterialTheme.colorScheme.errorContainer
-    }
-
-    val contentColor = if (status.isUpToDate) {
-        MaterialTheme.colorScheme.onSurface
-    } else {
-        MaterialTheme.colorScheme.onErrorContainer
+    val colors = MaterialTheme.colorScheme
+    val (container, content) = when {
+        state is TuitionState.Due && state.isOverdue -> colors.errorContainer to colors.onErrorContainer
+        state is TuitionState.Due -> colors.secondaryContainer to colors.onSecondaryContainer
+        else -> colors.surfaceContainerLow to colors.onSurface
     }
 
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+        onClick = onClick,
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = containerColor,
-            contentColor = contentColor
-        )
+        colors = CardDefaults.cardColors(containerColor = container, contentColor = content)
     ) {
         Row(
             modifier = Modifier
@@ -61,55 +60,56 @@ fun TuitionStatusCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .size(46.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if (status.isUpToDate) {
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-                        } else {
-                            MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
-                        }
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = if (status.isUpToDate) painterResource(R.drawable.check_circle) else painterResource(R.drawable.warning),
-                    contentDescription = null,
-                    tint = if (status.isUpToDate) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
-                    modifier = Modifier.size(24.dp)
-                )
+            when (state) {
+                TuitionState.Loading -> LoadingIndicator(Modifier.size(46.dp))
+                TuitionState.Unavailable -> Badge(Icons.Rounded.CloudOff, MaterialShapes.Cookie6Sided, colors.surfaceContainerHighest, colors.onSurfaceVariant)
+                TuitionState.UpToDate -> Badge(Icons.Rounded.Verified, MaterialShapes.Cookie9Sided, colors.tertiaryContainer, colors.onTertiaryContainer)
+                is TuitionState.Due -> if (state.isOverdue) {
+                    Badge(Icons.Rounded.PriorityHigh, MaterialShapes.SoftBurst, colors.error, colors.onError)
+                } else {
+                    Badge(Icons.Rounded.Schedule, MaterialShapes.Sunny, colors.secondary, colors.onSecondary)
+                }
             }
 
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
-                Text(
-                    text = if (status.isUpToDate) "Tasse in regola" else "Rata in scadenza",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                val detail = if (status.isUpToDate) {
-                    "Nessun pagamento in sospeso per l'anno corrente."
-                } else {
-                    "${status.installmentDescription.orEmpty()}: €${String.format("%.2f", status.pendingAmount ?: 0.0)} entro il ${status.dueDate.orEmpty()}"
+                val (title, detail) = when (state) {
+                    TuitionState.Loading -> "Tasse" to "Verifica dei pagamenti in corso…"
+                    TuitionState.Unavailable -> "Tasse" to "Stato dei pagamenti non disponibile al momento."
+                    TuitionState.UpToDate -> "Tasse in regola" to "Nessun pagamento in sospeso."
+                    is TuitionState.Due -> {
+                        val title = if (state.isOverdue) "Pagamento scaduto" else "Tasse da pagare"
+                        val count = if (state.pendingCount == 1) "1 addebito" else "${state.pendingCount} addebiti"
+                        title to listOfNotNull("${state.amount} · $count", state.dueLabel).joinToString(", ")
+                    }
                 }
-
-                Text(
-                    text = detail,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = contentColor.copy(alpha = 0.8f)
-                )
+                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(detail, style = MaterialTheme.typography.bodySmall, color = content.copy(alpha = 0.8f))
             }
 
-            Icon(
-                painter = painterResource(R.drawable.open_in_new),
-                contentDescription = "Details",
-                modifier = Modifier.size(18.dp)
-            )
+            Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, contentDescription = "Apri le tasse")
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+private fun Badge(icon: ImageVector, polygon: RoundedPolygon, container: Color, content: Color) {
+    ShapeBadge(polygon = polygon, size = 46.dp, containerColor = container, contentColor = content) {
+        Icon(icon, contentDescription = null, modifier = Modifier.size(24.dp))
+    }
+}
+
+@Preview
+@Composable
+private fun TuitionStatusCardPreview() {
+    MaterialTheme {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            TuitionStatusCard(TuitionState.UpToDate, onClick = {})
+            TuitionStatusCard(TuitionState.Due("148,50 €", "scade il 30/11", 1, isOverdue = false), onClick = {})
+            TuitionStatusCard(TuitionState.Due("148,50 €", "scaduta il 30/09", 2, isOverdue = true), onClick = {})
         }
     }
 }

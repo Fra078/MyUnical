@@ -1,20 +1,45 @@
 package it.appm.myunical.ui.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.School
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed interface AppRoute : NavKey {
+    @Serializable
     data object Main : AppRoute
-    data object Settings : AppRoute
+
+    @Serializable
+    data object ScheduleProviders : AppRoute
+
+    /** [providerId] is `null` when a new schedule is being created. */
+    @Serializable
+    data class ScheduleProviderEditor(val providerId: String? = null) : AppRoute
+
+    @Serializable
+    data object Taxes : AppRoute
+
+    @Serializable
+    data object News : AppRoute
+
+    @Serializable
+    data class NewsDetail(val newsId: Long) : AppRoute
+
+    @Serializable
+    data object Documents : AppRoute
+
+    @Serializable
+    data object Directory : AppRoute
+
+    @Serializable
+    data class ContactDetail(val contactId: String) : AppRoute
 }
 
 enum class MainTab(
@@ -23,7 +48,6 @@ enum class MainTab(
     val unselectedIcon: ImageVector
 ) {
     HOME("Home", Icons.Filled.Home, Icons.Outlined.Home),
-    SEARCH("Search", Icons.Filled.Search, Icons.Outlined.Search),
-    FAVORITES("Favorites", Icons.Filled.Favorite, Icons.Outlined.FavoriteBorder),
-    PROFILE("Profile", Icons.Filled.Person, Icons.Outlined.Person)
+    CAREER("Carriera", Icons.Filled.School, Icons.Outlined.School),
+    SCHEDULE("Orario", Icons.Filled.CalendarMonth, Icons.Outlined.CalendarMonth)
 }

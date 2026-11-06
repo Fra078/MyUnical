@@ -1,30 +1,47 @@
 package it.appm.myunical.di
 
-import it.fra.myunical.career.presentation.CareerViewModel
+import it.fra.myunical.domain.usecase.DownloadDocumentUseCase
 import it.fra.myunical.domain.usecase.GetAuthStateUseCase
+import it.fra.myunical.domain.usecase.GetCareerDataUseCase
 import it.fra.myunical.domain.usecase.GetCurrentCareerUseCase
-import it.fra.myunical.domain.usecase.GetCurrentStudyPlanUseCase
 import it.fra.myunical.domain.usecase.GetCurrentUserInfoUseCase
+import it.fra.myunical.domain.usecase.GetDegreeProgramsUseCase
+import it.fra.myunical.domain.usecase.GetMonthlyScheduleUseCase
+import it.fra.myunical.domain.usecase.GetNextLessonUseCase
+import it.fra.myunical.domain.usecase.GetProfilePhotoUrlUseCase
+import it.fra.myunical.domain.usecase.GetStudentDocumentsUseCase
+import it.fra.myunical.domain.usecase.GetStudyPathsUseCase
+import it.fra.myunical.domain.usecase.GetTaxSummaryUseCase
 import it.fra.myunical.domain.usecase.LoginUseCase
+import it.fra.myunical.domain.usecase.LogoutUseCase
 import it.fra.myunical.domain.usecase.SaveCredentialsUseCase
-import it.fra.myunical.schedule.presentation.settings.ScheduleProviderConfigurationViewModel
-import it.fra.myunical.today.presentation.TodayScreenViewModel
+import it.fra.myunical.domain.usecase.SetCurrentCareerUseCase
+import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
-
+/**
+ * Use cases. Stateless ones are factories; the ones keeping an in-memory cache shared by
+ * several screens (career, taxes, timetable) are singletons.
+ */
 val domainModule = module {
-    singleOf(::LoginUseCase)
-    singleOf(::GetAuthStateUseCase)
-    singleOf(::SaveCredentialsUseCase)
-    singleOf(::GetCurrentCareerUseCase)
-    singleOf(::GetCurrentUserInfoUseCase)
-    singleOf(::GetCurrentStudyPlanUseCase)
-}
+    factoryOf(::LoginUseCase)
+    factoryOf(::LogoutUseCase)
+    factoryOf(::GetAuthStateUseCase)
+    factoryOf(::SaveCredentialsUseCase)
+    factoryOf(::GetCurrentCareerUseCase)
+    factoryOf(::GetCurrentUserInfoUseCase)
+    factoryOf(::SetCurrentCareerUseCase)
+    factoryOf(::GetProfilePhotoUrlUseCase)
+    factoryOf(::GetStudentDocumentsUseCase)
+    factoryOf(::DownloadDocumentUseCase)
+    factoryOf(::GetDegreeProgramsUseCase)
+    factoryOf(::GetStudyPathsUseCase)
+    factory { GetNextLessonUseCase(providerRepository = get(), getMonthlySchedule = get()) }
 
-val appModule = module {
-    viewModelOf(::TodayScreenViewModel)
-    viewModelOf(::CareerViewModel)
-    viewModelOf(::ScheduleProviderConfigurationViewModel)
+    single { GetCareerDataUseCase(getCurrentCareer = get(), cinecaDataSource = get()) }
+    single {
+        GetTaxSummaryUseCase(getCurrentUserInfo = get(), getCurrentCareer = get(), taxRemoteDataSource = get())
+    }
+    singleOf(::GetMonthlyScheduleUseCase)
 }

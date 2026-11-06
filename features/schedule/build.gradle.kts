@@ -38,6 +38,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended.android)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.kotlinx.coroutines.core)
 
     implementation(libs.koin.android)
     implementation(libs.koin.compose.viewmodel)

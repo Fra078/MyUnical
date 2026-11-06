@@ -5,14 +5,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NewsPaginationResponse(
-    val count: Int,
+    val count: Int = 0,
     val next: String? = null,
     val previous: String? = null,
-    val page: Int,
+    val page: Int = 1,
     @SerialName("per_page")
-    val perPage: Int,
+    val perPage: Int = 0,
     @SerialName("total_pages")
-    val totalPages: Int,
+    val totalPages: Int = 0,
     val results: List<NewsEntry>
 )
 
@@ -31,7 +31,7 @@ data class NewsPublication(
     val id: Long,
     val title: String,
     val subheading: String? = null,
-    val content: String,
+    val content: String = "",
     val tags: List<String> = emptyList(),
     @SerialName("preview_image")
     val previewImage: MediaImage? = null,

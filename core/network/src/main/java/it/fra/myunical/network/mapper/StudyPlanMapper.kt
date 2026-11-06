@@ -13,7 +13,7 @@ fun StudyPlanItemDto.toDomainModel(): Course {
     return Course(
         id = this.activityId,
         code = this.courseCode,
-        name = this.courseName,
+        name = this.courseName.toTitleCase(),
         year = this.courseYear,
         credits = this.credits.toInt(),
         attendanceAcademicYear = this.attendanceAcademicYear,
