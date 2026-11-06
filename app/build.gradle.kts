@@ -1,24 +1,21 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.openapi)
 }
 
 
-val generatedDir = "${buildDir}/generated/openapi"
-
 android {
     namespace = "it.appm.myunical"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "it.appm.myunical"
-        minSdk = 26
-        targetSdk = 36
+        minSdk = 33
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -38,19 +35,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
+    /*compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+    }*/
     buildFeatures {
         compose = true
-    }
-
-    sourceSets {
-        getByName("main") {
-            kotlin {
-                srcDir("$generatedDir/auth/src/main/kotlin")
-            }
-        }
     }
 }
 
@@ -65,6 +54,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.animation)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
 
@@ -80,26 +73,23 @@ dependencies {
     implementation(libs.androidx.datastore.preferences.android)
     implementation(libs.androidx.material.icons.extended.android)
 
+    implementation(libs.koin.android)
+    implementation(project(":core:domain"))
+    implementation(project(":core:network"))
+    implementation(project(":core:datastore"))
+    implementation(project(":features:login"))
+    implementation(project(":features:today"))
+    implementation(project(":features:career"))
+    implementation(project(":features:schedule"))
 
+    //TEMP
+    implementation(libs.koin.compose.viewmodel)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-tasks.register<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("openApiGenerateAuth") {
-    generatorName.set("kotlin")
-    inputSpec.set("$projectDir/specs/frk-authApiV1.yaml")
-    outputDir.set("$generatedDir/auth")
-    apiPackage.set("it.unical.esse3.auth.api")
-    modelPackage.set("it.unical.esse3.auth.model")
-    additionalProperties.set(mapOf(
-        "serializationLibrary" to "kotlinx_serialization",
-        "useCoroutines" to "true"
-    ))
 }
 

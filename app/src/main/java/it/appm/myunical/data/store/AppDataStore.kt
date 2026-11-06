@@ -31,29 +31,4 @@ class AppDataStore(private val scope: CoroutineScope, private val dataSource: Da
     val userPhoto = dataSource.data.map { it[CardSource.photoUrl] }
         .stateIn(scope, SharingStarted.Eagerly, initialValue = null)
 
-    suspend fun updateCarriera(carriera: Carriera){
-        dataSource.updateData {
-            it.toMutablePreferences().apply {
-                set(CardSource.nome, carriera.nome)
-                set(CardSource.cognome, carriera.cognome)
-                set(CardSource.matricola, carriera.matricola)
-                set(CardSource.cdsCod, carriera.cdsCod)
-                set(CardSource.facolta, carriera.facolta)
-                set(CardSource.matId, carriera.matId)
-                set(CardSource.annoCds, carriera.annoCds)
-                set(CardSource.cdsId, carriera.cdsId)
-                set(CardSource.annoAccademico, carriera.annoAccademico)
-                set(CardSource.persId, carriera.persId)
-            }
-        }
-
-    }
-
-    suspend fun updatePhoto(url: String){
-        dataSource.updateData {
-            it.toMutablePreferences().apply {
-                set(CardSource.photoUrl, url)
-            }
-        }
-    }
 }

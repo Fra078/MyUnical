@@ -8,14 +8,8 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 
-//Codice relativo al salvataggio delle informazioni contenute nel tesserino
-
-val Context.cardSource: DataStore<Preferences> by preferencesDataStore(name = "cardSource")
 
 object CardSource {
-    val codice_fiscale = stringPreferencesKey("codice_fiscale")
-    val token = stringPreferencesKey("token")
-
     val matId = intPreferencesKey("matId")
     val nome = stringPreferencesKey("nome")
     val cognome = stringPreferencesKey("cognome")

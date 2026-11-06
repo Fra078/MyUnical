@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import it.appm.myunical.model.Evento
-import it.appm.myunical.model.News
 import kotlinx.coroutines.flow.Flow
 
 @Dao
