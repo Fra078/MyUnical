@@ -80,7 +80,7 @@ private fun Course.gradeScore(): Int = if (!isPassed) -10 else when (val result 
     else -> -1
 }
 
-private fun Course.toExamRecord(openSessions: Int): ExamRecord {
+internal fun Course.toExamRecord(openSessions: Int): ExamRecord {
     val result = outcome?.result.takeIf { isPassed }
     return ExamRecord(
         id = id,
@@ -130,9 +130,9 @@ fun ExamSession.toUiModel(today: LocalDate): SessionUiModel {
     )
 }
 
-private fun String.capitalized(): String =
+internal fun String.capitalized(): String =
     lowercase(ItalianLocale).replaceFirstChar { it.titlecase(ItalianLocale) }
 
-private fun String.toTitleCase(): String =
+internal fun String.toTitleCase(): String =
     if (any { it.isLowerCase() }) this
     else lowercase(ItalianLocale).split(' ').joinToString(" ") { w -> w.replaceFirstChar { it.titlecase(ItalianLocale) } }

@@ -3,6 +3,8 @@ package it.fra.myunical.domain.sources
 import it.fra.myunical.domain.model.degreeexplorer.DegreeProgram
 import it.fra.myunical.domain.model.degreeexplorer.StudyPath
 import it.fra.myunical.domain.model.schedule.ScheduleEvent
+import it.fra.myunical.domain.model.syllabus.CourseSyllabus
+import it.fra.myunical.domain.model.syllabus.OfferedActivity
 
 interface UnicalStorageDataSource {
     suspend fun getAllDegreeCourses(): List<DegreeProgram>
@@ -16,4 +18,13 @@ interface UnicalStorageDataSource {
         year: Int,
         month: Int
     ): List<ScheduleEvent>
+
+    /** The degree course [cdsCode] as offered to the students enrolled in [academicYear]. */
+    suspend fun findDegreeProgram(cdsCode: String, academicYear: Int): DegreeProgram?
+
+    /** Teaching activities offered in [academicYear] whose name matches [query]. */
+    suspend fun searchActivities(query: String, academicYear: Int): List<OfferedActivity>
+
+    /** Public page ("scheda insegnamento") of a teaching activity. */
+    suspend fun getSyllabus(activityId: Int): CourseSyllabus
 }

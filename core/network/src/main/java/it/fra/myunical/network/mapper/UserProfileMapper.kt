@@ -19,5 +19,6 @@ fun CareerTrack.toDomainModel() = CareerTrackModel(
     stuId = studentId.toInt(),
     matricola = studentNumber,
     active = studentStatusCode != "X",
-    closedReason = if (studentStatusCode != "X") null else studentStatusReasonDescription
+    closedReason = if (studentStatusCode != "X") null else studentStatusReasonDescription,
+    cdsCode = details.degreeCourseCode
 )

@@ -9,7 +9,8 @@ fun CareerTrackModel.toDataModel() = CareerTrackDataModel(
     stuId = stuId,
     matricola = matricola,
     active = active,
-    closedReason = closedReason
+    closedReason = closedReason,
+    cdsCode = cdsCode
 )
 
 fun CareerTrackDataModel.toDomainModel() = CareerTrackModel(
@@ -18,5 +19,6 @@ fun CareerTrackDataModel.toDomainModel() = CareerTrackModel(
     stuId = stuId,
     matricola = matricola,
     active = active,
-    closedReason = closedReason
+    closedReason = closedReason,
+    cdsCode = cdsCode
 )

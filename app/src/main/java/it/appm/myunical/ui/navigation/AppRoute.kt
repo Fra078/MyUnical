@@ -40,6 +40,10 @@ sealed interface AppRoute : NavKey {
 
     @Serializable
     data class ContactDetail(val contactId: String) : AppRoute
+
+    /** [courseRowId] is the libretto row (adsceId) of the current career. */
+    @Serializable
+    data class CourseDetail(val courseRowId: Long) : AppRoute
 }
 
 enum class MainTab(

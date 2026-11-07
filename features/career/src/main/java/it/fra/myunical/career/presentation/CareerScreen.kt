@@ -116,6 +116,7 @@ import org.koin.androidx.compose.koinViewModel
  */
 @Composable
 fun CareerScreen(
+    onOpenCourse: (Long) -> Unit,
     reselectSignal: Int = 0,
     viewModel: CareerViewModel = koinViewModel()
 ) {
@@ -125,6 +126,7 @@ fun CareerScreen(
         state = state,
         onIntent = viewModel::onIntent,
         onOpenPortal = { context.openInCustomTab(it) },
+        onOpenCourse = onOpenCourse,
         reselectSignal = reselectSignal
     )
 }
@@ -135,6 +137,7 @@ fun CareerScreen(
     state: CareerUiState,
     onIntent: (CareerIntent) -> Unit,
     onOpenPortal: (String) -> Unit,
+    onOpenCourse: (Long) -> Unit,
     modifier: Modifier = Modifier,
     reselectSignal: Int = 0
 ) {
@@ -245,7 +248,7 @@ fun CareerScreen(
                         )
                     }
                 }
-                else -> CareerContent(state, listState, onIntent, onOpenPortal)
+                else -> CareerContent(state, listState, onIntent, onOpenPortal, onOpenCourse)
             }
         }
     }
@@ -257,7 +260,8 @@ private fun CareerContent(
     state: CareerUiState,
     listState: LazyListState,
     onIntent: (CareerIntent) -> Unit,
-    onOpenPortal: (String) -> Unit
+    onOpenPortal: (String) -> Unit,
+    onOpenCourse: (Long) -> Unit
 ) {
     LazyColumn(
         state = listState,
@@ -279,7 +283,7 @@ private fun CareerContent(
         }
 
         when (state.section) {
-            CareerSection.LIBRETTO -> libretto(state, onIntent)
+            CareerSection.LIBRETTO -> libretto(state, onIntent, onOpenCourse)
             CareerSection.SESSIONS -> sessions(state, onOpenPortal)
         }
     }
@@ -288,7 +292,8 @@ private fun CareerContent(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 private fun LazyListScope.libretto(
     state: CareerUiState,
-    onIntent: (CareerIntent) -> Unit
+    onIntent: (CareerIntent) -> Unit,
+    onOpenCourse: (Long) -> Unit
 ) {
     item(key = "search", contentType = "search") {
         OutlinedTextField(
@@ -360,6 +365,7 @@ private fun LazyListScope.libretto(
                 exam = exam,
                 index = index,
                 count = group.exams.size,
+                onClick = { onOpenCourse(exam.id) },
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 1.dp)
                     .animateItem()
@@ -530,8 +536,9 @@ private fun GroupHeader(group: ExamGroup) {
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun ExamRow(exam: ExamRecord, index: Int, count: Int, modifier: Modifier = Modifier) {
+private fun ExamRow(exam: ExamRecord, index: Int, count: Int, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Surface(
+        onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = rememberGroupedItemShape(index, count),
         color = MaterialTheme.colorScheme.surfaceContainer
@@ -580,7 +587,7 @@ private fun ExamRow(exam: ExamRecord, index: Int, count: Int, modifier: Modifier
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun GradeBadge(exam: ExamRecord) {
+internal fun GradeBadge(exam: ExamRecord) {
     val colors = MaterialTheme.colorScheme
     val numeric = exam.grade?.firstOrNull()?.isDigit() == true
     when {
@@ -604,7 +611,7 @@ private fun GradeBadge(exam: ExamRecord) {
 }
 
 @Composable
-private fun SessionCard(session: SessionUiModel, onBook: () -> Unit, modifier: Modifier = Modifier) {
+internal fun SessionCard(session: SessionUiModel, onBook: () -> Unit, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
     val (pillContainer, pillContent) = when (session.state) {
         BookingState.BOOKED -> colors.tertiary to colors.onTertiary
@@ -828,7 +835,8 @@ private fun CareerScreenPreview() {
                 )
             ),
             onIntent = {},
-            onOpenPortal = {}
+            onOpenPortal = {},
+            onOpenCourse = {}
         )
     }
 }

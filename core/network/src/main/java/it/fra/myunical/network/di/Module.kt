@@ -14,6 +14,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import it.fra.myunical.domain.repository.CourseCatalogRepository
 import it.fra.myunical.domain.repository.DirectoryRepository
 import it.fra.myunical.domain.repository.NewsRepository
 import it.fra.myunical.domain.sources.AuthLocalDataSource
@@ -25,6 +26,7 @@ import it.fra.myunical.domain.sources.NewsRemoteDataSource
 import it.fra.myunical.domain.sources.TaxRemoteDataSource
 import it.fra.myunical.domain.sources.UnicalStorageDataSource
 import it.fra.myunical.network.BuildConfig
+import it.fra.myunical.network.repository.CourseCatalogRepositoryImpl
 import it.fra.myunical.network.repository.DirectoryRepositoryImpl
 import it.fra.myunical.network.repository.NewsRepositoryImpl
 import it.fra.myunical.network.sources.AuthRemoteDataSourceImpl
@@ -128,4 +130,5 @@ val networkModule = module {
     // Repositories: single instances, they hold the in-memory caches
     single<NewsRepository> { NewsRepositoryImpl(get()) }
     single<DirectoryRepository> { DirectoryRepositoryImpl(get()) }
+    single<CourseCatalogRepository> { CourseCatalogRepositoryImpl(get()) }
 }

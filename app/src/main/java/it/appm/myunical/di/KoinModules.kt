@@ -3,6 +3,7 @@ package it.appm.myunical.di
 import it.fra.myunical.domain.usecase.DownloadDocumentUseCase
 import it.fra.myunical.domain.usecase.GetAuthStateUseCase
 import it.fra.myunical.domain.usecase.GetCareerDataUseCase
+import it.fra.myunical.domain.usecase.GetCourseDetailUseCase
 import it.fra.myunical.domain.usecase.GetCurrentCareerUseCase
 import it.fra.myunical.domain.usecase.GetCurrentUserInfoUseCase
 import it.fra.myunical.domain.usecase.GetDegreeProgramsUseCase
@@ -37,6 +38,7 @@ val domainModule = module {
     factoryOf(::DownloadDocumentUseCase)
     factoryOf(::GetDegreeProgramsUseCase)
     factoryOf(::GetStudyPathsUseCase)
+    factoryOf(::GetCourseDetailUseCase)
     factory { GetNextLessonUseCase(providerRepository = get(), getMonthlySchedule = get()) }
 
     single { GetCareerDataUseCase(getCurrentCareer = get(), cinecaDataSource = get()) }

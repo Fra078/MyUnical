@@ -14,6 +14,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
 import it.appm.myunical.ui.screen.main.MainScreen
+import it.fra.myunical.career.presentation.detail.CourseDetailScreen
 import it.fra.myunical.directory.presentation.detail.ContactDetailScreen
 import it.fra.myunical.directory.presentation.search.DirectoryScreen
 import it.fra.myunical.documents.presentation.DocumentsScreen
@@ -64,7 +65,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                                 onOpenNews = { backStack.add(AppRoute.News) },
                                 onOpenNewsDetail = { backStack.add(AppRoute.NewsDetail(it)) },
                                 onOpenDocuments = { backStack.add(AppRoute.Documents) },
-                                onOpenDirectory = { backStack.add(AppRoute.Directory) }
+                                onOpenDirectory = { backStack.add(AppRoute.Directory) },
+                                onOpenCourse = { backStack.add(AppRoute.CourseDetail(it)) }
                             )
                         }
                     }
@@ -96,6 +98,13 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     }
                     entry<AppRoute.Directory> {
                         DirectoryScreen(
+                            onBack = ::pop,
+                            onOpenContact = { backStack.add(AppRoute.ContactDetail(it)) }
+                        )
+                    }
+                    entry<AppRoute.CourseDetail> { route ->
+                        CourseDetailScreen(
+                            courseRowId = route.courseRowId,
                             onBack = ::pop,
                             onOpenContact = { backStack.add(AppRoute.ContactDetail(it)) }
                         )

@@ -6,7 +6,9 @@ data class CareerTrackModel(
     val stuId: Int,
     val matricola: String,
     val active: Boolean,
-    val closedReason: String?
+    val closedReason: String?,
+    /** Esse3 degree course code ("0819"), shared with the course catalogue; null in careers saved by older versions. */
+    val cdsCode: String? = null
 )
 
 /** Short status shown next to the career name: "Attiva", "Titolo conseguito", "Chiusa · <motivo>". */

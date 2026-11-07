@@ -9,5 +9,6 @@ data class CareerTrackDataModel(
     val stuId: Int,
     val matricola: String,
     val active: Boolean,
-    val closedReason: String?
+    val closedReason: String?,
+    val cdsCode: String? = null
 )
