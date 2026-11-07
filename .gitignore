@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+/menus/pages
+/tools/canteen/.venv
+__pycache__

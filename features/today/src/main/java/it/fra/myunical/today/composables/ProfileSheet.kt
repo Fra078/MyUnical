@@ -45,21 +45,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import it.fra.myunical.today.models.CANTEEN_LINK_ID
 import it.fra.myunical.today.models.CampusLinks
 import it.fra.myunical.today.models.ProfileUiState
 import it.fra.myunical.today.presentation.StudentAvatar
 import it.fra.myunical.today.presentation.TodayScreenViewModel
-import it.fra.myunical.ui.components.openInCustomTab
-import org.koin.androidx.compose.koinViewModel
 import it.fra.myunical.ui.Esse3Links
 import it.fra.myunical.ui.components.GroupHeader
 import it.fra.myunical.ui.components.GroupedListItem
+import it.fra.myunical.ui.components.openInCustomTab
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 /** Where a profile menu entry leads. */
 sealed interface ProfileDestination {
@@ -67,6 +68,7 @@ sealed interface ProfileDestination {
     data object Taxes : ProfileDestination
     data object Documents : ProfileDestination
     data object Directory : ProfileDestination
+    data object Canteen : ProfileDestination
 }
 
 private const val WEB_OPEN_DELAY_MS = 120L
@@ -94,7 +96,7 @@ private val ServiceEntries = listOf(
 )
 
 private val CampusEntries = CampusLinks.map {
-    ProfileEntry(it.title, it.description, it.icon, ProfileDestination.Web(it.destinationUrl))
+    ProfileEntry(it.title, it.description, it.icon, if (it.id == CANTEEN_LINK_ID) ProfileDestination.Canteen else ProfileDestination.Web(it.destinationUrl))
 }
 
 /** Profile menu: the stateful entry point, hosted above the navigation bar by the main screen. */
@@ -105,6 +107,7 @@ fun ProfileMenu(
     onOpenTaxes: () -> Unit,
     onOpenDocuments: () -> Unit,
     onOpenDirectory: () -> Unit,
+    onOpenCanteen: () -> Unit,
     viewModel: TodayScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
@@ -120,6 +123,7 @@ fun ProfileMenu(
                 ProfileDestination.Taxes -> onOpenTaxes()
                 ProfileDestination.Documents -> onOpenDocuments()
                 ProfileDestination.Directory -> onOpenDirectory()
+                ProfileDestination.Canteen -> onOpenCanteen()
             }
         },
         onLogout = viewModel::logout

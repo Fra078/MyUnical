@@ -6,6 +6,7 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import it.appm.myunical.di.coilModule
 import it.appm.myunical.di.domainModule
+import it.fra.myunical.canteen.di.canteenModule
 import it.fra.myunical.career.di.careerModule
 import it.fra.myunical.datastore.di.datastoreModule
 import it.fra.myunical.directory.di.directoryModule
@@ -33,7 +34,7 @@ class MyUnicalApplication : Application(), SingletonImageLoader.Factory {
                 networkModule, datastoreModule, domainModule, coilModule,
                 // Features
                 loginModule, todayModule, careerModule, scheduleModule, taxesModule,
-                newsModule, documentsModule, directoryModule
+                newsModule, documentsModule, directoryModule, canteenModule
             )
         }
     }

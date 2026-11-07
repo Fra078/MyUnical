@@ -44,6 +44,7 @@ fun MainScreen(
     onOpenDocuments: () -> Unit,
     onOpenDirectory: () -> Unit,
     onOpenCourse: (Long) -> Unit,
+    onOpenCanteen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Preserves tab history across configuration changes
@@ -122,7 +123,8 @@ fun MainScreen(
                         onOpenCareer = { selectTab(MainTab.CAREER) },
                         onOpenNews = onOpenNews,
                         onOpenNewsDetail = onOpenNewsDetail,
-                        onOpenProfile = { showProfile = true }
+                        onOpenProfile = { showProfile = true },
+                        onOpenCanteen = onOpenCanteen
                     )
                     MainTab.CAREER -> CareerScreen(onOpenCourse = onOpenCourse, reselectSignal = careerReselections)
                     MainTab.SCHEDULE -> ScheduleScreen(
@@ -139,7 +141,8 @@ fun MainScreen(
             onDismiss = { showProfile = false },
             onOpenTaxes = onOpenTaxes,
             onOpenDocuments = onOpenDocuments,
-            onOpenDirectory = onOpenDirectory
+            onOpenDirectory = onOpenDirectory,
+            onOpenCanteen = onOpenCanteen
         )
     }
 }

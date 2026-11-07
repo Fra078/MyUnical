@@ -39,6 +39,9 @@ sealed interface AppRoute : NavKey {
     data object Directory : AppRoute
 
     @Serializable
+    data object Canteen : AppRoute
+
+    @Serializable
     data class ContactDetail(val contactId: String) : AppRoute
 
     /** [courseRowId] is the libretto row (adsceId) of the current career. */

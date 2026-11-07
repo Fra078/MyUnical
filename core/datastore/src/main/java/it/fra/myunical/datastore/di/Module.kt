@@ -2,10 +2,12 @@ package it.fra.myunical.datastore.di
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
+import it.fra.myunical.datastore.repository.CanteenMenuRepositoryImpl
 import it.fra.myunical.datastore.repository.ScheduleProviderRepositoryImpl
 import it.fra.myunical.datastore.repository.UserPreferencesRepositoryImpl
 import it.fra.myunical.datastore.sources.AuthLocalDataSourceImpl
 import it.fra.myunical.datastore.sources.UserInfoDataSourceImpl
+import it.fra.myunical.domain.repository.CanteenMenuRepository
 import it.fra.myunical.domain.repository.ScheduleProviderRepository
 import it.fra.myunical.domain.repository.UserPreferenceRepository
 import it.fra.myunical.domain.sources.AuthLocalDataSource
@@ -50,5 +52,10 @@ val datastoreModule = module {
                 produceFile = { androidContext().preferencesDataStoreFile("schedule_providers.preference") }
             )
         )
+    }
+
+    single<CanteenMenuRepository> {
+        val context = androidContext()
+        CanteenMenuRepositoryImpl(Json { ignoreUnknownKeys = true }) { context.assets.open(CanteenMenuRepositoryImpl.ASSET) }
     }
 }

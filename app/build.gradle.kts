@@ -83,6 +83,7 @@ dependencies {
     implementation(project(":features:news"))
     implementation(project(":features:documents"))
     implementation(project(":features:directory"))
+    implementation(project(":features:canteen"))
 
     //TEMP
     implementation(libs.koin.compose.viewmodel)

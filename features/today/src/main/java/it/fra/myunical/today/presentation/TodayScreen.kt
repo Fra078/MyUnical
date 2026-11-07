@@ -48,11 +48,14 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import it.fra.myunical.today.R
+import it.fra.myunical.today.composables.CanteenCard
 import it.fra.myunical.today.composables.CareerSnapshotCard
 import it.fra.myunical.today.composables.NewsCarousel
 import it.fra.myunical.today.composables.QuickLinksSection
 import it.fra.myunical.today.composables.TuitionStatusCard
 import it.fra.myunical.today.composables.UpcomingCommitmentHeroCard
+import it.fra.myunical.today.models.CANTEEN_LINK_ID
+import it.fra.myunical.today.models.CanteenCardState
 import it.fra.myunical.today.models.CareerSnapshotState
 import it.fra.myunical.today.models.CommitmentType
 import it.fra.myunical.today.models.DefaultQuickLinks
@@ -76,6 +79,7 @@ fun TodayScreen(
     onOpenNews: () -> Unit,
     onOpenNewsDetail: (Long) -> Unit,
     onOpenProfile: () -> Unit,
+    onOpenCanteen: () -> Unit,
     viewModel: TodayScreenViewModel = koinViewModel()
 ){
     val context = LocalContext.current
@@ -83,21 +87,24 @@ fun TodayScreen(
     val upcomingCommitment = viewModel.upcomingCommitment.collectAsStateWithLifecycle().value
     val tuitionState = viewModel.tuitionState.collectAsStateWithLifecycle().value
     val careerSnapshot = viewModel.careerSnapshot.collectAsStateWithLifecycle().value
+    val canteen = viewModel.canteen.collectAsStateWithLifecycle().value
     val news = viewModel.newsList.collectAsStateWithLifecycle().value
     TodayScreen(
         student = studentInfo,
         upcomingCommitment = upcomingCommitment,
         careerSnapshot = careerSnapshot,
         tuitionState = tuitionState,
+        canteen = canteen,
         quickLinks = DefaultQuickLinks,
         notices = news,
         onAvatarClick = onOpenProfile,
         onOpenPortalClick = { context.openInCustomTab(Esse3Links.HOME) },
-        onQuickLinkClick = { context.openInCustomTab(it.destinationUrl) },
+        onQuickLinkClick = { if (it.id == CANTEEN_LINK_ID) onOpenCanteen() else context.openInCustomTab(it.destinationUrl) },
         onNoticeClick = { onOpenNewsDetail(it.id) },
         onViewAllNoticesClick = onOpenNews,
         onCareerClick = onOpenCareer,
         onTuitionClick = onOpenTaxes,
+        onCanteenClick = onOpenCanteen,
         onOpenSchedule = onOpenSchedule,
         onSetupSchedule = onSetupSchedule
     )
@@ -110,6 +117,7 @@ fun TodayScreen(
     upcomingCommitment: UpcomingCommitmentState,
     careerSnapshot: CareerSnapshotState,
     tuitionState: TuitionState,
+    canteen: CanteenCardState,
     quickLinks: List<QuickLink>,
     notices: List<NoticeUiModel>?,
     modifier: Modifier = Modifier,
@@ -120,6 +128,7 @@ fun TodayScreen(
     onViewAllNoticesClick: () -> Unit = {},
     onCareerClick: () -> Unit = {},
     onTuitionClick: () -> Unit = {},
+    onCanteenClick: () -> Unit = {},
     onOpenSchedule: () -> Unit = {},
     onSetupSchedule: () -> Unit = {}
 ) {
@@ -199,6 +208,10 @@ fun TodayScreen(
                     state = tuitionState,
                     onClick = onTuitionClick
                 )
+            }
+
+            item(key = "canteen") {
+                CanteenCard(state = canteen, onClick = onCanteenClick)
             }
 
             item(key = "news_header") {
@@ -314,6 +327,7 @@ private fun TodayScreenPreview() {
             ),
             careerSnapshot = CareerSnapshotState.Available(114, 180, 0.63f, "27,68", 2),
             tuitionState = TuitionState.Due(amount = "148,50 €", dueLabel = "scade il 30/11", pendingCount = 1, isOverdue = false),
+            canteen = CanteenCardState.Available("Oggi a pranzo", listOf("Pasta al pesto", "Riso e zucca"), 15),
             quickLinks = DefaultQuickLinks,
             notices = listOf(
                 NoticeUiModel(1, "Inaugurazione Anno Accademico e lectio magistralis", "Eventi", "Oggi", "", null),

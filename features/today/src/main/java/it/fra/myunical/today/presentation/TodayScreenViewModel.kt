@@ -3,18 +3,21 @@ package it.fra.myunical.today.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.fra.myunical.domain.model.general.statusLabel
+import it.fra.myunical.domain.repository.NewsRepository
 import it.fra.myunical.domain.usecase.GetCareerDataUseCase
 import it.fra.myunical.domain.usecase.GetCurrentCareerUseCase
 import it.fra.myunical.domain.usecase.GetCurrentUserInfoUseCase
 import it.fra.myunical.domain.usecase.GetNextLessonUseCase
+import it.fra.myunical.domain.usecase.GetNextMealUseCase
 import it.fra.myunical.domain.usecase.GetProfilePhotoUrlUseCase
 import it.fra.myunical.domain.usecase.GetTaxSummaryUseCase
-import it.fra.myunical.domain.repository.NewsRepository
 import it.fra.myunical.domain.usecase.LogoutUseCase
 import it.fra.myunical.domain.usecase.SetCurrentCareerUseCase
+import it.fra.myunical.today.mapper.toCanteenState
 import it.fra.myunical.today.mapper.toSnapshotState
 import it.fra.myunical.today.mapper.toTuitionState
 import it.fra.myunical.today.mapper.toUiState
+import it.fra.myunical.today.models.CanteenCardState
 import it.fra.myunical.today.models.CareerSnapshotState
 import it.fra.myunical.today.models.NoticeUiModel
 import it.fra.myunical.today.models.ProfileCareer
@@ -23,6 +26,10 @@ import it.fra.myunical.today.models.StudentHeaderInfo
 import it.fra.myunical.today.models.TuitionState
 import it.fra.myunical.today.models.UpcomingCommitmentState
 import it.fra.myunical.ui.format.toRelativeLabel
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Locale
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -31,8 +38,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.util.Locale
 
 class TodayScreenViewModel(
     newsRepository: NewsRepository,
@@ -42,6 +47,7 @@ class TodayScreenViewModel(
     getNextLesson: GetNextLessonUseCase,
     getTaxSummary: GetTaxSummaryUseCase,
     getCareerData: GetCareerDataUseCase,
+    getNextMeal: GetNextMealUseCase,
     private val setCurrentCareer: SetCurrentCareerUseCase,
     private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
@@ -57,6 +63,17 @@ class TodayScreenViewModel(
     val careerSnapshot: StateFlow<CareerSnapshotState> = getCareerData()
         .map { it.toSnapshotState() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CareerSnapshotState.Loading)
+
+    val canteen: StateFlow<CanteenCardState> = flow {
+        val next = try {
+            getNextMeal()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            null
+        }
+        emit(next.toCanteenState(LocalDate.now()))
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CanteenCardState.Loading)
 
     /** Latest news for the carousel; null while loading, empty when unavailable. */
     val newsList: StateFlow<List<NoticeUiModel>?> = flow {
