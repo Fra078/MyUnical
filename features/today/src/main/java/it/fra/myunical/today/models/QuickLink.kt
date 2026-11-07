@@ -1,6 +1,7 @@
 package it.fra.myunical.today.models
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Description
 import androidx.compose.material.icons.rounded.LocalLibrary
 import androidx.compose.material.icons.rounded.Mail
 import androidx.compose.material.icons.rounded.Map
@@ -24,6 +25,8 @@ data class QuickLink(
 
 private val Esse3Link = QuickLink("esse3", "Esse3", Icons.Rounded.School, Esse3Links.HOME, "Portale dei servizi per gli studenti", Accent.PRIMARY)
 
+private val DocumentsLink = QuickLink("documents", "Documenti", Icons.Rounded.Description, Esse3Links.CERTIFICATES, "Certificati e autocertificazioni su Esse3", Accent.INFO)
+
 /** Campus services opened in a Custom Tab; every URL was checked to be reachable. */
 val CampusLinks = listOf(
     QuickLink("mail", "Webmail", Icons.Rounded.Mail, "https://outlook.com/studenti.unical.it", "Posta istituzionale @studenti.unical.it", Accent.SECONDARY),
@@ -33,8 +36,8 @@ val CampusLinks = listOf(
     QuickLink("site", "Sito UniCal", Icons.Rounded.Public, "https://www.unical.it/", "Il sito dell'Università della Calabria", Accent.WARNING)
 )
 
-/** The canteen link opens the menus in the app instead of the site. */
+/** The canteen link opens the menus in the app instead of the site (profile menu only). */
 const val CANTEEN_LINK_ID = "canteen"
 
 /** Shortcuts in the Home chips row. */
-val DefaultQuickLinks = listOf(Esse3Link) + CampusLinks.filter { it.id != "site" }
+val DefaultQuickLinks = listOf(Esse3Link, DocumentsLink) + CampusLinks.filter { it.id != "site" && it.id != CANTEEN_LINK_ID }

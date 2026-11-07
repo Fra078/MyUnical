@@ -10,7 +10,6 @@ import it.fra.myunical.canteen.di.canteenModule
 import it.fra.myunical.career.di.careerModule
 import it.fra.myunical.datastore.di.datastoreModule
 import it.fra.myunical.directory.di.directoryModule
-import it.fra.myunical.documents.di.documentsModule
 import it.fra.myunical.login.di.loginModule
 import it.fra.myunical.network.di.networkModule
 import it.fra.myunical.news.di.newsModule
@@ -34,7 +33,7 @@ class MyUnicalApplication : Application(), SingletonImageLoader.Factory {
                 networkModule, datastoreModule, domainModule, coilModule,
                 // Features
                 loginModule, todayModule, careerModule, scheduleModule, taxesModule,
-                newsModule, documentsModule, directoryModule, canteenModule
+                newsModule, directoryModule, canteenModule
             )
         }
     }

@@ -41,7 +41,6 @@ fun MainScreen(
     onOpenTaxes: () -> Unit,
     onOpenNews: () -> Unit,
     onOpenNewsDetail: (Long) -> Unit,
-    onOpenDocuments: () -> Unit,
     onOpenDirectory: () -> Unit,
     onOpenCourse: (Long) -> Unit,
     onOpenCanteen: () -> Unit,
@@ -140,7 +139,6 @@ fun MainScreen(
             visible = showProfile,
             onDismiss = { showProfile = false },
             onOpenTaxes = onOpenTaxes,
-            onOpenDocuments = onOpenDocuments,
             onOpenDirectory = onOpenDirectory,
             onOpenCanteen = onOpenCanteen
         )

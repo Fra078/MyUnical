@@ -81,7 +81,6 @@ dependencies {
     implementation(project(":features:taxes"))
     implementation(project(":core:ui"))
     implementation(project(":features:news"))
-    implementation(project(":features:documents"))
     implementation(project(":features:directory"))
     implementation(project(":features:canteen"))
 

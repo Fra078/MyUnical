@@ -2,11 +2,13 @@ package it.fra.myunical.today.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import it.fra.myunical.domain.model.degreeexplorer.DegreeRegulations
 import it.fra.myunical.domain.model.general.statusLabel
 import it.fra.myunical.domain.repository.NewsRepository
 import it.fra.myunical.domain.usecase.GetCareerDataUseCase
 import it.fra.myunical.domain.usecase.GetCurrentCareerUseCase
 import it.fra.myunical.domain.usecase.GetCurrentUserInfoUseCase
+import it.fra.myunical.domain.usecase.GetDegreeRegulationsUseCase
 import it.fra.myunical.domain.usecase.GetNextLessonUseCase
 import it.fra.myunical.domain.usecase.GetNextMealUseCase
 import it.fra.myunical.domain.usecase.GetProfilePhotoUrlUseCase
@@ -33,6 +35,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -48,6 +51,7 @@ class TodayScreenViewModel(
     getTaxSummary: GetTaxSummaryUseCase,
     getCareerData: GetCareerDataUseCase,
     getNextMeal: GetNextMealUseCase,
+    private val getDegreeRegulations: GetDegreeRegulationsUseCase,
     private val setCurrentCareer: SetCurrentCareerUseCase,
     private val logoutUseCase: LogoutUseCase
 ) : ViewModel() {
@@ -119,6 +123,21 @@ class TodayScreenViewModel(
             }
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** Regulations of the current career's degree course; null while loading or when unavailable. */
+    val regulations: StateFlow<DegreeRegulations?> = getCurrentCareer().filterNotNull()
+        .map { it.matId }
+        .distinctUntilChanged()
+        .map {
+            try {
+                getDegreeRegulations()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                null
+            }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun selectCareer(matId: Int) {
         viewModelScope.launch { setCurrentCareer(matId) }

@@ -1,10 +1,12 @@
 package it.appm.myunical.di
 
-import it.fra.myunical.domain.usecase.DownloadDocumentUseCase
 import it.fra.myunical.domain.usecase.GetAuthStateUseCase
 import it.fra.myunical.domain.usecase.GetCanteenMenuUseCase
 import it.fra.myunical.domain.usecase.GetCareerDataUseCase
 import it.fra.myunical.domain.usecase.GetCourseDetailUseCase
+import it.fra.myunical.domain.usecase.DegreeRegulationFinder
+import it.fra.myunical.domain.usecase.GetDegreeRegulationsUseCase
+import it.fra.myunical.domain.usecase.ResolveCdsCodeUseCase
 import it.fra.myunical.domain.usecase.GetCurrentCareerUseCase
 import it.fra.myunical.domain.usecase.GetCurrentUserInfoUseCase
 import it.fra.myunical.domain.usecase.GetDegreeProgramsUseCase
@@ -12,7 +14,6 @@ import it.fra.myunical.domain.usecase.GetMonthlyScheduleUseCase
 import it.fra.myunical.domain.usecase.GetNextLessonUseCase
 import it.fra.myunical.domain.usecase.GetNextMealUseCase
 import it.fra.myunical.domain.usecase.GetProfilePhotoUrlUseCase
-import it.fra.myunical.domain.usecase.GetStudentDocumentsUseCase
 import it.fra.myunical.domain.usecase.GetStudyPathsUseCase
 import it.fra.myunical.domain.usecase.GetTaxSummaryUseCase
 import it.fra.myunical.domain.usecase.LoginUseCase
@@ -36,11 +37,12 @@ val domainModule = module {
     factoryOf(::GetCurrentUserInfoUseCase)
     factoryOf(::SetCurrentCareerUseCase)
     factoryOf(::GetProfilePhotoUrlUseCase)
-    factoryOf(::GetStudentDocumentsUseCase)
-    factoryOf(::DownloadDocumentUseCase)
     factoryOf(::GetDegreeProgramsUseCase)
     factoryOf(::GetStudyPathsUseCase)
+    factoryOf(::ResolveCdsCodeUseCase)
     factoryOf(::GetCourseDetailUseCase)
+    factory { DegreeRegulationFinder(storageDataSource = get()) }
+    factoryOf(::GetDegreeRegulationsUseCase)
     factoryOf(::GetCanteenMenuUseCase)
     factory { GetNextMealUseCase(repository = get()) }
     factory { GetNextLessonUseCase(providerRepository = get(), getMonthlySchedule = get()) }

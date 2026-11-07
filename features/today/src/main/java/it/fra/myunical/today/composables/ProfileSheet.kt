@@ -22,6 +22,8 @@ import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.Gavel
+import androidx.compose.material.icons.rounded.VolunteerActivism
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Grading
 import androidx.compose.material.icons.rounded.MenuBook
@@ -49,6 +51,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import it.fra.myunical.domain.model.degreeexplorer.DegreeRegulations
+import it.fra.myunical.domain.model.degreeexplorer.Regulation
 import it.fra.myunical.today.models.CANTEEN_LINK_ID
 import it.fra.myunical.today.models.CampusLinks
 import it.fra.myunical.today.models.ProfileUiState
@@ -66,11 +70,11 @@ import org.koin.androidx.compose.koinViewModel
 sealed interface ProfileDestination {
     data class Web(val url: String) : ProfileDestination
     data object Taxes : ProfileDestination
-    data object Documents : ProfileDestination
     data object Directory : ProfileDestination
     data object Canteen : ProfileDestination
 }
 
+private const val StudentSupportUrl = "https://www.unical.it/didattica/diritto-allo-studio/"
 private const val WEB_OPEN_DELAY_MS = 120L
 private const val SCREEN_TRANSITION_MS = 700L
 
@@ -90,7 +94,8 @@ private val StudentEntries = listOf(
 )
 
 private val ServiceEntries = listOf(
-    ProfileEntry("Documenti e certificati", "Certificati, promemoria e ricevute in PDF", Icons.Rounded.Description, ProfileDestination.Documents),
+    ProfileEntry("Documenti e certificati", "Certificati e autocertificazioni su Esse3", Icons.Rounded.Description, ProfileDestination.Web(Esse3Links.CERTIFICATES)),
+    ProfileEntry("Diritto allo studio", "Borse di studio, alloggi e altri benefici", Icons.Rounded.VolunteerActivism, ProfileDestination.Web(StudentSupportUrl)),
     ProfileEntry("Rubrica di ateneo", "Contatti di docenti e personale", Icons.Rounded.Contacts, ProfileDestination.Directory),
     ProfileEntry("Portale Esse3", "Tutti i servizi per gli studenti", Icons.Rounded.School, ProfileDestination.Web(Esse3Links.HOME))
 )
@@ -99,29 +104,48 @@ private val CampusEntries = CampusLinks.map {
     ProfileEntry(it.title, it.description, it.icon, if (it.id == CANTEEN_LINK_ID) ProfileDestination.Canteen else ProfileDestination.Web(it.destinationUrl))
 }
 
+private fun academicYearLabel(year: Int) = "a.a. $year/${"%02d".format((year + 1) % 100)}"
+
+/** Links to the PDF regulations of the student's degree course, as many as are published. */
+private fun regulationEntries(regulations: DegreeRegulations?): List<ProfileEntry> {
+    if (regulations == null) return emptyList()
+    val cohort = regulations.cohort
+    val latest = regulations.latest
+    fun entry(title: String, description: String, regulation: Regulation) =
+        ProfileEntry(title, description, Icons.Rounded.Gavel, ProfileDestination.Web(regulation.url))
+    return when {
+        regulations.isSingle && cohort != null ->
+            listOf(entry("Regolamento del corso", academicYearLabel(cohort.academicYear), cohort))
+        else -> listOfNotNull(
+            latest?.let { entry("Regolamento in vigore", "Ultima versione, ${academicYearLabel(it.academicYear)}", it) },
+            cohort?.let { entry("Regolamento della tua immatricolazione", "Coorte ${academicYearLabel(it.academicYear)}", it) }
+        )
+    }
+}
+
 /** Profile menu: the stateful entry point, hosted above the navigation bar by the main screen. */
 @Composable
 fun ProfileMenu(
     visible: Boolean,
     onDismiss: () -> Unit,
     onOpenTaxes: () -> Unit,
-    onOpenDocuments: () -> Unit,
     onOpenDirectory: () -> Unit,
     onOpenCanteen: () -> Unit,
     viewModel: TodayScreenViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
     val profile by viewModel.profile.collectAsStateWithLifecycle()
+    val regulations by viewModel.regulations.collectAsStateWithLifecycle()
     ProfileSheet(
         visible = visible,
         profile = profile,
+        regulations = regulations,
         onDismiss = onDismiss,
         onSelectCareer = viewModel::selectCareer,
         onNavigate = { destination ->
             when (destination) {
                 is ProfileDestination.Web -> context.openInCustomTab(destination.url)
                 ProfileDestination.Taxes -> onOpenTaxes()
-                ProfileDestination.Documents -> onOpenDocuments()
                 ProfileDestination.Directory -> onOpenDirectory()
                 ProfileDestination.Canteen -> onOpenCanteen()
             }
@@ -134,6 +158,7 @@ fun ProfileMenu(
 fun ProfileSheet(
     visible: Boolean,
     profile: ProfileUiState?,
+    regulations: DegreeRegulations?,
     onDismiss: () -> Unit,
     onSelectCareer: (Int) -> Unit,
     onNavigate: (ProfileDestination) -> Unit,
@@ -170,7 +195,7 @@ fun ProfileSheet(
         ) {
             if (profile != null) ProfileHeader(profile, onSelectCareer)
 
-            EntryGroup("Studente", StudentEntries, ::open)
+            EntryGroup("Studente", StudentEntries + regulationEntries(regulations), ::open)
             EntryGroup("Servizi", ServiceEntries, ::open)
             EntryGroup("Campus", CampusEntries, ::open)
 

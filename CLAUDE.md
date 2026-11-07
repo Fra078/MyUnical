@@ -1,7 +1,7 @@
 # MyUnical
 
 App Android (Kotlin, Jetpack Compose Material 3 Expressive) per gli studenti dell'Università della
-Calabria: carriera Esse3, orario lezioni, tasse, documenti, notizie, rubrica, menù della mensa.
+Calabria: carriera Esse3, orario lezioni, tasse, notizie, rubrica, menù della mensa.
 
 Prima di analizzare il codice leggi i file in `docs/claude/`, scritti per evitare di riesplorare il
 progetto:

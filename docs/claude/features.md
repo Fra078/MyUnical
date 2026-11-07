@@ -14,9 +14,15 @@ la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseC
 - `CareerSnapshotCard`: media, CFU (`GetCareerDataUseCase`);
 - `TuitionStatusCard`: tasse da pagare (`GetTaxSummaryUseCase`);
 - `CanteenCard`: prossimo pasto (`GetNextMealUseCase`), apre la schermata Mensa;
-- `NewsCarousel`, `QuickLinkSection` (link in `models/QuickLink.kt`, ognuno con un `Accent`;
-  `CANTEEN_LINK_ID` apre la schermata interna invece del sito);
-- `ProfileSheet`: profilo, cambio carriera, voci verso Tasse, Documenti, Rubrica, Mensa, logout.
+- `NewsCarousel`, `QuickLinkSection` (azioni rapide in `models/QuickLink.kt`, ognuna con un `Accent`:
+  Esse3, Documenti = certificati Esse3 nel browser, Webmail, Biblioteche, Mappa; tutte aprono un Custom Tab);
+- `ProfileSheet`: profilo, cambio carriera e voci di menu (`ProfileDestination`). Studente: Libretto,
+  Appelli, Bacheca esiti, Piano di studi, regolamenti del corso, Tasse. Servizi: Documenti e certificati
+  (Esse3), Diritto allo studio (pagina unical.it), Rubrica, Portale. Campus: Webmail, Mensa (schermata
+  interna, `CANTEEN_LINK_ID`), Biblioteche, Mappa, Sito. Logout.
+- Regolamenti del corso: `GetDegreeRegulationsUseCase` → `DegreeRegulations(cohort, latest)`; il
+  ViewModel li carica al cambio di carriera. Le voci compaiono solo se pubblicati: "Regolamento in vigore"
+  (ultimo) e "Regolamento della tua immatricolazione" (coorte), oppure una sola voce se coincidono.
 
 ## Carriera (`features/career`)
 - `CareerScreen`: libretto con filtri (`ExamFilter`) e ordinamento (`ExamSortOption`), appelli e
@@ -37,13 +43,7 @@ la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseC
 - Colori dei corsi: `components/CourseColor.kt`.
 
 ## Tasse (`features/taxes`)
-`GetTaxSummaryUseCase` (singleton): addebiti per `stuId`, pagati/da pagare/scaduti. Le quietanze si
-scaricano come documenti.
-
-## Documenti (`features/documents`)
-Verbali d'esame e quietanze in PDF (`GetStudentDocumentsUseCase`, `DownloadDocumentUseCase`), salvati
-da `storage/DocumentStore.kt` in `cacheDir/documents` ed esposti con un `FileProvider`
-(`<package>.documents`), poi aperti con `ACTION_VIEW` in un'app esterna.
+`GetTaxSummaryUseCase` (singleton): addebiti per `stuId`, pagati/da pagare/scaduti. Il pagamento si fa su Esse3 (`Esse3Links.TAXES`).
 
 ## Notizie (`features/news`)
 Lista paginata e dettaglio (`NewsRepository`, cache in memoria), HTML reso in Compose.

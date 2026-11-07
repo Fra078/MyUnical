@@ -21,7 +21,6 @@ import it.fra.myunical.domain.sources.AuthLocalDataSource
 import it.fra.myunical.domain.sources.AuthRemoteDataSource
 import it.fra.myunical.domain.sources.CinecaRemoteDataSource
 import it.fra.myunical.domain.sources.DirectoryRemoteDataSource
-import it.fra.myunical.domain.sources.DocumentRemoteDataSource
 import it.fra.myunical.domain.sources.NewsRemoteDataSource
 import it.fra.myunical.domain.sources.TaxRemoteDataSource
 import it.fra.myunical.domain.sources.UnicalStorageDataSource
@@ -32,7 +31,6 @@ import it.fra.myunical.network.repository.NewsRepositoryImpl
 import it.fra.myunical.network.sources.AuthRemoteDataSourceImpl
 import it.fra.myunical.network.sources.CinecaRemoteDataSourceImpl
 import it.fra.myunical.network.sources.DirectoryRemoteDataSourceImpl
-import it.fra.myunical.network.sources.DocumentRemoteDataSourceImpl
 import it.fra.myunical.network.sources.NewsRemoteDataSourceImpl
 import it.fra.myunical.network.sources.TaxRemoteDataSourceImpl
 import it.fra.myunical.network.sources.UnicalStorageDataSourceImpl
@@ -122,7 +120,6 @@ val networkModule = module {
 
     single<CinecaRemoteDataSource> { CinecaRemoteDataSourceImpl(get(HttpClients.ESSE3)) }
     single<TaxRemoteDataSource> { TaxRemoteDataSourceImpl(get(HttpClients.ESSE3)) }
-    single<DocumentRemoteDataSource> { DocumentRemoteDataSourceImpl(get(HttpClients.ESSE3)) }
     single<NewsRemoteDataSource> { NewsRemoteDataSourceImpl(get(HttpClients.UNICAL_SITE)) }
     single<UnicalStorageDataSource> { UnicalStorageDataSourceImpl(get(HttpClients.UNICAL_STORAGE)) }
     single<DirectoryRemoteDataSource> { DirectoryRemoteDataSourceImpl(get(HttpClients.UNICAL_STORAGE)) }

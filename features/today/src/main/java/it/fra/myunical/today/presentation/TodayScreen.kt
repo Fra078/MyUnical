@@ -54,7 +54,6 @@ import it.fra.myunical.today.composables.NewsCarousel
 import it.fra.myunical.today.composables.QuickLinksSection
 import it.fra.myunical.today.composables.TuitionStatusCard
 import it.fra.myunical.today.composables.UpcomingCommitmentHeroCard
-import it.fra.myunical.today.models.CANTEEN_LINK_ID
 import it.fra.myunical.today.models.CanteenCardState
 import it.fra.myunical.today.models.CareerSnapshotState
 import it.fra.myunical.today.models.CommitmentType
@@ -99,7 +98,7 @@ fun TodayScreen(
         notices = news,
         onAvatarClick = onOpenProfile,
         onOpenPortalClick = { context.openInCustomTab(Esse3Links.HOME) },
-        onQuickLinkClick = { if (it.id == CANTEEN_LINK_ID) onOpenCanteen() else context.openInCustomTab(it.destinationUrl) },
+        onQuickLinkClick = { context.openInCustomTab(it.destinationUrl) },
         onNoticeClick = { onOpenNewsDetail(it.id) },
         onViewAllNoticesClick = onOpenNews,
         onCareerClick = onOpenCareer,

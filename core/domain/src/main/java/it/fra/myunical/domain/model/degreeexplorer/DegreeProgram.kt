@@ -8,5 +8,7 @@ data class DegreeProgram(
     val courseType: String = "",
     val area: String = "",
     val departmentName: String = "",
-    val durationYears: Int = 0
+    val durationYears: Int = 0,
+    /** Absolute URL of the didactic regulation PDF, when published for the requested year. */
+    val regulationUrl: String? = null
 )

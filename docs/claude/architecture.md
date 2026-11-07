@@ -9,7 +9,7 @@
 | `:core:network` | android lib | `it.fra.myunical.network` | Ktor + kotlinx.serialization: implementazioni dei data source remoti, DTO (`models/`), mapper DTO→domain, repository con cache in memoria |
 | `:core:datastore` | android lib | `it.fra.myunical.datastore` | DataStore Preferences (credenziali, profilo, preferenze, provider orario) e asset (`assets/canteen/menu.json`) |
 | `:core:ui` | android lib | `it.fra.myunical.ui` | componenti Compose condivisi, `ExtendedColors`/`Accent`, animazioni shared element, `Esse3Links`, formattazione date |
-| `:features:*` | android lib | `it.fra.myunical.<feature>` | una per area: login, today (Home), career, schedule, taxes, news, documents, directory, canteen |
+| `:features:*` | android lib | `it.fra.myunical.<feature>` | una per area: login, today (Home), career, schedule, taxes, news, directory, canteen |
 
 Le feature dipendono solo da `:core:domain` e `:core:ui` (template: `features/taxes/build.gradle.kts`).
 Non vedono network/datastore: parlano con use case o interfacce di repository del domain.
@@ -41,7 +41,7 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
 - `app/.../ui/navigation/AppRoute.kt`: `sealed interface AppRoute : NavKey`, tutte `@Serializable`.
   `Main` contiene le tab (`MainTab`: HOME, CAREER, SCHEDULE) gestite da `MainScreen`.
 - Le altre schermate sono route a pieno schermo: `ScheduleProviders`, `ScheduleProviderEditor(providerId?)`,
-  `Taxes`, `News`, `NewsDetail(newsId)`, `Documents`, `Directory`, `ContactDetail(contactId)`,
+  `Taxes`, `News`, `NewsDetail(newsId)`, `Directory`, `ContactDetail(contactId)`,
   `CourseDetail(courseRowId)`, `Canteen`.
 - `AppNavigation.kt`: back stack con `rememberNavBackStack`, `entry<AppRoute.X>`; le callback
   `onOpenX` scendono da `MainScreen` alle tab (es. `TodayScreen`).
@@ -62,7 +62,7 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
 ## Test
 
 - Unit test JVM: `core/domain/src/test` (use case con fake dei data source: `GetCareerDataUseCaseTest`,
-  `GetMonthlyScheduleUseCaseTest`, `GetNextLessonUseCaseTest`, `GetTaxSummaryUseCaseTest`,
+  `GetMonthlyScheduleUseCaseTest`, `DegreeRegulationFinderTest`, `GetNextLessonUseCaseTest`, `GetTaxSummaryUseCaseTest`,
   `GetNextMealUseCaseTest`, `CourseLookupTest`), `core/network/src/test` (mapper con JSON reali:
   Career, Tax, Directory, Syllabus), `core/datastore/src/test` (`CanteenMenuRepositoryTest`, che
   verifica anche che l'asset del menù sia completo).

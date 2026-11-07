@@ -33,9 +33,6 @@ sealed interface AppRoute : NavKey {
     data class NewsDetail(val newsId: Long) : AppRoute
 
     @Serializable
-    data object Documents : AppRoute
-
-    @Serializable
     data object Directory : AppRoute
 
     @Serializable

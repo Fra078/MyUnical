@@ -18,7 +18,6 @@ import it.fra.myunical.canteen.presentation.CanteenScreen
 import it.fra.myunical.career.presentation.detail.CourseDetailScreen
 import it.fra.myunical.directory.presentation.detail.ContactDetailScreen
 import it.fra.myunical.directory.presentation.search.DirectoryScreen
-import it.fra.myunical.documents.presentation.DocumentsScreen
 import it.fra.myunical.news.presentation.detail.NewsDetailScreen
 import it.fra.myunical.news.presentation.list.NewsListScreen
 import it.fra.myunical.schedule.presentation.editor.ScheduleProviderEditorScreen
@@ -65,7 +64,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                                 onOpenTaxes = { backStack.add(AppRoute.Taxes) },
                                 onOpenNews = { backStack.add(AppRoute.News) },
                                 onOpenNewsDetail = { backStack.add(AppRoute.NewsDetail(it)) },
-                                onOpenDocuments = { backStack.add(AppRoute.Documents) },
                                 onOpenDirectory = { backStack.add(AppRoute.Directory) },
                                 onOpenCourse = { backStack.add(AppRoute.CourseDetail(it)) },
                                 onOpenCanteen = { backStack.add(AppRoute.Canteen) }
@@ -97,9 +95,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     }
                     entry<AppRoute.Canteen> {
                         CanteenScreen(onBack = ::pop)
-                    }
-                    entry<AppRoute.Documents> {
-                        DocumentsScreen(onBack = ::pop)
                     }
                     entry<AppRoute.Directory> {
                         DirectoryScreen(

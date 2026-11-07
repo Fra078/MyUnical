@@ -17,6 +17,7 @@ import it.fra.myunical.domain.model.schedule.ScheduleEvent
 import it.fra.myunical.domain.model.syllabus.CourseSyllabus
 import it.fra.myunical.domain.model.syllabus.OfferedActivity
 import it.fra.myunical.domain.sources.UnicalStorageDataSource
+import it.fra.myunical.network.mapper.toAbsoluteUrl
 import it.fra.myunical.network.mapper.toDomainModel
 import it.fra.myunical.network.models.schedule.StudyCourseInfo
 import it.fra.myunical.network.models.schedule.StudyCoursePaginationResponse
@@ -123,6 +124,7 @@ class UnicalStorageDataSourceImpl(
         courseType = courseType,
         area = academicArea,
         departmentName = departmentName,
-        durationYears = durationYears
+        durationYears = durationYears,
+        regulationUrl = didacticRegulationUrl.toAbsoluteUrl()?.replace(" ", "%20")
     )
 }
