@@ -41,7 +41,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,23 +61,6 @@ import it.fra.myunical.login.R
 import it.fra.myunical.login.models.AcademicCareer
 import it.fra.myunical.login.models.LoginUiState
 import org.koin.androidx.compose.koinViewModel
-
-private val UnicalRedPrimary = Color(0xFF8B1538)
-private val UnicalRedOnPrimary = Color(0xFFFFFFFF)
-private val UnicalRedContainer = Color(0xFFFFD9DD)
-private val UnicalRedOnContainer = Color(0xFF3B0715)
-
-private val LoginColorScheme = lightColorScheme(
-    primary = UnicalRedPrimary,
-    onPrimary = UnicalRedOnPrimary,
-    primaryContainer = UnicalRedContainer,
-    onPrimaryContainer = UnicalRedOnContainer,
-    surface = Color(0xFFFCF8F8),
-    surfaceVariant = Color(0xFFF3DDDF),
-    error = Color(0xFFBA1A1A),
-    errorContainer = Color(0xFFFFDAD6),
-    onErrorContainer = Color(0xFF410002)
-)
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel = koinViewModel()){
@@ -491,7 +473,7 @@ private fun LoginErrorBanner(
 @Preview(name = "Login Idle State", showBackground = true)
 @Composable
 private fun LoginScreenIdlePreview() {
-    MaterialTheme(colorScheme = LoginColorScheme) {
+    MaterialTheme {
         LoginScreen(
             uiState = LoginUiState(
                 fiscalCode = "RSSMRA00A01H501U",
@@ -510,7 +492,7 @@ private fun LoginScreenIdlePreview() {
 @Preview(name = "Login Error State", showBackground = true)
 @Composable
 private fun LoginScreenErrorPreview() {
-    MaterialTheme(colorScheme = LoginColorScheme) {
+    MaterialTheme {
         LoginScreen(
             uiState = LoginUiState(
                 fiscalCode = "RSSMRA00A01H501U",
@@ -529,7 +511,7 @@ private fun LoginScreenErrorPreview() {
 @Preview(name = "Career Selection State", showBackground = true)
 @Composable
 private fun LoginScreenCareerSelectionPreview() {
-    MaterialTheme(colorScheme = LoginColorScheme) {
+    MaterialTheme {
         LoginScreen(
             uiState = LoginUiState(
                 fiscalCode = "RSSMRA00A01H501U",

@@ -48,6 +48,7 @@ import it.fra.myunical.domain.model.directory.TaughtCourse
 import it.fra.myunical.domain.model.directory.TeacherProfile
 import it.fra.myunical.ui.components.GroupHeader
 import it.fra.myunical.ui.components.GroupedListItem
+import it.fra.myunical.ui.theme.extendedColors
 
 private const val PHOTO_SIZE = 112
 
@@ -85,6 +86,8 @@ internal fun TeacherSections(teacher: TeacherProfile, onOpen: (String) -> Unit) 
                 title = course.name,
                 supporting = course.details(),
                 icon = Icons.AutoMirrored.Rounded.MenuBook,
+                iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 index = index,
                 count = teacher.courses.size
             )
@@ -102,6 +105,8 @@ internal fun TeacherSections(teacher: TeacherProfile, onOpen: (String) -> Unit) 
             GroupedListItem(
                 title = line,
                 icon = Icons.Rounded.Science,
+                iconContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                iconColor = MaterialTheme.colorScheme.onTertiaryContainer,
                 index = index,
                 count = teacher.researchLines.size
             )
@@ -117,6 +122,8 @@ internal fun TeacherSections(teacher: TeacherProfile, onOpen: (String) -> Unit) 
                 title = publication.title,
                 supporting = listOfNotNull(publication.year?.toString(), publication.type).joinToString(" · ").ifBlank { null },
                 icon = Icons.Rounded.Article,
+                iconContainerColor = MaterialTheme.extendedColors.info.container,
+                iconColor = MaterialTheme.extendedColors.info.onContainer,
                 index = index,
                 count = count,
                 onClick = publication.url?.let { url -> { onOpen(url) } }

@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import it.fra.myunical.today.models.QuickLink
+import it.fra.myunical.ui.theme.role
 
 @Composable
 fun QuickLinksSection(
@@ -41,10 +42,12 @@ fun QuickLinksSection(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(links, key = { it.id }) { link ->
+                val role = link.accent.role
                 Surface(
                     onClick = { onLinkClick(link) },
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh
+                    color = role.container,
+                    contentColor = role.onContainer
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
@@ -54,7 +57,7 @@ fun QuickLinksSection(
                         Icon(
                             imageVector = link.icon,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = role.color,
                             modifier = Modifier.size(18.dp)
                         )
                         Text(

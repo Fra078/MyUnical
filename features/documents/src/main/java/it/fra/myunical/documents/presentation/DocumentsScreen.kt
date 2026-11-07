@@ -56,6 +56,8 @@ import it.fra.myunical.ui.Esse3Links
 import it.fra.myunical.ui.components.GroupHeader
 import it.fra.myunical.ui.components.GroupedListItem
 import it.fra.myunical.ui.components.openInCustomTab
+import it.fra.myunical.ui.theme.Accent
+import it.fra.myunical.ui.theme.role
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -149,6 +151,8 @@ fun DocumentsScreen(
                         title = link.title,
                         supporting = link.description,
                         icon = link.icon,
+                        iconContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         index = index,
                         count = PortalLinks.size,
                         onClick = { onOpenPortal(link.url) },
@@ -168,6 +172,7 @@ fun DocumentsScreen(
                     key = "bookings",
                     title = "Promemoria prenotazioni",
                     icon = Icons.Rounded.EventAvailable,
+                    accent = Accent.SECONDARY,
                     documents = state.bookingReceipts,
                     isLoading = state.isLoading,
                     emptyText = "Nessuna prenotazione attiva agli esami.",
@@ -178,6 +183,7 @@ fun DocumentsScreen(
                     key = "payments",
                     title = "Ricevute di pagamento",
                     icon = Icons.Rounded.Receipt,
+                    accent = Accent.SUCCESS,
                     documents = state.paymentReceipts,
                     isLoading = state.isLoading,
                     emptyText = "Nessuna tassa pagata con pagoPA.",
@@ -194,6 +200,7 @@ private fun LazyListScope.documentSection(
     key: String,
     title: String,
     icon: ImageVector,
+    accent: Accent,
     documents: List<DocumentUiModel>?,
     isLoading: Boolean,
     emptyText: String,
@@ -221,10 +228,13 @@ private fun LazyListScope.documentSection(
         }
         else -> itemsIndexed(documents, key = { _, doc -> doc.id }) { index, doc ->
             val isDownloading = doc.id in downloading
+            val role = accent.role
             GroupedListItem(
                 title = doc.title,
                 supporting = doc.subtitle.ifBlank { null },
                 icon = icon,
+                iconContainerColor = role.container,
+                iconColor = role.onContainer,
                 index = index,
                 count = documents.size,
                 onClick = { onDownload(doc) },

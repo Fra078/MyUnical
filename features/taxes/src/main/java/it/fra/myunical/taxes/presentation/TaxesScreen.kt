@@ -82,8 +82,6 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.fra.myunical.domain.model.taxes.TaxStatus
-import it.fra.myunical.ui.Esse3Links
-import it.fra.myunical.ui.components.openInCustomTab
 import it.fra.myunical.taxes.models.InvoiceItemUiModel
 import it.fra.myunical.taxes.models.InvoiceUiModel
 import it.fra.myunical.taxes.models.OverviewTone
@@ -91,9 +89,12 @@ import it.fra.myunical.taxes.models.PaidYearGroup
 import it.fra.myunical.taxes.models.TaxOverview
 import it.fra.myunical.taxes.models.TaxesIntent
 import it.fra.myunical.taxes.models.TaxesUiState
+import it.fra.myunical.ui.Esse3Links
 import it.fra.myunical.ui.components.EmptyState
 import it.fra.myunical.ui.components.ShapeBadge
+import it.fra.myunical.ui.components.openInCustomTab
 import it.fra.myunical.ui.components.rememberGroupedItemShape
+import it.fra.myunical.ui.theme.extendedColors
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -304,15 +305,17 @@ private data class ToneStyle(
 @Composable
 private fun OverviewTone.style(): ToneStyle {
     val colors = MaterialTheme.colorScheme
+    val success = MaterialTheme.extendedColors.success
+    val warning = MaterialTheme.extendedColors.warning
     return when (this) {
         OverviewTone.OK -> ToneStyle(
-            colors.tertiaryContainer, colors.onTertiaryContainer,
-            colors.tertiary, colors.onTertiary,
+            success.container, success.onContainer,
+            success.color, success.onColor,
             Icons.Rounded.Verified, MaterialShapes.Cookie9Sided
         )
         OverviewTone.WARNING -> ToneStyle(
-            colors.secondaryContainer, colors.onSecondaryContainer,
-            colors.secondary, colors.onSecondary,
+            warning.container, warning.onContainer,
+            warning.color, warning.onColor,
             Icons.Rounded.Schedule, MaterialShapes.Sunny
         )
         OverviewTone.ALERT -> ToneStyle(
@@ -411,8 +414,8 @@ private fun YearHeader(group: PaidYearGroup) {
 private fun StatusPill(status: TaxStatus) {
     val (label, container, content) = when (status) {
         TaxStatus.OVERDUE -> Triple("Scaduta", MaterialTheme.colorScheme.error, MaterialTheme.colorScheme.onError)
-        TaxStatus.DUE -> Triple("Da pagare", MaterialTheme.colorScheme.secondary, MaterialTheme.colorScheme.onSecondary)
-        TaxStatus.PAID -> Triple("Pagata", MaterialTheme.colorScheme.tertiary, MaterialTheme.colorScheme.onTertiary)
+        TaxStatus.DUE -> Triple("Da pagare", MaterialTheme.extendedColors.warning.color, MaterialTheme.extendedColors.warning.onColor)
+        TaxStatus.PAID -> Triple("Pagata", MaterialTheme.extendedColors.success.color, MaterialTheme.extendedColors.success.onColor)
     }
     Text(
         text = label,
@@ -544,8 +547,8 @@ private fun PaidInvoiceRow(
                 ShapeBadge(
                     polygon = MaterialShapes.Cookie6Sided,
                     size = 40.dp,
-                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    containerColor = MaterialTheme.extendedColors.success.container,
+                    contentColor = MaterialTheme.extendedColors.success.onContainer
                 ) {
                     Icon(Icons.Rounded.CheckCircle, contentDescription = null, modifier = Modifier.size(20.dp))
                 }

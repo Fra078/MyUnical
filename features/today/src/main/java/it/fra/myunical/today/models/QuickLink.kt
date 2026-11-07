@@ -9,6 +9,7 @@ import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.ui.graphics.vector.ImageVector
 import it.fra.myunical.ui.Esse3Links
+import it.fra.myunical.ui.theme.Accent
 
 data class QuickLink(
     val id: String,
@@ -16,18 +17,20 @@ data class QuickLink(
     val icon: ImageVector,
     val destinationUrl: String,
     /** Longer explanation shown in the profile menu. */
-    val description: String = ""
+    val description: String = "",
+    /** Color family of the chip, so each service is recognizable at a glance. */
+    val accent: Accent = Accent.NEUTRAL
 )
 
-private val Esse3Link = QuickLink("esse3", "Esse3", Icons.Rounded.School, Esse3Links.HOME, "Portale dei servizi per gli studenti")
+private val Esse3Link = QuickLink("esse3", "Esse3", Icons.Rounded.School, Esse3Links.HOME, "Portale dei servizi per gli studenti", Accent.PRIMARY)
 
 /** Campus services opened in a Custom Tab; every URL was checked to be reachable. */
 val CampusLinks = listOf(
-    QuickLink("mail", "Webmail", Icons.Rounded.Mail, "https://outlook.com/studenti.unical.it", "Posta istituzionale @studenti.unical.it"),
-    QuickLink("canteen", "Mensa", Icons.Rounded.Restaurant, "https://www.unical.it/campus/vivere-il-campus/servizio-mensa/", "Menù, orari e punti ristoro"),
-    QuickLink("library", "Biblioteche", Icons.Rounded.LocalLibrary, "https://www.unical.it/campus/vivere-il-campus/biblioteche/", "Orari, cataloghi e prestiti"),
-    QuickLink("map", "Mappa campus", Icons.Rounded.Map, "https://www.unical.it/campus/visita-il-campus/mappa/", "Cubi, aule e servizi del campus"),
-    QuickLink("site", "Sito UniCal", Icons.Rounded.Public, "https://www.unical.it/", "Il sito dell'Università della Calabria")
+    QuickLink("mail", "Webmail", Icons.Rounded.Mail, "https://outlook.com/studenti.unical.it", "Posta istituzionale @studenti.unical.it", Accent.SECONDARY),
+    QuickLink("canteen", "Mensa", Icons.Rounded.Restaurant, "https://www.unical.it/campus/vivere-il-campus/servizio-mensa/", "Menù, orari e punti ristoro", Accent.INFO),
+    QuickLink("library", "Biblioteche", Icons.Rounded.LocalLibrary, "https://www.unical.it/campus/vivere-il-campus/biblioteche/", "Orari, cataloghi e prestiti", Accent.TERTIARY),
+    QuickLink("map", "Mappa campus", Icons.Rounded.Map, "https://www.unical.it/campus/visita-il-campus/mappa/", "Cubi, aule e servizi del campus", Accent.SUCCESS),
+    QuickLink("site", "Sito UniCal", Icons.Rounded.Public, "https://www.unical.it/", "Il sito dell'Università della Calabria", Accent.WARNING)
 )
 
 /** Shortcuts in the Home chips row. */

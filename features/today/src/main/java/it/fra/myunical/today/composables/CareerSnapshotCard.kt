@@ -38,8 +38,12 @@ fun CareerSnapshotCard(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        )
     ) {
+        val supporting = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -52,11 +56,16 @@ fun CareerSnapshotCard(
                 CareerSnapshotState.Unavailable -> Icon(
                     Icons.Rounded.CloudOff,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = supporting,
                     modifier = Modifier.size(56.dp).padding(12.dp)
                 )
                 is CareerSnapshotState.Available -> Box(contentAlignment = Alignment.Center) {
-                    CircularWavyProgressIndicator(progress = { state.progress }, modifier = Modifier.size(56.dp))
+                    CircularWavyProgressIndicator(
+                        progress = { state.progress },
+                        modifier = Modifier.size(56.dp),
+                        color = MaterialTheme.colorScheme.secondary,
+                        trackColor = MaterialTheme.colorScheme.secondary.copy(alpha = 0.2f)
+                    )
                     Text(
                         "${(state.progress * 100).toInt()}%",
                         style = MaterialTheme.typography.labelMedium,
@@ -72,7 +81,7 @@ fun CareerSnapshotCard(
                     CareerSnapshotState.Unavailable -> Text(
                         "Libretto non disponibile al momento.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = supporting
                     )
                     is CareerSnapshotState.Available -> {
                         Text(
@@ -81,7 +90,7 @@ fun CareerSnapshotCard(
                                 state.weightedAverage?.let { "media $it" }
                             ).joinToString(" · "),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = supporting
                         )
                         if (state.openSessions > 0) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {

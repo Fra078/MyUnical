@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.graphics.shapes.RoundedPolygon
 import it.fra.myunical.today.models.TuitionState
 import it.fra.myunical.ui.components.ShapeBadge
+import it.fra.myunical.ui.theme.extendedColors
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -41,9 +42,13 @@ fun TuitionStatusCard(
     modifier: Modifier = Modifier
 ) {
     val colors = MaterialTheme.colorScheme
+    val success = MaterialTheme.extendedColors.success
+    val warning = MaterialTheme.extendedColors.warning
+    // Paid → green, to pay → orange, overdue → red
     val (container, content) = when {
         state is TuitionState.Due && state.isOverdue -> colors.errorContainer to colors.onErrorContainer
-        state is TuitionState.Due -> colors.secondaryContainer to colors.onSecondaryContainer
+        state is TuitionState.Due -> warning.container to warning.onContainer
+        state == TuitionState.UpToDate -> success.container to success.onContainer
         else -> colors.surfaceContainerLow to colors.onSurface
     }
 
@@ -63,11 +68,11 @@ fun TuitionStatusCard(
             when (state) {
                 TuitionState.Loading -> LoadingIndicator(Modifier.size(46.dp))
                 TuitionState.Unavailable -> Badge(Icons.Rounded.CloudOff, MaterialShapes.Cookie6Sided, colors.surfaceContainerHighest, colors.onSurfaceVariant)
-                TuitionState.UpToDate -> Badge(Icons.Rounded.Verified, MaterialShapes.Cookie9Sided, colors.tertiaryContainer, colors.onTertiaryContainer)
+                TuitionState.UpToDate -> Badge(Icons.Rounded.Verified, MaterialShapes.Cookie9Sided, success.color, success.onColor)
                 is TuitionState.Due -> if (state.isOverdue) {
                     Badge(Icons.Rounded.PriorityHigh, MaterialShapes.SoftBurst, colors.error, colors.onError)
                 } else {
-                    Badge(Icons.Rounded.Schedule, MaterialShapes.Sunny, colors.secondary, colors.onSecondary)
+                    Badge(Icons.Rounded.Schedule, MaterialShapes.Sunny, warning.color, warning.onColor)
                 }
             }
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -46,9 +46,9 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumFlexibleTopAppBar
@@ -70,6 +70,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.semantics.Role
@@ -78,17 +79,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import it.fra.myunical.ui.components.EmptyState
 import it.fra.myunical.schedule.components.courseAccentColor
-import it.fra.myunical.ui.components.rememberGroupedItemShape
 import it.fra.myunical.schedule.models.LessonUiModel
 import it.fra.myunical.schedule.models.ProviderFilter
 import it.fra.myunical.schedule.models.ScheduleDay
 import it.fra.myunical.schedule.models.ScheduleIntent
 import it.fra.myunical.schedule.models.ScheduleUiState
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.koin.androidx.compose.koinViewModel
+import it.fra.myunical.ui.components.EmptyState
+import it.fra.myunical.ui.components.rememberGroupedItemShape
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -97,6 +95,9 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 private val ItalianLocale: Locale = Locale.ITALIAN
 private val TimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -361,14 +362,14 @@ private fun DayChip(
     val container by animateColorAsState(
         when {
             isSelected -> colors.primary
-            isToday -> colors.primaryContainer
+            isToday -> colors.secondaryContainer
             else -> colors.surfaceContainerHigh
         },
         label = "DayChipContainer"
     )
     val content = when {
         isSelected -> colors.onPrimary
-        isToday -> colors.onPrimaryContainer
+        isToday -> colors.onSecondaryContainer
         hasLessons -> colors.onSurface
         else -> colors.onSurfaceVariant.copy(alpha = 0.6f)
     }
@@ -379,7 +380,7 @@ private fun DayChip(
             .width(52.dp)
             .clip(shape)
             .background(container, shape)
-            .then(if (isToday && !isSelected) Modifier.border(2.dp, colors.primary, shape) else Modifier)
+            .then(if (isToday && !isSelected) Modifier.border(2.dp, colors.secondary, shape) else Modifier)
             .clickable(enabled = hasLessons, role = Role.Button, onClick = onClick)
             .padding(vertical = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -480,7 +481,8 @@ private fun LessonCard(
 
     Surface(
         shape = shape,
-        color = if (isOngoing) colors.primaryContainer else colors.surfaceContainer,
+        // A hint of the course color makes the same lesson recognizable along the week
+        color = if (isOngoing) colors.primaryContainer else accent.copy(alpha = if (isPast) 0.05f else 0.10f).compositeOver(colors.surfaceContainerLow),
         contentColor = if (isOngoing) colors.onPrimaryContainer else colors.onSurface,
         modifier = modifier.fillMaxWidth()
     ) {

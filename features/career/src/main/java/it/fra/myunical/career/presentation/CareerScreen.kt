@@ -37,8 +37,8 @@ import androidx.compose.material.icons.rounded.EventAvailable
 import androidx.compose.material.icons.rounded.EventBusy
 import androidx.compose.material.icons.rounded.HourglassEmpty
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material3.BottomSheetDefaults
@@ -109,6 +109,9 @@ import it.fra.myunical.ui.components.EmptyState
 import it.fra.myunical.ui.components.ShapeBadge
 import it.fra.myunical.ui.components.openInCustomTab
 import it.fra.myunical.ui.components.rememberGroupedItemShape
+import it.fra.myunical.ui.theme.Accent
+import it.fra.myunical.ui.theme.extendedColors
+import it.fra.myunical.ui.theme.role
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -597,11 +600,12 @@ internal fun GradeBadge(exam: ExamRecord) {
         ) { Text(exam.grade.orEmpty(), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold) }
         exam.grade != null && numeric -> ShapeBadge(
             polygon = MaterialShapes.Cookie9Sided, size = 52.dp,
-            containerColor = colors.primaryContainer, contentColor = colors.onPrimaryContainer
+            containerColor = colors.secondaryContainer, contentColor = colors.onSecondaryContainer
         ) { Text(exam.grade, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold) }
         exam.grade != null -> ShapeBadge(
             polygon = MaterialShapes.Cookie9Sided, size = 52.dp,
-            containerColor = colors.secondaryContainer, contentColor = colors.onSecondaryContainer
+            containerColor = MaterialTheme.extendedColors.success.container,
+            contentColor = MaterialTheme.extendedColors.success.onContainer
         ) { Icon(Icons.Rounded.Check, contentDescription = exam.grade) }
         else -> ShapeBadge(
             polygon = MaterialShapes.Circle, size = 52.dp,
@@ -613,12 +617,7 @@ internal fun GradeBadge(exam: ExamRecord) {
 @Composable
 internal fun SessionCard(session: SessionUiModel, onBook: () -> Unit, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
-    val (pillContainer, pillContent) = when (session.state) {
-        BookingState.BOOKED -> colors.tertiary to colors.onTertiary
-        BookingState.OPEN -> colors.tertiaryContainer to colors.onTertiaryContainer
-        BookingState.NOT_YET_OPEN -> colors.secondaryContainer to colors.onSecondaryContainer
-        BookingState.CLOSED -> colors.surfaceContainerHighest to colors.onSurfaceVariant
-    }
+    val accent = session.state.accent().role
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -643,9 +642,9 @@ internal fun SessionCard(session: SessionUiModel, onBook: () -> Unit, modifier: 
                     text = session.stateLabel,
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = pillContent,
+                    color = accent.onContainer,
                     modifier = Modifier
-                        .background(pillContainer, CircleShape)
+                        .background(accent.container, CircleShape)
                         .padding(horizontal = 10.dp, vertical = 4.dp)
                 )
                 session.bookingDetail?.let { InfoLine(Icons.Rounded.EventAvailable, it) }
@@ -663,10 +662,13 @@ internal fun SessionCard(session: SessionUiModel, onBook: () -> Unit, modifier: 
 
 @Composable
 private fun DateTile(session: SessionUiModel) {
+    // Booked sessions stand out with the solid color, the others use the container of their state
+    val accent = session.state.accent().role
+    val booked = session.state == BookingState.BOOKED
     Surface(
         shape = RoundedCornerShape(18.dp),
-        color = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        color = if (booked) accent.color else accent.container,
+        contentColor = if (booked) accent.onColor else accent.onContainer,
         modifier = Modifier.width(60.dp)
     ) {
         Column(Modifier.padding(vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -675,6 +677,14 @@ private fun DateTile(session: SessionUiModel) {
             Text(session.month, style = MaterialTheme.typography.labelMedium)
         }
     }
+}
+
+/** Booked → blue, open → green, opening soon → orange, closed → neutral. */
+private fun BookingState.accent(): Accent = when (this) {
+    BookingState.BOOKED -> Accent.SECONDARY
+    BookingState.OPEN -> Accent.SUCCESS
+    BookingState.NOT_YET_OPEN -> Accent.WARNING
+    BookingState.CLOSED -> Accent.NEUTRAL
 }
 
 @Composable

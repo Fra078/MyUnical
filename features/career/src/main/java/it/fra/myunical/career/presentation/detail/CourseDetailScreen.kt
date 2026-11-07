@@ -86,6 +86,7 @@ import it.fra.myunical.ui.components.EmptyState
 import it.fra.myunical.ui.components.GroupHeader
 import it.fra.myunical.ui.components.GroupedListItem
 import it.fra.myunical.ui.components.openInCustomTab
+import it.fra.myunical.ui.theme.extendedColors
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -258,7 +259,7 @@ private fun Header(exam: ExamRecord, subtitle: String) {
                 text = exam.passedOn?.let { "Superato il $it" } ?: "Da sostenere",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = if (exam.isPassed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                color = if (exam.isPassed) MaterialTheme.extendedColors.success.color else MaterialTheme.colorScheme.outline
             )
         }
     }
@@ -311,6 +312,8 @@ private fun LazyListScope.syllabus(
                     title = "Apri il team su Microsoft Teams",
                     supporting = syllabus.teamsCode?.let { "Codice $it" },
                     icon = Icons.Rounded.Groups,
+                    iconContainerColor = MaterialTheme.extendedColors.info.container,
+                    iconColor = MaterialTheme.extendedColors.info.onContainer,
                     index = 0,
                     count = 1,
                     onClick = { onOpenUrl(link) },
@@ -367,8 +370,8 @@ private fun WorkloadCard(workload: WorkloadUiModel) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
         )
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
