@@ -192,6 +192,16 @@ private fun CourseDetail(
         item(key = "catalog_header") { GroupHeader("Scheda dell'insegnamento") }
         if (state.units.size > 1) {
             item(key = "units") { UnitSelector(state.units, state.selectedUnit, onSelectUnit) }
+            state.units.getOrNull(state.selectedUnit)?.title?.let { title ->
+                item(key = "unit_title") {
+                    Text(
+                        title,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
+                    )
+                }
+            }
         }
         when (val catalog = state.catalog) {
             CatalogState.Loading -> item(key = "catalog_loading") {
@@ -471,7 +481,7 @@ private fun CourseDetailPreview() {
                 exam = ExamRecord(1, "Fisica", 12, "Scritto e orale", null, false, false, null, 1),
                 subtitle = "1° anno · A.A. 2025/26",
                 sessions = emptyList(),
-                units = listOf(UnitOption(1, "Modulo 1: Meccanica"), UnitOption(2, "Modulo 2: Elettricità e magnetismo")),
+                units = listOf(UnitOption(1, "Modulo 1", "Meccanica"), UnitOption(2, "Modulo 2", "Elettricità e magnetismo")),
                 catalog = CatalogState.Loaded(
                     SyllabusUiModel(
                         activityId = 1,

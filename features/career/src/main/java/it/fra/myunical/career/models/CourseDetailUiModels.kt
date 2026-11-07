@@ -16,8 +16,14 @@ sealed interface CourseDetailUiState {
     ) : CourseDetailUiState
 }
 
-/** A module or group of the course, picked with a chip when there is more than one. */
-data class UnitOption(val activityId: Int, val label: String)
+/** A module or group of the course, picked with a chip ([label]) when there is more than one. */
+data class UnitOption(
+    val activityId: Int,
+    /** "Modulo 1", "Gruppo A", "Modulo 1 · Gruppo A" */
+    val label: String,
+    /** Full name of a module, shown under the chips; null for groups. */
+    val title: String? = null
+)
 
 sealed interface CatalogState {
     data object Loading : CatalogState

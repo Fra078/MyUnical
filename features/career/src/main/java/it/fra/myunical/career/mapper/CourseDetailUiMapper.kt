@@ -19,16 +19,28 @@ fun Course.detailSubtitle(): String = listOfNotNull(
     courseType.takeIf { it.isNotBlank() }?.capitalized()
 ).joinToString(" · ")
 
-/** Module names only when they differ ("Modulo 1: Meccanica"), groups by their partition ("Gruppo A"). */
+private val ModulePrefix = Regex("^\\s*(modulo\\s*\\d+)\\s*[:.\\-–]?\\s*", RegexOption.IGNORE_CASE)
+
+/**
+ * Chips stay short: modules by their number ("Modulo 1", full name as [UnitOption.title]),
+ * groups by their partition ("Gruppo A").
+ */
 fun List<CourseUnit>.toOptions(): List<UnitOption> {
-    val showNames = map { it.name }.distinct().size > 1
+    val isModular = map { it.name }.distinct().size > 1
     return mapIndexed { index, unit ->
-        val label = listOfNotNull(
-            unit.name.toTitleCase().takeIf { showNames },
-            unit.partition
-        ).joinToString(" · ").ifBlank { "Parte ${index + 1}" }
-        UnitOption(unit.activityId, label)
+        val prefix = ModulePrefix.find(unit.name)
+        val moduleName = (prefix?.let { unit.name.removeRange(it.range) } ?: unit.name).trim().readableCase()
+        val moduleLabel = prefix?.groupValues?.get(1)?.capitalized() ?: moduleName
+        val label = listOfNotNull(moduleLabel.takeIf { isModular }, unit.partition)
+            .joinToString(" · ")
+            .ifBlank { "Parte ${index + 1}" }
+        UnitOption(unit.activityId, label, title = moduleName.takeIf { isModular && it.isNotBlank() })
     }
+}
+
+/** "IoT SENSOR DEVICE PROGRAMMING" → "IoT Sensor Device Programming": words in capitals are title-cased. */
+private fun String.readableCase(): String = split(' ').joinToString(" ") { word ->
+    if (word.length > 1 && word.none(Char::isLowerCase)) word.capitalized() else word
 }
 
 fun CourseSyllabus.toUiModel() = SyllabusUiModel(
