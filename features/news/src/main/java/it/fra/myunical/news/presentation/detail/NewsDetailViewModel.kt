@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 
 class NewsDetailViewModel(
-    newsId: Long,
+    newsId: String,
     newsRepository: NewsRepository
 ) : ViewModel() {
 

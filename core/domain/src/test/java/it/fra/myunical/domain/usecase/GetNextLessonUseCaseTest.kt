@@ -1,6 +1,7 @@
 package it.fra.myunical.domain.usecase
 
 import it.fra.myunical.domain.model.degreeexplorer.DegreeProgram
+import it.fra.myunical.domain.model.degreeexplorer.Department
 import it.fra.myunical.domain.model.degreeexplorer.StudyPath
 import it.fra.myunical.domain.model.schedule.NextLesson
 import it.fra.myunical.domain.model.schedule.ScheduleEvent
@@ -37,6 +38,7 @@ class GetNextLessonUseCaseTest {
     private fun useCase(byMonth: Map<Int, List<ScheduleEvent>>, fail: Boolean = false): GetNextLessonUseCase {
         val dataSource = object : UnicalStorageDataSource {
             override suspend fun getAllDegreeCourses(): List<DegreeProgram> = emptyList()
+            override suspend fun getDepartments(): List<Department> = emptyList()
             override suspend fun getStudyPlansForCds(regDidId: Int): List<StudyPath> = emptyList()
             override suspend fun findDegreeProgram(cdsCode: String, academicYear: Int): DegreeProgram? = null
             override suspend fun searchActivities(query: String, academicYear: Int): List<OfferedActivity> = emptyList()

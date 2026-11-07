@@ -34,6 +34,7 @@ Pubblico, senza autenticazione, `expectSuccess = true` (un 404 lancia un'eccezio
 | `ricerca/cds-websites/{cdsCode}/timetable/` (`academic_year`, `year`, `date_year`, `date_month`) | orario lezioni del mese |
 | `ricerca/activities/` (`name`, `academic_year`, `page_size`) | ricerca attività. **Il parametro `search` è ignorato: usare `name`** |
 | `ricerca/activities/{id}/` | pagina del corso (syllabus) |
+| `ricerca/departments/` (`page`) | 14 dipartimenti: `DepartmentCod`, `DepartmentURL` (`https://desf.unical.it`, l'host è il valore di `sites=` per le notizie). Il record di `ricerca/cds/` ha `DepartmentCod` |
 | `ricerca/addressbook/`, `ricerca/addressbook/{id}/` | rubrica |
 | `ricerca/teachers/{id}/` (+ `researchlines/`, `publications/`) | profilo docente |
 
@@ -57,7 +58,15 @@ Stranezze delle pagine dei corsi (`ricerca/activities/{id}/`):
 
 ## Sito Unical — `https://www.unical.it/api/`
 
-- `news/by-context/1` (paginato): notizie (`NewsRemoteDataSourceImpl`).
+- `news/by-context/1` (paginato): notizie d'ateneo con immagine. I filtri per categoria (`/{category}`,
+  `?category_name=`) vengono ignorati: non usarli.
+- `search/` (uniCMS, 15 risultati per pagina, `page_size` ignorato): indice di notizie e avvisi di **tutti**
+  i siti Unical, filtrabile con `sites=<host>` e `categories=Avvisi` anche senza testo di ricerca. Campi:
+  `title`, `heading` (sommario, spesso vuoto), `content` (HTML completo), `content_id`, `image` (percorso
+  relativo, vale su qualunque host), `urls` (senza schema, la prima è quella canonica), `published` (senza
+  offset), `categories`, `tags`. Usato per gli avvisi d'ateneo (`sites=www.unical.it&categories=Avvisi`) e
+  per le notizie/avvisi dei dipartimenti (`sites=<host del dipartimento>`).
+- Specifica OpenAPI del sito: `https://www.unical.it/openapi.json`.
 - Pagine web aperte in Custom Tab: link rapidi in `features/today/.../models/QuickLink.kt`.
 
 ## Menù della mensa

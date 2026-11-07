@@ -9,6 +9,7 @@ import io.ktor.http.ContentType
 import it.fra.myunical.domain.model.degreeexplorer.AcademicYearCourseGroup
 import it.fra.myunical.domain.model.degreeexplorer.DegreeCategory
 import it.fra.myunical.domain.model.degreeexplorer.DegreeProgram
+import it.fra.myunical.domain.model.degreeexplorer.Department
 import it.fra.myunical.domain.model.degreeexplorer.StudyPath
 import it.fra.myunical.domain.model.degreeexplorer.SubjectCourse
 import it.fra.myunical.domain.model.degreeexplorer.SubjectModule
@@ -19,6 +20,8 @@ import it.fra.myunical.domain.model.syllabus.OfferedActivity
 import it.fra.myunical.domain.sources.UnicalStorageDataSource
 import it.fra.myunical.network.mapper.toAbsoluteUrl
 import it.fra.myunical.network.mapper.toDomainModel
+import it.fra.myunical.network.models.DepartmentDto
+import it.fra.myunical.network.models.DepartmentPageResponse
 import it.fra.myunical.network.models.schedule.StudyCourseInfo
 import it.fra.myunical.network.models.schedule.StudyCoursePaginationResponse
 import it.fra.myunical.network.models.schedule.TimetableEntryDto
@@ -39,6 +42,19 @@ class UnicalStorageDataSourceImpl(
             parameter("coursetype", "L,LM,LM5,LM6")
         }
         return result.body<StudyCoursePaginationResponse>().results.map { it.toDegreeProgram() }
+    }
+
+    override suspend fun getDepartments(): List<Department> {
+        val departments = mutableListOf<Department>()
+        var page = 1
+        do {
+            val body = httpClient.get("ricerca/departments/") {
+                parameter("page", page)
+            }.body<DepartmentPageResponse>()
+            departments += body.results.mapNotNull { it.toDepartment() }
+            page++
+        } while (body.next != null)
+        return departments
     }
 
     override suspend fun findDegreeProgram(cdsCode: String, academicYear: Int): DegreeProgram? =
@@ -116,8 +132,15 @@ class UnicalStorageDataSourceImpl(
             parameter("lang", "it")
         }.body<StudyActivityDetailResponse>().results.toDomainModel()
 
+    private fun DepartmentDto.toDepartment(): Department? {
+        val host = url.toAbsoluteUrl()?.substringAfter("://")?.substringBefore('/') ?: return null
+        // The registry's short names are inconsistent ("- DIMES -", "Dip.Farmacia e ..."): the host is not
+        return Department(code = code, shortName = host.substringBefore('.').uppercase(), name = name.trim(), host = host)
+    }
+
     private fun StudyCourseInfo.toDegreeProgram() = DegreeProgram(
         cdsCode = courseCode,
+        departmentCode = departmentCode,
         regulationId = regulationId.toInt(),
         name = courseName,
         category = if (courseType == "L" || courseType == "LM5") DegreeCategory.BACHELOR_AND_SINGLE_CYCLE else DegreeCategory.MASTER,

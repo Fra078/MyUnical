@@ -14,6 +14,8 @@ la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseC
 - `CareerSnapshotCard`: media, CFU (`GetCareerDataUseCase`);
 - `TuitionStatusCard`: tasse da pagare (`GetTaxSummaryUseCase`);
 - `CanteenCard`: prossimo pasto (`GetNextMealUseCase`), apre la schermata Mensa;
+- `DepartmentNoticesSection`: ultimi 3 avvisi del dipartimento sotto il carosello (nascosta se il
+  dipartimento è ignoto o non ci sono avvisi), "Vedi tutti" apre la scheda del dipartimento;
 - `NewsCarousel`, `QuickLinkSection` (azioni rapide in `models/QuickLink.kt`, ognuna con un `Accent`:
   Esse3, Documenti = certificati Esse3 nel browser, Webmail, Biblioteche, Mappa; tutte aprono un Custom Tab);
 - `ProfileSheet`: profilo, cambio carriera e voci di menu (`ProfileDestination`). Studente: Libretto,
@@ -46,7 +48,18 @@ la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseC
 `GetTaxSummaryUseCase` (singleton): addebiti per `stuId`, pagati/da pagare/scaduti. Il pagamento si fa su Esse3 (`Esse3Links.TAXES`).
 
 ## Notizie (`features/news`)
-Lista paginata e dettaglio (`NewsRepository`, cache in memoria), HTML reso in Compose.
+- Fonti (`NewsSource`): `University` (notizie con immagine), `Notices` (avvisi d'ateneo, brevi e
+  senza immagine), `Department(host, noticesOnly)` (sito del dipartimento dello studente). Mappatura in
+  `NewsRemoteDataSourceImpl`; `NewsRepositoryImpl` ha una cache di pagine per fonte.
+- `NoticeModel.id` è una stringa col prefisso della fonte (`n<id contesto>` per le notizie d'ateneo,
+  `s<content_id>` per la ricerca): i due spazi di numerazione sono diversi e possono collidere.
+- `NewsListScreen`: chip Notizie · Avvisi · <sigla dipartimento> (la terza solo se il dipartimento è noto),
+  un feed paginato per scheda che parte alla prima apertura. Voci senza immagine = riga compatta col sommario.
+  `AppRoute.News(openDepartment)` apre direttamente la scheda del dipartimento.
+- Dipartimento: `GetStudentDepartmentUseCase` (cds della carriera → `DepartmentCod` del record della
+  coorte, altrimenti dell'anno corrente → `ricerca/departments/`); la sigla è l'host in maiuscolo
+  (`desf.unical.it` → DESF), perché `DepartmentNameShort` è incoerente. `DepartmentFinder` tiene la lista.
+- Dettaglio: HTML reso in Compose, "Apri sul sito" usa `link`.
 
 ## Rubrica (`features/directory`)
 Ricerca persone (`ricerca/addressbook/`), dettaglio contatto; per i docenti anche insegnamenti, linee di

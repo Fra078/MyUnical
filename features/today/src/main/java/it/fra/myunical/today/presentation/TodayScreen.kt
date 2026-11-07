@@ -50,7 +50,9 @@ import coil3.request.crossfade
 import it.fra.myunical.today.R
 import it.fra.myunical.today.composables.CanteenCard
 import it.fra.myunical.today.composables.CareerSnapshotCard
+import it.fra.myunical.today.composables.DepartmentNoticesSection
 import it.fra.myunical.today.composables.NewsCarousel
+import it.fra.myunical.today.models.DepartmentNotices
 import it.fra.myunical.today.composables.QuickLinksSection
 import it.fra.myunical.today.composables.TuitionStatusCard
 import it.fra.myunical.today.composables.UpcomingCommitmentHeroCard
@@ -76,7 +78,8 @@ fun TodayScreen(
     onOpenTaxes: () -> Unit,
     onOpenCareer: () -> Unit,
     onOpenNews: () -> Unit,
-    onOpenNewsDetail: (Long) -> Unit,
+    onOpenNewsDetail: (String) -> Unit,
+    onOpenDepartmentNews: () -> Unit,
     onOpenProfile: () -> Unit,
     onOpenCanteen: () -> Unit,
     viewModel: TodayScreenViewModel = koinViewModel()
@@ -88,6 +91,7 @@ fun TodayScreen(
     val careerSnapshot = viewModel.careerSnapshot.collectAsStateWithLifecycle().value
     val canteen = viewModel.canteen.collectAsStateWithLifecycle().value
     val news = viewModel.newsList.collectAsStateWithLifecycle().value
+    val departmentNotices = viewModel.departmentNotices.collectAsStateWithLifecycle().value
     TodayScreen(
         student = studentInfo,
         upcomingCommitment = upcomingCommitment,
@@ -96,11 +100,13 @@ fun TodayScreen(
         canteen = canteen,
         quickLinks = DefaultQuickLinks,
         notices = news,
+        departmentNotices = departmentNotices,
         onAvatarClick = onOpenProfile,
         onOpenPortalClick = { context.openInCustomTab(Esse3Links.HOME) },
         onQuickLinkClick = { context.openInCustomTab(it.destinationUrl) },
         onNoticeClick = { onOpenNewsDetail(it.id) },
         onViewAllNoticesClick = onOpenNews,
+        onViewAllDepartmentNoticesClick = onOpenDepartmentNews,
         onCareerClick = onOpenCareer,
         onTuitionClick = onOpenTaxes,
         onCanteenClick = onOpenCanteen,
@@ -120,11 +126,13 @@ fun TodayScreen(
     quickLinks: List<QuickLink>,
     notices: List<NoticeUiModel>?,
     modifier: Modifier = Modifier,
+    departmentNotices: DepartmentNotices? = null,
     onAvatarClick: () -> Unit = {},
     onOpenPortalClick: () -> Unit = {},
     onQuickLinkClick: (QuickLink) -> Unit = {},
     onNoticeClick: (NoticeUiModel) -> Unit = {},
     onViewAllNoticesClick: () -> Unit = {},
+    onViewAllDepartmentNoticesClick: () -> Unit = {},
     onCareerClick: () -> Unit = {},
     onTuitionClick: () -> Unit = {},
     onCanteenClick: () -> Unit = {},
@@ -253,6 +261,16 @@ fun TodayScreen(
                     else -> NewsCarousel(notices = notices, onNoticeClick = onNoticeClick)
                 }
             }
+
+            if (departmentNotices != null) {
+                item(key = "department_notices") {
+                    DepartmentNoticesSection(
+                        notices = departmentNotices,
+                        onNoticeClick = onNoticeClick,
+                        onViewAllClick = onViewAllDepartmentNoticesClick
+                    )
+                }
+            }
         }
     }
 }
@@ -329,8 +347,8 @@ private fun TodayScreenPreview() {
             canteen = CanteenCardState.Available("Oggi a pranzo", listOf("Pasta al pesto", "Riso e zucca"), 15),
             quickLinks = DefaultQuickLinks,
             notices = listOf(
-                NoticeUiModel(1, "Inaugurazione Anno Accademico e lectio magistralis", "Eventi", "Oggi", "", null),
-                NoticeUiModel(2, "Proroga termini presentazione piano di studi", "Didattica", "Ieri", "", null)
+                NoticeUiModel("1", "Inaugurazione Anno Accademico e lectio magistralis", "Eventi", "Oggi", "", null),
+                NoticeUiModel("2", "Proroga termini presentazione piano di studi", "Didattica", "Ieri", "", null)
             )
         )
     }

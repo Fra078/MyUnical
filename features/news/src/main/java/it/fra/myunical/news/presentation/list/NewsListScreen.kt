@@ -1,5 +1,6 @@
 package it.fra.myunical.news.presentation.list
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -23,6 +25,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFlexibleTopAppBar
@@ -39,6 +42,7 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.key
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -51,40 +55,47 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import it.fra.myunical.news.models.NewsItemUiModel
-import it.fra.myunical.news.models.NewsListUiState
+import it.fra.myunical.news.models.NewsScreenState
+import it.fra.myunical.news.models.NewsTab
 import it.fra.myunical.ui.animation.newsImageKey
 import it.fra.myunical.ui.animation.sharedImage
 import it.fra.myunical.ui.components.EmptyState
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NewsListScreen(
     onBack: () -> Unit,
-    onOpenNews: (Long) -> Unit,
-    viewModel: NewsListViewModel = koinViewModel()
+    onOpenNews: (String) -> Unit,
+    openDepartment: Boolean = false,
+    viewModel: NewsListViewModel = koinViewModel { parametersOf(openDepartment) }
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     NewsListScreen(
-        state = state,
+        screen = state,
         onBack = onBack,
         onOpenNews = onOpenNews,
-        onLoadMore = viewModel::loadMore,
-        onRefresh = viewModel::refresh
+        onSelectTab = viewModel::select,
+        onLoadMore = { viewModel.loadMore() },
+        onRefresh = { viewModel.refresh() }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun NewsListScreen(
-    state: NewsListUiState,
+    screen: NewsScreenState,
     onBack: () -> Unit,
-    onOpenNews: (Long) -> Unit,
+    onOpenNews: (String) -> Unit,
+    onSelectTab: (NewsTab) -> Unit,
     onLoadMore: () -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val state = screen.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    val listState = rememberLazyListState()
+    // Each tab starts from the top
+    val listState = key(screen.selected) { rememberLazyListState() }
 
     // Infinite scroll: ask for the next page when the last items become visible
     val shouldLoadMore by remember {
@@ -112,14 +123,27 @@ fun NewsListScreen(
             )
         }
     ) { innerPadding ->
+        Column(Modifier.padding(innerPadding)) {
+        Row(
+            Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            screen.tabs.forEach { tab ->
+                FilterChip(
+                    selected = tab.tab == screen.selected,
+                    onClick = { onSelectTab(tab.tab) },
+                    label = { Text(tab.label) }
+                )
+            }
+        }
         val pullState = rememberPullToRefreshState()
         PullToRefreshBox(
             isRefreshing = state.isRefreshing,
             onRefresh = onRefresh,
             state = pullState,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier = Modifier.fillMaxSize(),
             indicator = {
                 PullToRefreshDefaults.LoadingIndicator(
                     state = pullState,
@@ -152,7 +176,7 @@ fun NewsListScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     itemsIndexed(state.items, key = { _, item -> item.id }) { index, item ->
-                        if (index == 0) {
+                        if (index == 0 && item.imageUrl != null) {
                             FeaturedNewsCard(item, onClick = { onOpenNews(item.id) }, modifier = Modifier.animateItem())
                         } else {
                             CompactNewsCard(item, onClick = { onOpenNews(item.id) }, modifier = Modifier.animateItem())
@@ -178,6 +202,7 @@ fun NewsListScreen(
                     }
                 }
             }
+        }
         }
     }
 }
@@ -224,6 +249,16 @@ private fun FeaturedNewsCard(item: NewsItemUiModel, onClick: () -> Unit, modifie
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
+                // Notices have no picture: a short summary tells what they are about
+                if (item.imageUrl == null && item.summary.isNotBlank()) {
+                    Text(
+                        item.summary,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }

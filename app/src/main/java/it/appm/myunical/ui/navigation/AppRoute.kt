@@ -27,10 +27,10 @@ sealed interface AppRoute : NavKey {
     data object Taxes : AppRoute
 
     @Serializable
-    data object News : AppRoute
+    data class News(val openDepartment: Boolean = false) : AppRoute
 
     @Serializable
-    data class NewsDetail(val newsId: Long) : AppRoute
+    data class NewsDetail(val newsId: String) : AppRoute
 
     @Serializable
     data object Directory : AppRoute

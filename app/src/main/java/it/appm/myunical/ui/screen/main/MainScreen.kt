@@ -40,7 +40,8 @@ fun MainScreen(
     onAddSchedule: () -> Unit,
     onOpenTaxes: () -> Unit,
     onOpenNews: () -> Unit,
-    onOpenNewsDetail: (Long) -> Unit,
+    onOpenDepartmentNews: () -> Unit,
+    onOpenNewsDetail: (String) -> Unit,
     onOpenDirectory: () -> Unit,
     onOpenCourse: (Long) -> Unit,
     onOpenCanteen: () -> Unit,
@@ -122,6 +123,7 @@ fun MainScreen(
                         onOpenCareer = { selectTab(MainTab.CAREER) },
                         onOpenNews = onOpenNews,
                         onOpenNewsDetail = onOpenNewsDetail,
+                        onOpenDepartmentNews = onOpenDepartmentNews,
                         onOpenProfile = { showProfile = true },
                         onOpenCanteen = onOpenCanteen
                     )

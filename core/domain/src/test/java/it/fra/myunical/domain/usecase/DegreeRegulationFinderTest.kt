@@ -2,6 +2,7 @@ package it.fra.myunical.domain.usecase
 
 import it.fra.myunical.domain.model.degreeexplorer.DegreeCategory
 import it.fra.myunical.domain.model.degreeexplorer.DegreeProgram
+import it.fra.myunical.domain.model.degreeexplorer.Department
 import it.fra.myunical.domain.model.degreeexplorer.Regulation
 import it.fra.myunical.domain.model.degreeexplorer.StudyPath
 import it.fra.myunical.domain.model.schedule.ScheduleEvent
@@ -23,6 +24,7 @@ class DegreeRegulationFinderTest {
     private fun find(published: Map<Int, String>, cohort: Int, current: Int): Pair<Regulation?, Regulation?> = runBlocking {
         val dataSource = object : UnicalStorageDataSource {
             override suspend fun getAllDegreeCourses(): List<DegreeProgram> = emptyList()
+            override suspend fun getDepartments(): List<Department> = emptyList()
             override suspend fun getStudyPlansForCds(regDidId: Int): List<StudyPath> = emptyList()
             override suspend fun findDegreeProgram(cdsCode: String, academicYear: Int): DegreeProgram? =
                 if (academicYear > 2100) error("offline") else published[academicYear]?.let { program(it) }

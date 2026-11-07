@@ -41,7 +41,7 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
 - `app/.../ui/navigation/AppRoute.kt`: `sealed interface AppRoute : NavKey`, tutte `@Serializable`.
   `Main` contiene le tab (`MainTab`: HOME, CAREER, SCHEDULE) gestite da `MainScreen`.
 - Le altre schermate sono route a pieno schermo: `ScheduleProviders`, `ScheduleProviderEditor(providerId?)`,
-  `Taxes`, `News`, `NewsDetail(newsId)`, `Directory`, `ContactDetail(contactId)`,
+  `Taxes`, `News(openDepartment)`, `NewsDetail(newsId: String)`, `Directory`, `ContactDetail(contactId)`,
   `CourseDetail(courseRowId)`, `Canteen`.
 - `AppNavigation.kt`: back stack con `rememberNavBackStack`, `entry<AppRoute.X>`; le callback
   `onOpenX` scendono da `MainScreen` alle tab (es. `TodayScreen`).
@@ -62,9 +62,9 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
 ## Test
 
 - Unit test JVM: `core/domain/src/test` (use case con fake dei data source: `GetCareerDataUseCaseTest`,
-  `GetMonthlyScheduleUseCaseTest`, `DegreeRegulationFinderTest`, `GetNextLessonUseCaseTest`, `GetTaxSummaryUseCaseTest`,
+  `GetMonthlyScheduleUseCaseTest`, `DegreeRegulationFinderTest`, `DepartmentFinderTest`, `GetNextLessonUseCaseTest`, `GetTaxSummaryUseCaseTest`,
   `GetNextMealUseCaseTest`, `CourseLookupTest`), `core/network/src/test` (mapper con JSON reali:
-  Career, Tax, Directory, Syllabus), `core/datastore/src/test` (`CanteenMenuRepositoryTest`, che
+  Career, Tax, Directory, Syllabus, News), `core/datastore/src/test` (`CanteenMenuRepositoryTest`, che
   verifica anche che l'asset del menù sia completo).
 - Aggiungendo metodi a un'interfaccia di data source aggiorna i fake nei test, o la compilazione dei
   test fallisce.

@@ -116,4 +116,4 @@ fun Modifier.aboveSharedElements(): Modifier {
 }
 
 /** Shared key of a news cover image, used by the Home carousel, the news list and the detail. */
-fun newsImageKey(newsId: Long): String = "news-image-$newsId"
+fun newsImageKey(newsId: String): String = "news-image-$newsId"

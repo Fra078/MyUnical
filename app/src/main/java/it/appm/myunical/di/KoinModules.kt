@@ -5,7 +5,9 @@ import it.fra.myunical.domain.usecase.GetCanteenMenuUseCase
 import it.fra.myunical.domain.usecase.GetCareerDataUseCase
 import it.fra.myunical.domain.usecase.GetCourseDetailUseCase
 import it.fra.myunical.domain.usecase.DegreeRegulationFinder
+import it.fra.myunical.domain.usecase.DepartmentFinder
 import it.fra.myunical.domain.usecase.GetDegreeRegulationsUseCase
+import it.fra.myunical.domain.usecase.GetStudentDepartmentUseCase
 import it.fra.myunical.domain.usecase.ResolveCdsCodeUseCase
 import it.fra.myunical.domain.usecase.GetCurrentCareerUseCase
 import it.fra.myunical.domain.usecase.GetCurrentUserInfoUseCase
@@ -43,6 +45,9 @@ val domainModule = module {
     factoryOf(::GetCourseDetailUseCase)
     factory { DegreeRegulationFinder(storageDataSource = get()) }
     factoryOf(::GetDegreeRegulationsUseCase)
+    // Keeps the list of departments, which never changes
+    single { DepartmentFinder(storageDataSource = get()) }
+    singleOf(::GetStudentDepartmentUseCase)
     factoryOf(::GetCanteenMenuUseCase)
     factory { GetNextMealUseCase(repository = get()) }
     factory { GetNextLessonUseCase(providerRepository = get(), getMonthlySchedule = get()) }

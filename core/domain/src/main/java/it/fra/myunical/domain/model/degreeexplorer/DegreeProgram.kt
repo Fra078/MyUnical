@@ -10,5 +10,7 @@ data class DegreeProgram(
     val departmentName: String = "",
     val durationYears: Int = 0,
     /** Absolute URL of the didactic regulation PDF, when published for the requested year. */
-    val regulationUrl: String? = null
+    val regulationUrl: String? = null,
+    /** Code of the department running the course, matching [Department.code]. */
+    val departmentCode: String = ""
 )

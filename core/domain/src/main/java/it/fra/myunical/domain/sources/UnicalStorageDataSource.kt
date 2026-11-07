@@ -1,6 +1,7 @@
 package it.fra.myunical.domain.sources
 
 import it.fra.myunical.domain.model.degreeexplorer.DegreeProgram
+import it.fra.myunical.domain.model.degreeexplorer.Department
 import it.fra.myunical.domain.model.degreeexplorer.StudyPath
 import it.fra.myunical.domain.model.schedule.ScheduleEvent
 import it.fra.myunical.domain.model.syllabus.CourseSyllabus
@@ -8,6 +9,10 @@ import it.fra.myunical.domain.model.syllabus.OfferedActivity
 
 interface UnicalStorageDataSource {
     suspend fun getAllDegreeCourses(): List<DegreeProgram>
+
+    /** The university departments with their websites. */
+    suspend fun getDepartments(): List<Department>
+
     suspend fun getStudyPlansForCds(regDidId: Int): List<StudyPath>
 
     /** Returns the lessons of [cdsYear] for the given calendar [month]; `providerId` is left empty. */

@@ -62,7 +62,7 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun NewsDetailScreen(
-    newsId: Long,
+    newsId: String,
     onBack: () -> Unit,
     viewModel: NewsDetailViewModel = koinViewModel(key = "news_$newsId") { parametersOf(newsId) }
 ) {

@@ -3,7 +3,8 @@ package it.fra.myunical.domain.model.news
 import java.time.LocalDateTime
 
 data class NoticeModel(
-    val id: Long,
+    /** Unique across sources: the university feed and the search index number their items differently. */
+    val id: String,
     val title: String,
     val category: String,
     val publishedAt: LocalDateTime?,

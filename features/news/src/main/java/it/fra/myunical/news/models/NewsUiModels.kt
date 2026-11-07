@@ -1,13 +1,27 @@
 package it.fra.myunical.news.models
 
 data class NewsItemUiModel(
-    val id: Long,
+    val id: String,
     val title: String,
     val summary: String,
     val category: String,
     val dateLabel: String?,
     val imageUrl: String?
 )
+
+/** The feeds of the news screen. */
+enum class NewsTab { NEWS, NOTICES, DEPARTMENT }
+
+data class NewsTabUi(val tab: NewsTab, val label: String)
+
+/** The tabs with their lists; a list not loaded yet reads as loading. */
+data class NewsScreenState(
+    val tabs: List<NewsTabUi>,
+    val selected: NewsTab,
+    val lists: Map<NewsTab, NewsListUiState> = emptyMap()
+) {
+    val current: NewsListUiState get() = lists[selected] ?: NewsListUiState()
+}
 
 data class NewsListUiState(
     val items: List<NewsItemUiModel> = emptyList(),
@@ -20,7 +34,7 @@ data class NewsListUiState(
 )
 
 data class NewsDetailUiModel(
-    val id: Long,
+    val id: String,
     val title: String,
     val summary: String,
     val category: String,

@@ -62,7 +62,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                                 onManageSchedules = { backStack.add(AppRoute.ScheduleProviders) },
                                 onAddSchedule = { backStack.add(AppRoute.ScheduleProviderEditor()) },
                                 onOpenTaxes = { backStack.add(AppRoute.Taxes) },
-                                onOpenNews = { backStack.add(AppRoute.News) },
+                                onOpenNews = { backStack.add(AppRoute.News()) },
+                                onOpenDepartmentNews = { backStack.add(AppRoute.News(openDepartment = true)) },
                                 onOpenNewsDetail = { backStack.add(AppRoute.NewsDetail(it)) },
                                 onOpenDirectory = { backStack.add(AppRoute.Directory) },
                                 onOpenCourse = { backStack.add(AppRoute.CourseDetail(it)) },
@@ -77,10 +78,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                             onEditProvider = { backStack.add(AppRoute.ScheduleProviderEditor(it)) }
                         )
                     }
-                    entry<AppRoute.News> {
+                    entry<AppRoute.News> { route ->
                         WithNavScope {
                             NewsListScreen(
                                 onBack = ::pop,
+                                openDepartment = route.openDepartment,
                                 onOpenNews = { backStack.add(AppRoute.NewsDetail(it)) }
                             )
                         }
