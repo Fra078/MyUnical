@@ -66,6 +66,12 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
   `GetNextMealUseCaseTest`, `CourseLookupTest`), `core/network/src/test` (mapper con JSON reali:
   Career, Tax, Directory, Syllabus, News), `core/datastore/src/test` (`CanteenMenuRepositoryTest`, che
   verifica anche che l'asset del menù sia completo).
+- Screenshot test (plugin `com.android.compose.screenshot`, alpha): `app/src/screenshotTest`, riferimenti
+  in `app/src/screenshotTestDebug/reference`. Servono sia `android.experimental.enableScreenshotTest=true`
+  in `gradle.properties` sia `experimentalProperties[...]` nel blocco `android` di `app`. Le preview usano gli
+  overload stateless pubblici delle schermate (`TodayScreen(student, …)`, `ScheduleScreen(state, …)`…) con
+  `AppTheme`; layoutlib non carica immagini di rete né esegue i `LaunchedEffect` (la striscia dei giorni
+  dell'orario non scorre a oggi).
 - Aggiungendo metodi a un'interfaccia di data source aggiorna i fake nei test, o la compilazione dei
   test fallisce.
 - Nelle feature ci sono solo gli `ExampleUnitTest` del template.

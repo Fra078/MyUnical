@@ -21,13 +21,17 @@ stranezze delle API, trappole già incontrate.
 
 ## Build e test
 
-`gradlew` non è eseguibile e il JDK è quello di Android Studio:
+Il JDK è quello di Android Studio (`sh ./gradlew` funziona anche dove `gradlew` non è eseguibile):
 
 ```sh
 export JAVA_HOME=/var/home/fra078/.local/share/JetBrains/Toolbox/apps/android-studio/jbr
 sh ./gradlew :core:domain:test :core:datastore:testDebugUnitTest :core:network:testDebugUnitTest --offline
 sh ./gradlew :app:assembleDebug --offline
 ```
+
+Screenshot del README (`docs/screenshots/`): preview con dati inventati in
+`app/src/screenshotTest/.../ReadmeScreenshots.kt`, generate con `sh ./gradlew :app:updateDebugScreenshotTest`
+e copiate a mano (istruzioni nel README). Mai dati reali negli screenshot o nelle preview: la repo è pubblica.
 
 Installazione sul telefono (Pixel, adb via TLS; il seriale IP non è stabile, controlla `adb devices`):
 

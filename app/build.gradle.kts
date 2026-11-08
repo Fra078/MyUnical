@@ -5,11 +5,14 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.screenshot)
 }
 
 
 android {
     namespace = "it.appm.myunical"
+    // Compose Preview Screenshot Testing: the README screenshots in src/screenshotTest
+    experimentalProperties["android.experimental.enableScreenshotTest"] = true
     compileSdk = 37
 
     defaultConfig {
@@ -92,6 +95,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
+    screenshotTestImplementation(libs.screenshot.validation.api)
+    screenshotTestImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 

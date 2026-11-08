@@ -28,8 +28,10 @@ appcompat = "1.8.0"
 material = "1.14.0"
 animation = "1.12.1"
 browser = "1.10.0"
+screenshot = "0.0.1-alpha16"
 
 [libraries]
+screenshot-validation-api = { group = "com.android.tools.screenshot", name = "screenshot-validation-api", version.ref = "screenshot" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
@@ -77,6 +79,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
 
 [plugins]
+compose-screenshot = { id = "com.android.compose.screenshot", version.ref = "screenshot" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
