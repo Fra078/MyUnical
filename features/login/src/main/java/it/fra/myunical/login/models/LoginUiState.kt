@@ -15,5 +15,5 @@ data class LoginUiState(
     val careers: List<AcademicCareer> = emptyList(),
     val selectedCareerId: Int? = null
 ) {
-    val canSubmit: Boolean get() = !isLoading && fiscalCode.isNotBlank() && password.isNotBlank()
+    val canSubmit: Boolean get() = !isLoading && fiscalCode.isNotEmpty() && password.isNotEmpty()
 }

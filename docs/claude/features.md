@@ -10,6 +10,10 @@ la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseC
 `LoginViewModel` ha due passi (`LoginStep`): credenziali e scelta della carriera. Con una sola carriera
 (o una sola attiva) entra subito; altrimenti elenca le carriere (attive per prime) e il tasto indietro
 torna alle credenziali. Gli errori sono `LoginError` (credenziali, rete, server), tradotti nella UI.
+Input: regole in `UserCredentials.sanitizeUsername/sanitizePassword` (codice fiscale solo lettere e cifre
+in maiuscolo; password com'è, spazi compresi, senza caratteri di controllo), applicate durante la digitazione
+e in `LoginUseCase`. Autofill: i campi hanno `contentType` Username/Password (senza, il gestore password
+riempie solo la password) e l'invio chiama `LocalAutofillManager.commit()`.
 Il salvataggio delle credenziali fa passare `MainActivity` a `AppNavigation`. I ViewModel stanno in uno
 store per stato di autenticazione (`SessionViewModelStores`): al cambio di stato quelli dell'altro stato
 vengono cancellati, altrimenti dopo il logout il login riappariva in caricamento con le vecchie credenziali.

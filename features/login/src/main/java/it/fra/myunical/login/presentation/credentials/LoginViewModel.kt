@@ -28,9 +28,11 @@ class LoginViewModel(
     private val _state = MutableStateFlow(LoginUiState())
     val state: StateFlow<LoginUiState> = _state.asStateFlow()
 
-    fun updateFiscalCode(value: String) = _state.update { it.copy(fiscalCode = value.uppercase(), error = null) }
+    fun updateFiscalCode(value: String) =
+        _state.update { it.copy(fiscalCode = UserCredentials.sanitizeUsername(value), error = null) }
 
-    fun updatePassword(value: String) = _state.update { it.copy(password = value, error = null) }
+    fun updatePassword(value: String) =
+        _state.update { it.copy(password = UserCredentials.sanitizePassword(value), error = null) }
 
     fun togglePasswordVisibility() = _state.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
 
@@ -84,7 +86,7 @@ class LoginViewModel(
 
     private suspend fun save(matId: Int) {
         val state = _state.value
-        saveCredentials(UserCredentials(state.fiscalCode.trim(), state.password.trim()), matId)
+        saveCredentials(UserCredentials(state.fiscalCode, state.password).sanitized(), matId)
         // Saving the credentials moves the app to the signed-in screens: nothing else to update
     }
 

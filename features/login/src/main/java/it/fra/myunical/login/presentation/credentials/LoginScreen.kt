@@ -41,7 +41,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.platform.LocalAutofillManager
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -53,6 +57,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import it.fra.myunical.domain.model.auth.UserCredentials
 import it.fra.myunical.login.R
 import it.fra.myunical.login.models.AcademicCareer
 import it.fra.myunical.login.models.LoginError
@@ -159,8 +164,11 @@ private fun CredentialsStep(
     onSubmit: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    val autofillManager = LocalAutofillManager.current
     val submit = {
         focusManager.clearFocus()
+        // Offers to save the credentials in the password manager
+        autofillManager?.commit()
         onSubmit()
     }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp),) {
@@ -179,9 +187,19 @@ private fun CredentialsStep(
         OutlinedTextField(
             value = state.fiscalCode,
             onValueChange = onFiscalCodeChanged,
-            modifier = Modifier.fillMaxWidth(),
+            // Without it autofill sees only the password field and fills just that one
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentType = ContentType.Username },
             label = { Text("Codice fiscale") },
             leadingIcon = { Icon(painterResource(R.drawable.badge), contentDescription = null) },
+            supportingText = {
+                // Hint for a likely typo, not a block: the sign-in decides whether the code is right
+                val length = state.fiscalCode.length
+                if (length in 1 until UserCredentials.FISCAL_CODE_LENGTH || length > UserCredentials.FISCAL_CODE_LENGTH) {
+                    Text("$length/${UserCredentials.FISCAL_CODE_LENGTH} caratteri")
+                }
+            },
             singleLine = true,
             isError = state.error == LoginError.INVALID_CREDENTIALS,
             shape = MaterialTheme.shapes.large,
@@ -194,7 +212,9 @@ private fun CredentialsStep(
         OutlinedTextField(
             value = state.password,
             onValueChange = onPasswordChanged,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .semantics { contentType = ContentType.Password },
             label = { Text("Password") },
             leadingIcon = { Icon(painterResource(R.drawable.lock), contentDescription = null) },
             trailingIcon = {

@@ -12,8 +12,8 @@ class LoginUseCase(
 ) {
 
     suspend operator fun invoke(credentials: UserCredentials) : AuthResponseModel {
-        val cleanCredentials= UserCredentials(credentials.username.trim(),credentials.password.trim())
-        if (cleanCredentials.username.isBlank() || cleanCredentials.password.isBlank())
+        val cleanCredentials = credentials.sanitized()
+        if (cleanCredentials.username.isEmpty() || cleanCredentials.password.isEmpty())
             return AuthResponseModel.Failure(AuthError.InvalidCredentials)
         val response = remoteAuthDataSource.validateCredentials(cleanCredentials)
         if (response is AuthResponseModel.Success){
