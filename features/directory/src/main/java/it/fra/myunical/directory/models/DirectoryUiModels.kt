@@ -39,7 +39,7 @@ sealed interface ContactDetailUiState {
     }
 }
 
-/** Initials for the avatar: "Andrea Rossi" -> "FR". */
+/** Initials for the avatar: "Andrea Rossi" -> "AR". */
 val Contact.initials: String
     get() = name.split(' ').filter { it.isNotBlank() }.let { words ->
         listOfNotNull(words.firstOrNull(), words.drop(1).lastOrNull())

@@ -11,7 +11,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Based on real responses of the course catalogue (storage.portale.unical.it). */
+/** Based on responses of the course catalogue (storage.portale.unical.it), with invented teachers. */
 class SyllabusMapperTest {
 
     private val json = Json { ignoreUnknownKeys = true; isLenient = true; coerceInputValues = true }

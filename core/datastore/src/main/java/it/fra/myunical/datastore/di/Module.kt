@@ -5,6 +5,8 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import it.fra.myunical.datastore.repository.CanteenMenuRepositoryImpl
 import it.fra.myunical.datastore.repository.ScheduleProviderRepositoryImpl
 import it.fra.myunical.datastore.repository.UserPreferencesRepositoryImpl
+import it.fra.myunical.datastore.security.CredentialCipher
+import it.fra.myunical.datastore.security.KeystoreCredentialCipher
 import it.fra.myunical.datastore.sources.AuthLocalDataSourceImpl
 import it.fra.myunical.datastore.sources.UserInfoDataSourceImpl
 import it.fra.myunical.domain.repository.CanteenMenuRepository
@@ -19,12 +21,17 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val datastoreModule = module {
-    single<AuthLocalDataSource> { AuthLocalDataSourceImpl(
-        dataStore = PreferenceDataStoreFactory.create(
-            scope = CoroutineScope(Dispatchers.IO),
-            produceFile = { androidContext().preferencesDataStoreFile("auth_secure.preference") }
+    single<CredentialCipher> { KeystoreCredentialCipher() }
+    single<AuthLocalDataSource> {
+        AuthLocalDataSourceImpl(
+            dataStore = PreferenceDataStoreFactory.create(
+                migrations = listOf(AuthLocalDataSourceImpl.PlaintextMigration(get())),
+                scope = CoroutineScope(Dispatchers.IO),
+                produceFile = { androidContext().preferencesDataStoreFile("auth_secure.preference") }
+            ),
+            cipher = get()
         )
-    ) }
+    }
 
     single<UserPreferenceRepository> {
         UserPreferencesRepositoryImpl(

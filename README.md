@@ -36,8 +36,9 @@ Scritta in Kotlin con Jetpack Compose e Material 3 Expressive.
 - **Profilo**: cambio carriera, regolamento didattico del corso (quello della tua immatricolazione e
   quello in vigore) e collegamenti a diritto allo studio, portale e servizi del campus.
 
-L'accesso usa le credenziali di Esse3 (codice fiscale e password). Restano salvate solo sul
-dispositivo e servono a leggere i tuoi dati dalle API dell'ateneo. Non passano da nessun server terzo.
+L'accesso usa le credenziali di Esse3 (codice fiscale e password). Restano solo sul dispositivo,
+cifrate con una chiave del Keystore di Android, e servono a leggere i tuoi dati dalle API dell'ateneo.
+Non passano da nessun server terzo.
 
 ## Da dove vengono i dati
 
@@ -127,3 +128,7 @@ cp app/src/screenshotTestDebug/reference/it/appm/myunical/screenshots/ReadmeScre
 MyUnical è un progetto indipendente: **non è realizzato né approvato dall'Università della Calabria**
 né da Cineca. Usa le API pubbliche dell'ateneo, che possono cambiare senza preavviso. Per scadenze,
 pagamenti e prenotazioni fa fede il portale ufficiale.
+
+## Licenza
+
+Distribuito con licenza [MIT](LICENSE).

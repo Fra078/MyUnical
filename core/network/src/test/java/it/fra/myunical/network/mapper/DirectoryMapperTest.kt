@@ -13,7 +13,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Based on real responses of the public address book (storage.portale.unical.it). */
+/** Based on responses of the public address book (storage.portale.unical.it), with invented people. */
 class DirectoryMapperTest {
 
     private val json = Json { ignoreUnknownKeys = true; isLenient = true; coerceInputValues = true }

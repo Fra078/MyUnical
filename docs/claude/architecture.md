@@ -63,8 +63,10 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
 
 - Unit test JVM: `core/domain/src/test` (use case con fake dei data source: `GetCareerDataUseCaseTest`,
   `GetMonthlyScheduleUseCaseTest`, `DegreeRegulationFinderTest`, `CareerScheduleBuilderTest`, `UserCredentialsTest`, `DepartmentFinderTest`, `GetNextLessonUseCaseTest`, `GetTaxSummaryUseCaseTest`,
-  `GetNextMealUseCaseTest`, `CourseLookupTest`), `core/network/src/test` (mapper con JSON reali:
-  Career, Tax, Directory, Syllabus, News), `core/datastore/src/test` (`CanteenMenuRepositoryTest`, che
+  `GetNextMealUseCaseTest`, `CourseLookupTest`), `core/network/src/test` (mapper con JSON nella forma reale delle API:
+  Career, Tax, Directory, Syllabus, News; persone, contatti, ID dei docenti e testi liberi sono inventati:
+  i JSON nuovi vanno anonimizzati prima di committarli), `core/datastore/src/test` (`AuthLocalDataSourceImplTest`, DataStore vero su file temporaneo e cifrario finto;
+  `CanteenMenuRepositoryTest`, che
   verifica anche che l'asset del menù sia completo).
 - Screenshot test (plugin `com.android.compose.screenshot`, alpha): `app/src/screenshotTest`, riferimenti
   in `app/src/screenshotTestDebug/reference`. Servono sia `android.experimental.enableScreenshotTest=true`

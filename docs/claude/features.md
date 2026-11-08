@@ -4,7 +4,9 @@ Percorsi relativi a `features/<x>/src/main/java/it/fra/myunical/<x>/` salvo dove
 
 ## Login (`features/login`)
 Credenziali Esse3 → `LoginUseCase` → `AuthRemoteDataSource.validateCredentials` (`login`). Salva
-credenziali (`auth_secure`) e profilo con le carriere (`user_info`). Con più carriere l'utente sceglie;
+credenziali (`auth_secure`, cifrate: `datastore/security/CredentialCipher.kt`, AES-GCM con chiave del Keystore;
+`AuthLocalDataSourceImpl.PlaintextMigration` cifra quelle in chiaro delle versioni precedenti; un valore
+non decifrabile, per esempio dopo un ripristino su un altro telefono, vale come logout) e profilo con le carriere (`user_info`). Con più carriere l'utente sceglie;
 la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseCase`).
 `GetAuthStateUseCase` decide se mostrare login o `Main`.
 `LoginViewModel` ha due passi (`LoginStep`): credenziali e scelta della carriera. Con una sola carriera
