@@ -23,4 +23,7 @@
 - `ShapeBadge`: icona dentro una forma Material colorata (per voci di lista e link rapidi).
 - `EmptyState`, `CustomTabs` (apertura URL in Custom Tab).
 - `format/RelativeDate.kt`: "oggi", "domani", date in italiano.
+- Transizioni di navigazione: `app/.../ui/navigation/NavTransitions.kt`. Nel back predittivo la schermata
+  precedente resta ferma (se scorresse da sinistra lascerebbe una fascia di finestra scoperta accanto alla
+  schermata che rimpicciolisce); `AppNavigation` dipinge comunque lo sfondo del tema sotto il `NavDisplay`.
 - `animation/SharedElements.kt`: shared element e angoli tra card della Home e schermate.

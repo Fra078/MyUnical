@@ -62,7 +62,7 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
 ## Test
 
 - Unit test JVM: `core/domain/src/test` (use case con fake dei data source: `GetCareerDataUseCaseTest`,
-  `GetMonthlyScheduleUseCaseTest`, `DegreeRegulationFinderTest`, `DepartmentFinderTest`, `GetNextLessonUseCaseTest`, `GetTaxSummaryUseCaseTest`,
+  `GetMonthlyScheduleUseCaseTest`, `DegreeRegulationFinderTest`, `CareerScheduleBuilderTest`, `DepartmentFinderTest`, `GetNextLessonUseCaseTest`, `GetTaxSummaryUseCaseTest`,
   `GetNextMealUseCaseTest`, `CourseLookupTest`), `core/network/src/test` (mapper con JSON reali:
   Career, Tax, Directory, Syllabus, News), `core/datastore/src/test` (`CanteenMenuRepositoryTest`, che
   verifica anche che l'asset del menù sia completo).

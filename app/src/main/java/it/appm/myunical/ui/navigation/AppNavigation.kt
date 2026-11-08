@@ -2,6 +2,8 @@ package it.appm.myunical.ui.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -39,7 +41,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
     val cornerRegistry = remember { SharedCornerRegistry() }
 
-    SharedTransitionLayout(modifier) {
+    // Whatever the screens leave uncovered while they animate shows the theme, not the window
+    SharedTransitionLayout(modifier.background(MaterialTheme.colorScheme.background)) {
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
             LocalSharedCornerRegistry provides cornerRegistry

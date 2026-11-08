@@ -13,7 +13,8 @@ fun ScheduleProvider.toDataModel() = ScheduleProviderDataModel(
     degreeName = degreeName,
     studyPathId = studyPathId,
     studyPathName = studyPathName,
-    courses = courses.map(TrackedCourse::toDataModel)
+    courses = courses.map(TrackedCourse::toDataModel),
+    careerMatId = careerMatId
 )
 
 fun ScheduleProviderDataModel.toDomainModel() = ScheduleProvider(
@@ -24,7 +25,8 @@ fun ScheduleProviderDataModel.toDomainModel() = ScheduleProvider(
     degreeName = degreeName,
     studyPathId = studyPathId,
     studyPathName = studyPathName,
-    courses = courses.map(TrackedCourseDataModel::toDomainModel)
+    courses = courses.map(TrackedCourseDataModel::toDomainModel),
+    careerMatId = careerMatId
 )
 
 fun TrackedCourse.toDataModel() = TrackedCourseDataModel(

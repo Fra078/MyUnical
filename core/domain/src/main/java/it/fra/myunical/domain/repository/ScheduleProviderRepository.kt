@@ -8,4 +8,7 @@ interface ScheduleProviderRepository {
     suspend fun getProvider(id: String): ScheduleProvider?
     suspend fun upsertProvider(item: ScheduleProvider)
     suspend fun removeProvider(id: String)
+
+    /** True when the user removed the automatic schedule of [careerMatId], so it must not be recreated. */
+    suspend fun isCareerScheduleDismissed(careerMatId: Int): Boolean
 }

@@ -216,7 +216,9 @@ class ScheduleProviderEditorViewModel(
             degreeName = degree.name,
             studyPathId = path.id,
             studyPathName = path.name,
-            courses = courses
+            courses = courses,
+            // A saved edit is the user's own choice: the career no longer overwrites it
+            careerMatId = null
         )
         _state.update { it.copy(isSaving = true) }
         viewModelScope.launch {

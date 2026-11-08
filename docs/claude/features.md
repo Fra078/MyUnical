@@ -7,6 +7,10 @@ Credenziali Esse3 → `LoginUseCase` → `AuthRemoteDataSource.validateCredentia
 credenziali (`auth_secure`) e profilo con le carriere (`user_info`). Con più carriere l'utente sceglie;
 la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseCase`).
 `GetAuthStateUseCase` decide se mostrare login o `Main`.
+`LoginViewModel` ha due passi (`LoginStep`): credenziali e scelta della carriera. Con una sola carriera
+(o una sola attiva) entra subito; altrimenti elenca le carriere (attive per prime) e il tasto indietro
+torna alle credenziali. Gli errori sono `LoginError` (credenziali, rete, server), tradotti nella UI.
+Il salvataggio delle credenziali fa passare `MainActivity` a `AppNavigation`.
 
 ## Home (`features/today`)
 `TodayScreenViewModel` combina più sorgenti, ognuna con stato proprio:
@@ -42,6 +46,12 @@ la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseC
 - `providers/` elenco, `editor/` creazione e modifica (usa `GetDegreeProgramsUseCase`,
   `GetStudyPathsUseCase` sullo storage), `schedule/` calendario mensile (`GetMonthlyScheduleUseCase`,
   singleton con cache per mese/anno di corso; filtra gli eventi per `trackedCodes`).
+- Orario automatico: `SyncCareerScheduleUseCase` (avviato da `TodayScreenViewModel`) tiene un provider
+  `career-<matId>` (`ScheduleProvider.careerMatId`) allineato alla carriera: `CareerScheduleBuilder` prende il
+  regolamento della coorte (`findDegreeProgram`), sceglie il percorso con più esami non superati del libretto
+  e traccia quegli esami. Non tocca orari modificati a mano (il salvataggio dell'editor azzera `careerMatId`),
+  non ricrea quello rimosso (`isCareerScheduleDismissed`) e non si crea se esiste già un orario manuale
+  dello stesso corso (evita lezioni doppie).
 - Colori dei corsi: `components/CourseColor.kt`.
 
 ## Tasse (`features/taxes`)

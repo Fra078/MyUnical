@@ -8,7 +8,9 @@ data class ScheduleProvider(
     val degreeName: String,
     val studyPathId: Int,
     val studyPathName: String,
-    val courses: List<TrackedCourse>
+    val courses: List<TrackedCourse>,
+    /** Career whose libretto keeps this schedule up to date; null for schedules built by hand. */
+    val careerMatId: Int? = null
 ) {
     val cdsYears: List<Int>
         get() = courses.map(TrackedCourse::yearNumber).distinct().sorted()

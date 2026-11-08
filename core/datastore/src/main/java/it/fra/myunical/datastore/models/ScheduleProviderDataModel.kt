@@ -11,7 +11,8 @@ data class ScheduleProviderDataModel(
     val degreeName: String,
     val studyPathId: Int,
     val studyPathName: String,
-    val courses: List<TrackedCourseDataModel>
+    val courses: List<TrackedCourseDataModel>,
+    val careerMatId: Int? = null
 )
 
 @Serializable

@@ -18,6 +18,7 @@ import it.fra.myunical.domain.usecase.GetStudentDepartmentUseCase
 import it.fra.myunical.domain.usecase.GetTaxSummaryUseCase
 import it.fra.myunical.domain.usecase.LogoutUseCase
 import it.fra.myunical.domain.usecase.SetCurrentCareerUseCase
+import it.fra.myunical.domain.usecase.SyncCareerScheduleUseCase
 import it.fra.myunical.today.mapper.toCanteenState
 import it.fra.myunical.today.mapper.toSnapshotState
 import it.fra.myunical.today.mapper.toTuitionState
@@ -58,8 +59,14 @@ class TodayScreenViewModel(
     private val getDegreeRegulations: GetDegreeRegulationsUseCase,
     private val getStudentDepartment: GetStudentDepartmentUseCase,
     private val setCurrentCareer: SetCurrentCareerUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    syncCareerSchedule: SyncCareerScheduleUseCase
 ) : ViewModel() {
+
+    init {
+        // The schedule follows the career from the first screen, without the user building it by hand
+        viewModelScope.launch { syncCareerSchedule() }
+    }
 
     val upcomingCommitment: StateFlow<UpcomingCommitmentState> = getNextLesson()
         .map { it.toUiState(LocalDateTime.now()) }

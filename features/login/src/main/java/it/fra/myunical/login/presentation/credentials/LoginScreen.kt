@@ -1,51 +1,46 @@
 package it.fra.myunical.login.presentation.credentials
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -54,95 +49,76 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.fra.myunical.login.R
 import it.fra.myunical.login.models.AcademicCareer
+import it.fra.myunical.login.models.LoginError
+import it.fra.myunical.login.models.LoginStep
 import it.fra.myunical.login.models.LoginUiState
+import it.fra.myunical.ui.components.ShapeBadge
+import it.fra.myunical.ui.components.rememberGroupedItemShape
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = koinViewModel()){
-    val state = viewModel.state.collectAsStateWithLifecycle().value
+fun LoginScreen(viewModel: LoginViewModel = koinViewModel()) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    BackHandler(enabled = state.step == LoginStep.CAREER && !state.isLoading, onBack = viewModel::backToCredentials)
 
     LoginScreen(
-        uiState = state,
+        state = state,
         onFiscalCodeChanged = viewModel::updateFiscalCode,
         onPasswordChanged = viewModel::updatePassword,
         onTogglePasswordVisibility = viewModel::togglePasswordVisibility,
-        onLoginSubmitted = viewModel::submitLogin,
+        onSubmit = viewModel::submitLogin,
         onCareerSelected = viewModel::selectCareer,
-        onConfirmCareerSelection = viewModel::confirmCareerSelection
+        onConfirmCareer = viewModel::confirmCareerSelection,
+        onBackToCredentials = viewModel::backToCredentials
     )
-
 }
-
 
 @Composable
 fun LoginScreen(
-    uiState: LoginUiState,
+    state: LoginUiState,
     onFiscalCodeChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onTogglePasswordVisibility: () -> Unit,
-    onLoginSubmitted: () -> Unit,
+    onSubmit: () -> Unit,
     onCareerSelected: (Int) -> Unit,
-    onConfirmCareerSelection: () -> Unit,
+    onConfirmCareer: () -> Unit,
+    onBackToCredentials: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val focusManager = LocalFocusManager.current
-    val scrollState = rememberScrollState()
-
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.surface
-    ) {
+    Surface(modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .safeDrawingPadding()
                 .imePadding()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            UniversityBrandHeader()
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            AnimatedVisibility(visible = uiState.errorMessage != null) {
-                uiState.errorMessage?.let { error ->
-                    LoginErrorBanner(
-                        message = error,
-                        modifier = Modifier.padding(bottom = 16.dp)
-                    )
-                }
-            }
-
+            BrandHeader()
+            Spacer(Modifier.height(32.dp))
             AnimatedContent(
-                targetState = uiState.availableCareers.size > 1,
-                transitionSpec = { fadeIn() togetherWith fadeOut() },
-                label = "LoginScreenContentTransition"
-            ) { hasMultipleCareersToSelect ->
-                if (hasMultipleCareersToSelect) {
-                    CareerSelectionSection(
-                        careers = uiState.availableCareers,
-                        selectedCareerId = uiState.selectedCareerId,
-                        isLoading = uiState.isLoading,
-                        onCareerSelected = onCareerSelected,
-                        onConfirm = onConfirmCareerSelection
+                targetState = state.step,
+                transitionSpec = {
+                    val forward = targetState == LoginStep.CAREER
+                    (fadeIn() + slideInHorizontally { if (forward) it / 4 else -it / 4 }) togetherWith
+                        (fadeOut() + slideOutHorizontally { if (forward) -it / 4 else it / 4 })
+                },
+                label = "loginStep"
+            ) { step ->
+                when (step) {
+                    LoginStep.CREDENTIALS -> CredentialsStep(
+                        state, onFiscalCodeChanged, onPasswordChanged, onTogglePasswordVisibility, onSubmit
                     )
-                } else {
-                    CredentialsSection(
-                        uiState = uiState,
-                        onFiscalCodeChanged = onFiscalCodeChanged,
-                        onPasswordChanged = onPasswordChanged,
-                        onTogglePasswordVisibility = onTogglePasswordVisibility,
-                        onLogin = {
-                            focusManager.clearFocus()
-                            onLoginSubmitted()
-                        }
-                    )
+                    LoginStep.CAREER -> CareerStep(state, onCareerSelected, onConfirmCareer, onBackToCredentials)
                 }
             }
         }
@@ -150,383 +126,235 @@ fun LoginScreen(
 }
 
 @Composable
-private fun UniversityBrandHeader(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(80.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            contentAlignment = Alignment.Center
+private fun BrandHeader() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        ShapeBadge(
+            size = 88.dp,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ) {
-            Icon(
-                painter = painterResource(R.drawable.school),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(44.dp)
-            )
+            Icon(painterResource(R.drawable.school), contentDescription = null, modifier = Modifier.size(44.dp))
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
+        Spacer(Modifier.height(20.dp))
         Text(
-            text = "Università della Calabria",
-            style = MaterialTheme.typography.titleMedium,
+            "MyUnical",
+            style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onSurface
         )
-
         Text(
-            text = "Portale Servizi Didattici",
-            style = MaterialTheme.typography.bodyMedium,
+            "Università della Calabria",
+            style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
 
 @Composable
-private fun CredentialsSection(
-    uiState: LoginUiState,
+private fun CredentialsStep(
+    state: LoginUiState,
     onFiscalCodeChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onTogglePasswordVisibility: () -> Unit,
-    onLogin: () -> Unit,
-    modifier: Modifier = Modifier
+    onSubmit: () -> Unit
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+    val focusManager = LocalFocusManager.current
+    val submit = {
+        focusManager.clearFocus()
+        onSubmit()
+    }
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp),) {
+        Text(
+            "Accedi con le credenziali Esse3",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold
         )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            OutlinedTextField(
-                value = uiState.fiscalCode,
-                onValueChange = { onFiscalCodeChanged(it.uppercase()) },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Codice Fiscale") },
-                leadingIcon = {
-                    Icon(painter = painterResource(R.drawable.badge), contentDescription = null)
-                },
-                singleLine = true,
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Characters,
-                    keyboardType = KeyboardType.Ascii,
-                    imeAction = ImeAction.Next
-                ),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    focusedLabelColor = MaterialTheme.colorScheme.primary
-                )
+        Text(
+            "Le credenziali restano sul telefono e servono solo a leggere i tuoi dati dal portale.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(Modifier.height(4.dp))
+
+        OutlinedTextField(
+            value = state.fiscalCode,
+            onValueChange = onFiscalCodeChanged,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Codice fiscale") },
+            leadingIcon = { Icon(painterResource(R.drawable.badge), contentDescription = null) },
+            singleLine = true,
+            isError = state.error == LoginError.INVALID_CREDENTIALS,
+            shape = MaterialTheme.shapes.large,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Characters,
+                keyboardType = KeyboardType.Ascii,
+                imeAction = ImeAction.Next
             )
-
-            OutlinedTextField(
-                value = uiState.password,
-                onValueChange = onPasswordChanged,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Password") },
-                leadingIcon = {
-                    Icon(painter = painterResource(R.drawable.lock), contentDescription = null)
-                },
-                trailingIcon = {
-                    IconButton(onClick = onTogglePasswordVisibility) {
-                        Icon(
-                            painter = painterResource(if (uiState.isPasswordVisible) R.drawable.visibility_off else R.drawable.visibility),
-                            contentDescription = if (uiState.isPasswordVisible) "Nascondi password" else "Mostra password"
-                        )
-                    }
-                },
-                visualTransformation = if (uiState.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                singleLine = true,
-                shape = RoundedCornerShape(16.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = { onLogin() }),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    focusedLabelColor = MaterialTheme.colorScheme.primary
-                )
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = onLogin,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                enabled = !uiState.isLoading && uiState.fiscalCode.isNotBlank() && uiState.password.isNotBlank(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                if (uiState.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.5.dp
-                    )
-                } else {
-                    Text(
-                        text = "Accedi",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
+        )
+        OutlinedTextField(
+            value = state.password,
+            onValueChange = onPasswordChanged,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Password") },
+            leadingIcon = { Icon(painterResource(R.drawable.lock), contentDescription = null) },
+            trailingIcon = {
+                IconButton(onClick = onTogglePasswordVisibility) {
+                    Icon(
+                        painterResource(if (state.isPasswordVisible) R.drawable.visibility_off else R.drawable.visibility),
+                        contentDescription = if (state.isPasswordVisible) "Nascondi password" else "Mostra password"
                     )
                 }
-            }
+            },
+            visualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            singleLine = true,
+            isError = state.error == LoginError.INVALID_CREDENTIALS,
+            shape = MaterialTheme.shapes.large,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { if (state.canSubmit) submit() })
+        )
+
+        AnimatedVisibility(state.error != null) {
+            state.error?.let { ErrorBanner(it.message()) }
         }
+
+        Spacer(Modifier.height(4.dp))
+        PrimaryAction("Accedi", state.canSubmit, state.isLoading, submit)
     }
 }
 
 @Composable
-private fun CareerSelectionSection(
-    careers: List<AcademicCareer>,
-    selectedCareerId: Int?,
-    isLoading: Boolean,
+private fun CareerStep(
+    state: LoginUiState,
     onCareerSelected: (Int) -> Unit,
     onConfirm: () -> Unit,
-    modifier: Modifier = Modifier
+    onBack: () -> Unit
 ) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text("Scegli la carriera", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+        Text(
+            "Il tuo account ha più carriere. Potrai cambiarla in qualsiasi momento dal profilo.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                text = "Seleziona Carriera",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Text(
-                text = "Sono state rilevate più carriere attive associate a questo account.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            careers.forEach { career ->
-                val isSelected = career.matId == selectedCareerId
-                CareerCardItem(
-                    career = career,
-                    isSelected = isSelected,
-                    onSelect = { onCareerSelected(career.matId) }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = onConfirm,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(16.dp),
-                enabled = !isLoading && selectedCareerId != null,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.5.dp
-                    )
-                } else {
-                    Text(
-                        text = "Conferma Selezione",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold
-                    )
+        Spacer(Modifier.height(4.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            state.careers.forEachIndexed { index, career ->
+                CareerRow(career, index, state.careers.size, career.matId == state.selectedCareerId) {
+                    onCareerSelected(career.matId)
                 }
             }
         }
+        Spacer(Modifier.height(4.dp))
+        PrimaryAction("Continua", state.selectedCareerId != null && !state.isLoading, state.isLoading, onConfirm)
+        TextButton(onClick = onBack, enabled = !state.isLoading, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text("Usa un altro account")
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun CareerCardItem(
-    career: AcademicCareer,
-    isSelected: Boolean,
-    onSelect: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val borderColor = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-    val containerColor = if (isSelected) {
-        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f)
-    } else {
-        MaterialTheme.colorScheme.surface
-    }
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(containerColor)
-            .border(2.dp, borderColor, RoundedCornerShape(16.dp))
-            .clickable(onClick = onSelect)
-            .padding(16.dp)
-            .animateContentSize()
+private fun CareerRow(career: AcademicCareer, index: Int, count: Int, selected: Boolean, onClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    Surface(
+        onClick = onClick,
+        shape = rememberGroupedItemShape(index, count),
+        color = if (selected) colors.primaryContainer else colors.surfaceContainer,
+        contentColor = if (selected) colors.onPrimaryContainer else colors.onSurface,
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
-                    ),
-                contentAlignment = Alignment.Center
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            ShapeBadge(
+                size = 44.dp,
+                polygon = if (selected) MaterialShapes.Cookie9Sided else MaterialShapes.Circle,
+                containerColor = if (selected) colors.primary else colors.secondaryContainer,
+                contentColor = if (selected) colors.onPrimary else colors.onSecondaryContainer
             ) {
                 Icon(
-                    painter = painterResource(if (isSelected) R.drawable.check_circle else R.drawable.school),
+                    painterResource(if (selected) R.drawable.check_circle else R.drawable.school),
                     contentDescription = null,
-                    tint = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
+            Spacer(Modifier.width(16.dp))
+            Column(Modifier.weight(1f)) {
+                Text(career.degreeTitle, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                 Text(
-                    text = career.degreeTitle,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Matricola: ${career.matricola} • ${career.status}",
+                    "Matricola ${career.matricola} · ${career.status}",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = if (selected) colors.onPrimaryContainer else colors.onSurfaceVariant
                 )
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun LoginErrorBanner(
-    message: String,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer
-        )
+private fun PrimaryAction(text: String, enabled: Boolean, loading: Boolean, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = ButtonDefaults.MediumContainerHeight),
+        contentPadding = ButtonDefaults.contentPaddingFor(ButtonDefaults.MediumContainerHeight)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.error),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(24.dp)
-            )
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onErrorContainer
-            )
+        if (loading) {
+            LoadingIndicator(Modifier.size(28.dp), color = MaterialTheme.colorScheme.onPrimary)
+        } else {
+            Text(text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
         }
     }
 }
 
-@Preview(name = "Login Idle State", showBackground = true)
 @Composable
-private fun LoginScreenIdlePreview() {
+private fun ErrorBanner(message: String) {
+    Surface(
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.errorContainer,
+        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(painterResource(R.drawable.error), contentDescription = null, modifier = Modifier.size(24.dp))
+            Spacer(Modifier.width(12.dp))
+            Text(message, style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Start)
+        }
+    }
+}
+
+private fun LoginError.message() = when (this) {
+    LoginError.INVALID_CREDENTIALS -> "Codice fiscale o password non corretti."
+    LoginError.NETWORK -> "Impossibile raggiungere il portale. Controlla la connessione e riprova."
+    LoginError.SERVER -> "Il portale non risponde come previsto. Riprova tra qualche minuto."
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CredentialsPreview() {
     MaterialTheme {
         LoginScreen(
-            uiState = LoginUiState(
-                fiscalCode = "RSSMRA00A01H501U",
-                password = "Password123"
-            ),
-            onFiscalCodeChanged = {},
-            onPasswordChanged = {},
-            onTogglePasswordVisibility = {},
-            onLoginSubmitted = {},
-            onCareerSelected = {},
-            onConfirmCareerSelection = {}
+            LoginUiState(fiscalCode = "RSSMRA00A01H501U", password = "x", error = LoginError.INVALID_CREDENTIALS),
+            {}, {}, {}, {}, {}, {}, {}
         )
     }
 }
 
-@Preview(name = "Login Error State", showBackground = true)
+@Preview(showBackground = true)
 @Composable
-private fun LoginScreenErrorPreview() {
+private fun CareerPreview() {
     MaterialTheme {
         LoginScreen(
-            uiState = LoginUiState(
-                fiscalCode = "RSSMRA00A01H501U",
-                errorMessage = "Credenziali non valide. Verifica il codice fiscale e la password inseriti."
-            ),
-            onFiscalCodeChanged = {},
-            onPasswordChanged = {},
-            onTogglePasswordVisibility = {},
-            onLoginSubmitted = {},
-            onCareerSelected = {},
-            onConfirmCareerSelection = {}
-        )
-    }
-}
-
-@Preview(name = "Career Selection State", showBackground = true)
-@Composable
-private fun LoginScreenCareerSelectionPreview() {
-    MaterialTheme {
-        LoginScreen(
-            uiState = LoginUiState(
-                fiscalCode = "RSSMRA00A01H501U",
-                availableCareers = listOf(
-                    AcademicCareer(1, "Ingegneria Informatica (LM-32)", "234567", "Attiva"),
-                    AcademicCareer(2, "Scienze dei Materiali (LM-53)", "189234", "Chiusa")
+            LoginUiState(
+                step = LoginStep.CAREER,
+                careers = listOf(
+                    AcademicCareer(1, "Ingegneria Informatica", "234567", "Attiva", true),
+                    AcademicCareer(2, "Scienze dei Materiali", "189234", "Titolo conseguito", false)
                 ),
                 selectedCareerId = 1
             ),
-            onFiscalCodeChanged = {},
-            onPasswordChanged = {},
-            onTogglePasswordVisibility = {},
-            onLoginSubmitted = {},
-            onCareerSelected = {},
-            onConfirmCareerSelection = {}
+            {}, {}, {}, {}, {}, {}, {}
         )
     }
 }

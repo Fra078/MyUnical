@@ -4,5 +4,6 @@ data class AcademicCareer(
     val matId: Int,
     val degreeTitle: String,
     val matricola: String,
-    val status: String
+    val status: String,
+    val active: Boolean
 )

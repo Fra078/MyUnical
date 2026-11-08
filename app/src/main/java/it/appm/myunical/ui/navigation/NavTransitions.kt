@@ -2,6 +2,7 @@ package it.appm.myunical.ui.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.VisibilityThreshold
@@ -46,12 +47,13 @@ private val LateFade = CubicBezierEasing(0.7f, 0f, 1f, 1f)
 
 /**
  * Predictive back: driven by the finger, so every spec is a linear tween. The leaving screen
- * shrinks and leans toward the swipe while the previous one comes back from the left.
+ * shrinks and leans toward the swipe over the previous one, which stays still: sliding it in from
+ * the left would leave a strip of empty window uncovered beside the shrinking screen.
  */
 fun <T : Any> predictiveBack(): AnimatedContentTransitionScope<Scene<T>>.(Int) -> ContentTransform = { edge ->
     val direction = if (edge == NavigationEvent.EDGE_RIGHT) -1 else 1
     val linear = tween<Float>(easing = LinearEasing)
-    (slideInHorizontally(tween(easing = LinearEasing)) { -(it * PARALLAX).toInt() } togetherWith
+    (EnterTransition.None togetherWith
         (scaleOut(linear, targetScale = 0.9f) +
             slideOutHorizontally(tween(easing = LinearEasing)) { it / 8 * direction } +
             fadeOut(tween(easing = LateFade))))
