@@ -55,6 +55,7 @@ import it.fra.myunical.domain.model.degreeexplorer.DegreeRegulations
 import it.fra.myunical.domain.model.degreeexplorer.Regulation
 import it.fra.myunical.today.models.CANTEEN_LINK_ID
 import it.fra.myunical.today.models.CampusLinks
+import it.fra.myunical.today.models.TransparencyLink
 import it.fra.myunical.today.models.ProfileUiState
 import it.fra.myunical.today.presentation.StudentAvatar
 import it.fra.myunical.today.presentation.TodayScreenViewModel
@@ -96,6 +97,7 @@ private val ServiceEntries = listOf(
     ProfileEntry("Documenti e certificati", "Certificati e autocertificazioni su Esse3", Icons.Rounded.Description, ProfileDestination.Web(Esse3Links.CERTIFICATES)),
     ProfileEntry("Diritto allo studio", "Borse di studio, alloggi e altri benefici", Icons.Rounded.VolunteerActivism, ProfileDestination.Web(StudentSupportUrl)),
     ProfileEntry("Rubrica di ateneo", "Contatti di docenti e personale", Icons.Rounded.Contacts, ProfileDestination.Directory),
+    ProfileEntry("Amministrazione trasparente", "Documenti, bandi e dati pubblici dell'Ateneo", TransparencyLink.icon, ProfileDestination.Web(TransparencyLink.destinationUrl)),
     ProfileEntry("Portale Esse3", "Tutti i servizi per gli studenti", Icons.Rounded.School, ProfileDestination.Web(Esse3Links.HOME))
 )
 

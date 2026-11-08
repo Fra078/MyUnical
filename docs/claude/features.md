@@ -29,10 +29,10 @@ vengono cancellati, altrimenti dopo il logout il login riappariva in caricamento
 - `DepartmentNoticesSection`: ultimi 3 avvisi del dipartimento sotto il carosello (nascosta se il
   dipartimento è ignoto o non ci sono avvisi), "Vedi tutti" apre la scheda del dipartimento;
 - `NewsCarousel`, `QuickLinkSection` (azioni rapide in `models/QuickLink.kt`, ognuna con un `Accent`:
-  Esse3, Documenti = certificati Esse3, Webmail, Biblioteche, Mappa). Nessun pulsante nella top bar: il portale si apre dall'azione rapida Esse3. I link passano da `LocalLinkOpener` (vedi "Pagine Esse3 nell'app");
+  Esse3, Documenti = certificati Esse3, Trasparenza = amministrazione trasparente, Biblioteche, Mappa; la Webmail è solo nel menu profilo). Nessun pulsante nella top bar: il portale si apre dall'azione rapida Esse3. I link passano da `LocalLinkOpener` (vedi "Pagine Esse3 nell'app");
 - `ProfileSheet`: profilo, cambio carriera e voci di menu (`ProfileDestination`). Studente: Libretto,
   Appelli, Bacheca esiti, Piano di studi, regolamenti del corso, Tasse. Servizi: Documenti e certificati
-  (Esse3), Diritto allo studio (pagina unical.it), Rubrica, Portale. Campus: Webmail, Mensa (schermata
+  (Esse3), Diritto allo studio (pagina unical.it), Amministrazione trasparente, Rubrica, Portale. Campus: Webmail, Mensa (schermata
   interna, `CANTEEN_LINK_ID`), Biblioteche, Mappa, Sito. Logout.
 - Regolamenti del corso: `GetDegreeRegulationsUseCase` → `DegreeRegulations(cohort, latest)`; il
   ViewModel li carica al cambio di carriera. Le voci compaiono solo se pubblicati: "Regolamento in vigore"
