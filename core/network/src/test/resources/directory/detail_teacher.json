@@ -1,0 +1,61 @@
+{
+ "results": {
+  "Name": "Marco ROSSI",
+  "ID": "9001",
+  "Roles": [
+   {
+    "Role": "PA",
+    "RoleDescription": "Professori Associati",
+    "Priority": 1,
+    "StructureCod": "002016",
+    "Structure": "Dipartimento di Fisica",
+    "StructureTypeCOD": "DIP",
+    "ProfileId": null,
+    "ProfileDescription": null
+   }
+  ],
+  "OfficeReference": [
+   "Cubo 31C Piano 5 Stanza 6"
+  ],
+  "Email": [
+   "marco.rossi@example.org"
+  ],
+  "PEC": [],
+  "TelOffice": [
+   "0984/000000"
+  ],
+  "TelCelOffice": [],
+  "Fax": [],
+  "WebSite": [],
+  "CV": [],
+  "Teacher": 1,
+  "PersonFunctions": null,
+  "TeacherCVFull": "Curriculum di esempio.",
+  "TeacherCVShort": "Curriculum di esempio."
+ },
+ "labels": {
+  "Name": "Nome",
+  "ID": "ID",
+  "Roles": "Ruoli",
+  "Role": "Ruolo",
+  "RoleDescription": "Ruolo",
+  "Priority": "Priorità",
+  "StructureCod": "Codice Struttura",
+  "Structure": "Struttura",
+  "StructureTypeCOD": "Tipologia",
+  "ProfileId": "Profilo",
+  "ProfileDescription": "Descrizione Profilo",
+  "OfficeReference": "Riferimento Ufficio",
+  "Email": "Posta Elettronica",
+  "PEC": "Posta Elettronica Certificata",
+  "TelOffice": "Telefono Ufficio",
+  "TelCelOffice": "Telefono Cellulare Ufficio",
+  "Fax": "Fax",
+  "WebSite": "https://example.org",
+  "CV": "Curriculum di esempio.",
+  "Teacher": "Pagina Docente",
+  "PersonFunctions": " Funzioni",
+  "TeacherCVFull": "Curriculum di esempio.",
+  "TeacherCVShort": "Curriculum di esempio."
+ }
+}

@@ -1,0 +1,146 @@
+{
+ "results": {
+  "StudyActivityID": 203557,
+  "StudyActivityCod": "27008451",
+  "StudyActivityName": "Modulo 1: MECCANICA",
+  "StudyActivityPartitionDes": null,
+  "StudyActivityRoot": {
+   "StudyActivityID": null,
+   "StudyActivityName": "FISICA",
+   "StudyActivityCod": "27000005"
+  },
+  "StudyActivityCdSID": 17991,
+  "StudyActivityCdSCod": "0876",
+  "StudyActivityRegDidId": 49158,
+  "StudyActivityStudyPlans": [
+   "PROCESSI",
+   "MATERIALI",
+   "ALIMENTARE E BIOTECNOLOGIE"
+  ],
+  "StudyActivityErogationYear": 2025,
+  "StudyActivityECTS": 6.0,
+  "StudyActivityLanguage": [
+   "Italiano"
+  ],
+  "StudyActivityModalities": [
+   {
+    "ModalityActivityCod": "C",
+    "ModalityActivityDescription": "Convenzionale"
+   }
+  ],
+  "StudyActivitySSDCod": "FIS/01",
+  "StudyActivitySSD": "FISICA SPERIMENTALE",
+  "StudyActivityCompulsory": "Si",
+  "StudyActivityCdSName": "INGEGNERIA CHIMICA",
+  "StudyActivityYear": 1,
+  "StudyActivitySemester": "Primo Semestre",
+  "StudyActivityTeacherID": null,
+  "StudyActivityTeacherName": null,
+  "StudyActivityTeachingUnitTypeCod": "A",
+  "StudyActivityTeachingUnitType": "Base",
+  "StudyActivityModules": [],
+  "StudyActivityPartitions": [],
+  "StudyActivityHours": [
+   {
+    "ActivityType": "LEZ",
+    "Hours": 38,
+    "StudyActivityTeacherID": "9003",
+    "StudyActivityTeacherName": "LOMBARDI Chiara"
+   },
+   {
+    "ActivityType": "ESE",
+    "Hours": 18,
+    "StudyActivityTeacherID": "9004",
+    "StudyActivityTeacherName": "MORETTI Marta"
+   }
+  ],
+  "StudyActivityBorrows": [
+   {
+    "StudyActivityID": 208105,
+    "StudyActivityName": "MECCANICA",
+    "StudyActivityPartitionCod": null,
+    "StudyActivityPartition": null,
+    "StudyActivityCdSCod": "0829",
+    "StudyActivityCdSName": "INGEGNERIA BIOMEDICA"
+   }
+  ],
+  "StudyActivityBorrowedFrom": null,
+  "StudyActivityContents": [
+   {
+    "StudyActivityContentCod": "ALTRO",
+    "StudyActivityContentTitle": "Peer review: (opzionale) indicare i docenti con i quali ci si confronta su tracce, modalità di esame e impegno studente. ",
+    "StudyActivityContentDes": "Le prove di esame scritto e orale verranno concordate e tenute insieme alla Prof.ssa Marta Moretti."
+   },
+   {
+    "StudyActivityContentCod": "CODICE_TEAMS",
+    "StudyActivityContentTitle": "Codice del corso su TEAMS (opzionale)",
+    "StudyActivityContentDes": "65cup0z"
+   },
+   {
+    "StudyActivityContentCod": "CONTENUTI",
+    "StudyActivityContentTitle": "Inserire un “sommario” molto sintetico dell’insegnamento, evidenziando il dominio disciplinare e le caratteristiche generali dei contenuti. Tale campo non va confuso con il “Programma” dell’insegnamento.",
+    "StudyActivityContentDes": "MODULO I-MECCANICA .  Calcolo vettoriale. La dinamica del punto materiale. Dinamica dei sistemi complessi."
+   },
+   {
+    "StudyActivityContentCod": "LINGUA_INS",
+    "StudyActivityContentTitle": "Lingua insegnamento",
+    "StudyActivityContentDes": "\r\nITALIANO\r\n"
+   },
+   {
+    "StudyActivityContentCod": "LINK_TEAMS",
+    "StudyActivityContentTitle": "Link Classe Microsoft TEAMS",
+    "StudyActivityContentDes": "Fisica_Ing_Chimica"
+   },
+   {
+    "StudyActivityContentCod": "METODI_DID",
+    "StudyActivityContentTitle": "Metodologie didattiche: Indicare le metodologie didattiche (lezioni, esercitazioni, laboratorio, role playing, problem solving, studi di caso, project work, brainstorming, business game, etc.) e gli strumenti didattici (tradizionali: videoproiettore, lavagna luminosa, etc. / innovativi: forum, materiale didattico interattivo, Lavagna Interattiva Multimediale-LIM, etc.). N.B. Dare evidenza alle metodologie didattiche utilizzate per le competenze trasversali. ",
+    "StudyActivityContentDes": "Lezioni ed esercitazioni frontali. In caso di emergenza sanitaria, si procederà con la didattica a distanza secondo modalità da definire in base alle indicazioni nazionali e locali."
+   },
+   {
+    "StudyActivityContentCod": "MOD_VER_APPR",
+    "StudyActivityContentTitle": "Le modalità di valutazione dell’apprendimento devono documentare: 1) i metodi di valutazione dell’apprendimento, con particolare riferimento a: a) numero e tipologia delle prove che concorrono alla valutazione finale dell’insegnamento; b) modalità di somministrazione delle prove con relativa descrizione (esame scritto, test, esame orale, seminario, prova pratica, prova di laboratorio, progetto, relazione su tirocinio); c) durata della prova (di particolare rilievo per le prove scritte e pratiche, mentre è difficilmente definibile per quelle orali); 2) i criteri di valutazione dell’apprendimento, per ogni risultato di apprendimento atteso, eventuali risultati di apprendimento trasversali compresi. In tal caso, evidenziando gli obiettivi delle prove, occorre descrivere quello che ci si aspetta lo studente conosca o sia in grado di fare e a quale livello, al fine di dimostrare che un risultato di apprendimento è stato raggiunto e con quale livello; 3) i criteri di misurazione dell’apprendimento (ad esempio: attribuzione di un voto finale, dichiarazione di idoneità, ecc.); 4) i criteri di attribuzione del voto finale (se previsto).",
+    "StudyActivityContentDes": "Per ciascun modulo l’esame è articolato in una prova scritta, della durata di 1h e 30 minuti, che consiste nella risoluzione di uno o due esercizi sui principali argomenti trattati durante il corso. Il superamento della prova scritta dà accesso alla prova orale (obbligatoria) dove lo studente deve d"
+   },
+   {
+    "StudyActivityContentCod": "OB_SVIL_SOS",
+    "StudyActivityContentTitle": "Obiettivi Agenda 2030 per lo sviluppo sostenibile",
+    "StudyActivityContentDes": "\r\n"
+   },
+   {
+    "StudyActivityContentCod": "OBIETT_FORM",
+    "StudyActivityContentTitle": "Descrivere: 1) le competenze specifiche in termini di conoscenze e abilità da conseguire – Descrittori di Dublino 1 e 2.; 2) eventuali competenze trasversali in termini di conoscenze e abilità da conseguire – Descrittori di Dublino 3, 4 e 5.",
+    "StudyActivityContentDes": "L' unità formativa di Meccanica si propone di fornire allo studente le conoscenze fondamentali della fisica classica, per quanto attiene alla dinamica del punto materiale e dei sistemi complessi. Al termine del corso lo studente dovrà essere in grado di descrivere quantitativamente semplici fenomeni"
+   },
+   {
+    "StudyActivityContentCod": "PAG_WEB_DOC",
+    "StudyActivityContentTitle": "Pagina web docente: inserire il link alla pagina web del docente. Tale pagina deve contenere (almeno) i recapiti, l’orario di ricevimento, la qualifica del docente ed il curriculum.",
+    "StudyActivityContentDes": "https://www.unical.it/storage/addressbook/"
+   },
+   {
+    "StudyActivityContentCod": "PREREQ",
+    "StudyActivityContentTitle": "Prerequisiti:  indicare le nozioni necessarie per la comprensione degli argomenti trattati.",
+    "StudyActivityContentDes": "Sono richieste conoscenze di base di algebra, di analisi, di geometria e di trigonometria."
+   },
+   {
+    "StudyActivityContentCod": "PROGR_EST",
+    "StudyActivityContentTitle": "Programma:  fornire una descrizione dettagliata del programma dell'insegnamento.",
+    "StudyActivityContentDes": "MODULO I-MECCANICA  \nIntroduzione al Metodo Scientifico: grandezze fisiche fondamentali e derivate; analisi dimensionale; sistemi di unità di misura; notazione scientifica, ordini di grandezza; incertezza nelle misure dirette; errori sistematici e casuali; cifre significative; cenni sulla propagazio"
+   },
+   {
+    "StudyActivityContentCod": "PROPEDE",
+    "StudyActivityContentTitle": "Informazione inserita dai referenti didattici del Dipartimento.",
+    "StudyActivityContentDes": "\r\n"
+   },
+   {
+    "StudyActivityContentCod": "STIMA_CAR_LAV",
+    "StudyActivityContentTitle": "Stima del carico di lavoro per lo studente in termini di ore complessive dedicate a questo insegnamento, inclusa la verifica del profitto. Il totale delle ore di impegno per lo studente dovrà essere pari a 25 * numero di CFU dell'insegnamento. Occorre utilizzare il seguente schema (si veda un esempio completo di compilazione nella cartella condivisa Gruppo di Interesse sulla Didattica) e si prega di usare esattamente le etichette indicate (tutte in maiuscolo) per una migliore estrazione dei contenuti e successiva visualizzazione sulle pagine web. ARGOMENTI: (descrizione di un gruppo di argomenti, oppure di tesine o altre attività, come esercitazioni finalizzate alla simulazione di prove di esame). MATERIALE: (quantificazione del materiale didattico da studiare, es. capitoli del libro di testo, dispense, etc.). LEZIONI: numero di ore di lezione per il gruppo di argomenti indicato. ESERCITAZIONI: numero di ore di esercitazione per il gruppo di argomenti indicato. LABORATORIO: numero di ore di laboratorio per il gruppo di argomenti indicato. STUDIO: numero di ore di studio individuale richieste allo studente per il gruppo di argomenti indicato, considerata la tipologia di attività ed il materiale da studiare. Le voci sopra indicate vanno ripetute per ciascun gruppo di argomenti. Inoltre occorre aggiungere al termine la stima dell’impegno per la valutazione finale, nel seguente formato: ESAME: numero di ore dedicate alla valutazione del profitto, includendo i giorni dedicati alle prove scritte, alla prova orale e ad eventuali revisioni di progetti ed homework.",
+    "StudyActivityContentDes": "Modulo I-Meccanica  .\nLezioni: 38 ore .\nEsercitazioni: 18 ore.\nStudio individuale: 72 ore."
+   },
+   {
+    "StudyActivityContentCod": "TESTI_RIF",
+    "StudyActivityContentTitle": "Testi di riferimento ed eventuali letture consigliate. Inserire eventuale link al materiale didattico del docente. ESEMPIO Materiale didattico messo a disposizione del docente sulla piattaforma on-line (include il testo “Thinking like a computer scientist” in versione interattiva). http://icampus.dimes.unical.it",
+    "StudyActivityContentDes": "-D. Halliday, R. Resnick, J. Walker, Fondamenti di Fisica  \n-Lezioni di Fisica 1, D. Sette, A. Alippi, A. Bettucci\n-Raymond A. Serway, John W. Jewett, Principi di Fisica  \n-C. Mencuccini, V. Silvestrini, Fisica-Meccanica e Termodinamica  "
+   }
+  ]
+ }
+}

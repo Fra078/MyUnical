@@ -1,0 +1,69 @@
+{
+ "results": {
+  "Name": "Andrea ROSSI",
+  "ID": "andrea.rossi",
+  "Roles": [
+   {
+    "Role": "ND",
+    "RoleDescription": "Personale Tecnico Amministrativo",
+    "Priority": 1,
+    "StructureCod": "002059",
+    "Structure": "CENTRO COMUNE DI SERVIZIO TEACHING AND LEARNING CENTER",
+    "StructureTypeCOD": "CEN",
+    "ProfileId": null,
+    "ProfileDescription": null
+   }
+  ],
+  "OfficeReference": [],
+  "Email": [
+   "andrea.rossi@example.org"
+  ],
+  "PEC": [],
+  "TelOffice": [
+   "0984/000000"
+  ],
+  "TelCelOffice": [],
+  "Fax": [],
+  "WebSite": [],
+  "CV": [],
+  "Teacher": false,
+  "PersonFunctions": [
+   {
+    "TeacherRole": "Responsabile Amministrativo",
+    "FunctionCod": "NFU046",
+    "StructureCod": "002059",
+    "StructureName": "CENTRO COMUNE DI SERVIZIO TEACHING AND LEARNING CENTER"
+   }
+  ],
+  "TeacherCVFull": "Curriculum di esempio.",
+  "TeacherCVShort": "Curriculum di esempio."
+ },
+ "labels": {
+  "Name": "Nome",
+  "ID": "ID",
+  "Roles": "Ruoli",
+  "Role": "Ruolo",
+  "RoleDescription": "Ruolo",
+  "Priority": "Priorità",
+  "StructureCod": "Codice Struttura",
+  "Structure": "Struttura",
+  "StructureTypeCOD": "Tipologia",
+  "ProfileId": "Profilo",
+  "ProfileDescription": "Descrizione Profilo",
+  "OfficeReference": "Riferimento Ufficio",
+  "Email": "Posta Elettronica",
+  "PEC": "Posta Elettronica Certificata",
+  "TelOffice": "Telefono Ufficio",
+  "TelCelOffice": "Telefono Cellulare Ufficio",
+  "Fax": "Fax",
+  "WebSite": "https://example.org",
+  "CV": "Curriculum di esempio.",
+  "Teacher": "Pagina Docente",
+  "PersonFunctions": " Funzioni",
+  "TeacherRole": "Ruolo",
+  "FunctionCod": "Codice Funzione",
+  "StructureName": "Nome",
+  "TeacherCVFull": "Curriculum di esempio.",
+  "TeacherCVShort": "Curriculum di esempio."
+ }
+}

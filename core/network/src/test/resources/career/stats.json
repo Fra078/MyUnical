@@ -1,0 +1,25 @@
+{
+ "gruppoVoto": {
+  "cod": "30L",
+  "des": "Trentesimi con lode",
+  "lodeFlg": 1,
+  "maxPunti": 30,
+  "minPunti": 18
+ },
+ "matId": 1,
+ "numAdFrequentate": 0,
+ "numAdLibretto": 23,
+ "numAdPianificate": 0,
+ "numAdPiano": 23,
+ "numAdSuperate": 23,
+ "umPesoCalcolato": 180.0,
+ "umPesoCod": "C",
+ "umPesoConvalidato": 180.0,
+ "umPesoDes": "Crediti",
+ "umPesoFrequentato": 0.0,
+ "umPesoMax": 999.0,
+ "umPesoMin": 180.0,
+ "umPesoPianificato": 0.0,
+ "umPesoPiano": 180.0,
+ "umPesoSuperato": 180.0
+}

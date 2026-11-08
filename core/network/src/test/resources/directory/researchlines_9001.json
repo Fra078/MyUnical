@@ -1,0 +1,23 @@
+{
+ "next": null,
+ "previous": null,
+ "count": 1,
+ "total_pages": 1,
+ "page_number": 1,
+ "results": [
+  {
+   "RLineID": 27494,
+   "RLineDescription": "Fisica teorica delle interazioni fondamentali",
+   "RLineResults": "",
+   "RLineERC0Id": "PE",
+   "RLineERC0Name": "Scienze e ingegneria"
+  }
+ ],
+ "labels": {
+  "RLineID": "ID Linea di Ricerca",
+  "RLineDescription": "Descrizione Linea di Ricerca",
+  "RLineResults": "Risultati Linea di Ricerca",
+  "RLineERC0Id": "ID Linea di Ricerca ERC0",
+  "RLineERC0Name": "Nome Linea di Ricerca ERC0"
+ }
+}

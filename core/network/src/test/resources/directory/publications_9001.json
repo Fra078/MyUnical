@@ -1,0 +1,81 @@
+{
+ "next": "//storage.portale.unical.it/api/ricerca/teachers/9001/publications/?page=2&page_size=5",
+ "previous": null,
+ "count": 56,
+ "total_pages": 12,
+ "page_number": 1,
+ "results": [
+  {
+   "PublicationId": 241997,
+   "PublicationTitle": "Titolo di esempio",
+   "PublicationAbstract": "Abstract di esempio.",
+   "PublicationCollection": "7.1 Curatela",
+   "PublicationCommunity": "7 Curatele",
+   "Publication": "Pubblicazione di esempio",
+   "PublicationLabel": "Pubblicazione di esempio",
+   "PublicationContributors": "Autori di esempio",
+   "PublicationYear": 2025,
+   "PublicationUrl": "http://hdl.handle.net/20.500.11770/382738"
+  },
+  {
+   "PublicationId": 174768,
+   "PublicationTitle": "Titolo di esempio",
+   "PublicationAbstract": "Abstract di esempio.",
+   "PublicationCollection": "1.1 Articolo in rivista",
+   "PublicationCommunity": "1 Contributo su Rivista",
+   "Publication": "Pubblicazione di esempio",
+   "PublicationLabel": "Pubblicazione di esempio",
+   "PublicationContributors": "Autori di esempio",
+   "PublicationYear": 2023,
+   "PublicationUrl": "http://hdl.handle.net/20.500.11770/343188"
+  },
+  {
+   "PublicationId": 177453,
+   "PublicationTitle": "Titolo di esempio",
+   "PublicationAbstract": "Abstract di esempio.",
+   "PublicationCollection": "1.1 Articolo in rivista",
+   "PublicationCommunity": "1 Contributo su Rivista",
+   "Publication": "Pubblicazione di esempio",
+   "PublicationLabel": "Pubblicazione di esempio",
+   "PublicationContributors": "Autori di esempio",
+   "PublicationYear": 2023,
+   "PublicationUrl": "http://hdl.handle.net/20.500.11770/344705"
+  },
+  {
+   "PublicationId": 184885,
+   "PublicationTitle": "Titolo di esempio",
+   "PublicationAbstract": "Abstract di esempio.",
+   "PublicationCollection": "7.1 Curatela",
+   "PublicationCommunity": "7 Curatele",
+   "Publication": "Pubblicazione di esempio",
+   "PublicationLabel": "Pubblicazione di esempio",
+   "PublicationContributors": "Autori di esempio",
+   "PublicationYear": 2023,
+   "PublicationUrl": "http://hdl.handle.net/20.500.11770/350337"
+  },
+  {
+   "PublicationId": 149129,
+   "PublicationTitle": "Titolo di esempio",
+   "PublicationAbstract": "Abstract di esempio.",
+   "PublicationCollection": "1.1 Articolo in rivista",
+   "PublicationCommunity": "1 Contributo su Rivista",
+   "Publication": "Pubblicazione di esempio",
+   "PublicationLabel": "Pubblicazione di esempio",
+   "PublicationContributors": "Autori di esempio",
+   "PublicationYear": 2022,
+   "PublicationUrl": "http://hdl.handle.net/20.500.11770/330748"
+  }
+ ],
+ "labels": {
+  "PublicationId": "ID",
+  "PublicationTitle": "Titolo di esempio",
+  "PublicationAbstract": "Abstract di esempio.",
+  "PublicationCollection": "Collection",
+  "PublicationCommunity": "Tipologia",
+  "Publication": "Pubblicazione di esempio",
+  "PublicationLabel": "Pubblicazione di esempio",
+  "PublicationContributors": "Autori di esempio",
+  "PublicationYear": "Anno di Pubblicazione",
+  "PublicationUrl": "Url Pubblicazione"
+ }
+}

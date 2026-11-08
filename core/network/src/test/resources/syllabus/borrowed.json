@@ -1,0 +1,54 @@
+{
+ "results": {
+  "StudyActivityID": 208110,
+  "StudyActivityCod": "27000001",
+  "StudyActivityName": "ANALISI MATEMATICA I",
+  "StudyActivityPartitionDes": null,
+  "StudyActivityRoot": null,
+  "StudyActivityCdSID": 5773,
+  "StudyActivityCdSCod": "0829",
+  "StudyActivityRegDidId": 54758,
+  "StudyActivityStudyPlans": [
+   "Bioingegneria dell'Informazione",
+   "Bioingegneria Industriale"
+  ],
+  "StudyActivityErogationYear": 2025,
+  "StudyActivityECTS": 9.0,
+  "StudyActivityLanguage": [
+   "Italiano"
+  ],
+  "StudyActivityModalities": [
+   {
+    "ModalityActivityCod": "C",
+    "ModalityActivityDescription": "Convenzionale"
+   }
+  ],
+  "StudyActivitySSDCod": "MAT/05",
+  "StudyActivitySSD": "ANALISI MATEMATICA",
+  "StudyActivityCompulsory": "Si",
+  "StudyActivityCdSName": "INGEGNERIA BIOMEDICA",
+  "StudyActivityYear": 1,
+  "StudyActivitySemester": "Primo Semestre",
+  "StudyActivityTeacherID": null,
+  "StudyActivityTeacherName": null,
+  "StudyActivityTeachingUnitTypeCod": "A",
+  "StudyActivityTeachingUnitType": "Base",
+  "StudyActivityModules": [],
+  "StudyActivityPartitions": [],
+  "StudyActivityHours": [],
+  "StudyActivityBorrows": [],
+  "StudyActivityBorrowedFrom": {
+   "StudyActivityID": 203549,
+   "StudyActivityName": "ANALISI MATEMATICA I",
+   "StudyActivityPartition": null,
+   "StudyActivityCdSCod": "0876",
+   "StudyActivityCdSName": "INGEGNERIA CHIMICA",
+   "StudyActivityStudyPlans": [
+    "PROCESSI",
+    "MATERIALI",
+    "ALIMENTARE E BIOTECNOLOGIE"
+   ]
+  },
+  "StudyActivityContents": []
+ }
+}

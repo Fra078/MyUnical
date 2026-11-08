@@ -1,0 +1,82 @@
+{
+ "results": {
+  "TeacherID": "9002",
+  "TeacherFirstName": "STEFANO",
+  "TeacherLastName": "COSTA",
+  "TeacherDepartmentID": 4,
+  "TeacherDepartmentCod": "002016",
+  "TeacherDepartmentName": "Dipartimento di Fisica",
+  "TeacherRole": "PO",
+  "TeacherRoleDescription": "Professori Ordinari",
+  "TeacherSSDCod": "PHYS-02/A",
+  "TeacherSSDDescription": "Fisica teorica delle interazioni fondamentali, modelli, metodi matematici e applicazioni",
+  "TeacherOffice": "Dipartimento di Fisica",
+  "ORCID": "0000-0000-0000-0000",
+  "PhotoPath": "//storage.portale.unical.it/media/portale/docenti_pta/foto/docente.png",
+  "CVPathIta": "//storage.portale.unical.it/media/portale/docenti_pta/cv_ita/cv.pdf",
+  "CVPathEn": "//storage.portale.unical.it/media/portale/docenti_pta/cv_en/cv.pdf",
+  "ShortBio": "Biografia di esempio.",
+  "ReceptionHours": "Su appuntamento",
+  "TeacherOfficeReference": [
+   "Cubo 31C Piano 5 Stanza 11"
+  ],
+  "TeacherEmail": [
+   "stefano.costa@example.org"
+  ],
+  "TeacherPEC": [],
+  "TeacherTelOffice": [
+   "0984/000000"
+  ],
+  "TeacherTelCelOffice": [],
+  "TeacherFax": [],
+  "TeacherWebSite": [],
+  "TeacherCV": [],
+  "TeacherFunctions": [
+   {
+    "TeacherRole": "Vice Direttore di Dipartimento",
+    "StructureCod": "002016",
+    "StructureName": "Dipartimento di Fisica"
+   }
+  ],
+  "TeacherCVFull": "Curriculum di esempio.",
+  "TeacherCVShort": "Curriculum di esempio.",
+  "ProfileId": "00000000000",
+  "ProfileDescription": "Non assegnato",
+  "ProfileShortDescription": "Non assegnato"
+ },
+ "labels": {
+  "TeacherID": "ID Docente",
+  "TeacherFirstName": "Nome",
+  "TeacherLastName": "Cognome",
+  "TeacherDepartmentID": "ID Dipartimento",
+  "TeacherDepartmentCod": "Codice Dipartimento",
+  "TeacherDepartmentName": "Dipartimento",
+  "TeacherRole": "Ruolo",
+  "TeacherRoleDescription": "Ruolo",
+  "TeacherSSDCod": "SSD",
+  "TeacherSSDDescription": "SSD",
+  "TeacherOffice": "Ufficio",
+  "ORCID": "ORCID",
+  "PhotoPath": "Photo Path",
+  "CVPathIta": "CV Path Ita",
+  "CVPathEn": "CV Path Eng",
+  "ShortBio": "Biografia di esempio.",
+  "ReceptionHours": "Su appuntamento",
+  "TeacherOfficeReference": "Riferimento Ufficio",
+  "TeacherEmail": "Posta Elettronica",
+  "TeacherPEC": "Posta Elettronica Certificata",
+  "TeacherTelOffice": "Telefono Ufficio",
+  "TeacherTelCelOffice": "Telefono Cellulare Ufficio",
+  "TeacherFax": "Fax",
+  "TeacherWebSite": "https://example.org",
+  "TeacherCV": "Curriculum di esempio.",
+  "TeacherFunctions": "Ruoli Amministrativi",
+  "StructureCod": "Codice Struttura",
+  "StructureName": "Nome",
+  "TeacherCVFull": "Curriculum di esempio.",
+  "TeacherCVShort": "Curriculum di esempio.",
+  "ProfileId": "Profilo",
+  "ProfileDescription": "Descrizione Profilo",
+  "ProfileShortDescription": "Descrizione Breve Profilo"
+ }
+}

@@ -1,0 +1,46 @@
+[
+ {
+  "base": 30,
+  "definizioneBase": {
+   "value": "CDSORD"
+  },
+  "media": 27.76,
+  "tipoMediaCod": {
+   "value": "A"
+  },
+  "tipoOk": 0
+ },
+ {
+  "base": 30,
+  "definizioneBase": {
+   "value": "CDSORD"
+  },
+  "media": 27.68,
+  "tipoMediaCod": {
+   "value": "P"
+  },
+  "tipoOk": 1
+ },
+ {
+  "base": 110,
+  "definizioneBase": {
+   "value": "CDS"
+  },
+  "media": 101.79,
+  "tipoMediaCod": {
+   "value": "A"
+  },
+  "tipoOk": 0
+ },
+ {
+  "base": 110,
+  "definizioneBase": {
+   "value": "CDS"
+  },
+  "media": 101.51,
+  "tipoMediaCod": {
+   "value": "P"
+  },
+  "tipoOk": 1
+ }
+]
