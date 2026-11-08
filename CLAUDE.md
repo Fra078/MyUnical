@@ -21,17 +21,17 @@ stranezze delle API, trappole già incontrate.
 
 ## Build e test
 
-Il JDK è quello di Android Studio (`sh ./gradlew` funziona anche dove `gradlew` non è eseguibile):
+Il JDK è quello di Android Studio (percorso locale in `CLAUDE.local.md`); `sh ./gradlew` funziona anche dove
+`gradlew` non è eseguibile:
 
 ```sh
-export JAVA_HOME=/var/home/fra078/.local/share/JetBrains/Toolbox/apps/android-studio/jbr
 sh ./gradlew :core:domain:test :core:datastore:testDebugUnitTest :core:network:testDebugUnitTest --offline
 sh ./gradlew :app:assembleDebug --offline
 ```
 
 Release: `sh ./gradlew :app:assembleRelease` (R8 attivo, firma da `keystore.properties` o da variabili
-`RELEASE_*`, altrimenti chiave di debug). La chiave vera è in `~/.android-keys/myunical-release.jks`, fuori
-dal repository e da non perdere: senza, gli aggiornamenti non si installano sopra le versioni già
+`RELEASE_*`, altrimenti chiave di debug). La chiave vera è fuori dal repository (percorso in `keystore.properties`)
+e da non perdere: senza, gli aggiornamenti non si installano sopra le versioni già
 distribuite. Con la chiave di debug il release si installa sopra il debug senza perdere i dati (con quella
 vera serve prima disinstallare). Pubblicazione: tag `v*` → `.github/workflows/release.yml`.
 
@@ -39,11 +39,11 @@ Screenshot del README (`docs/screenshots/`): preview con dati inventati in
 `app/src/screenshotTest/.../ReadmeScreenshots.kt`, generate con `sh ./gradlew :app:updateDebugScreenshotTest`
 e copiate a mano (istruzioni nel README). Mai dati reali negli screenshot o nelle preview: la repo è pubblica.
 
-Installazione sul telefono (Pixel, adb via TLS; il seriale IP non è stabile, controlla `adb devices`):
+Installazione sul telefono: `adb install -r app/build/outputs/apk/debug/app-debug.apk` (dispositivo in
+`CLAUDE.local.md`).
 
-```sh
-adb -s <device> install -r app/build/outputs/apk/debug/app-debug.apk
-```
+**La repo è pubblica**: niente credenziali, dati personali, percorsi locali o seriali di dispositivi nei file
+tracciati. Vanno in `CLAUDE.local.md` o `keystore.properties`, ignorati da git.
 
 ## Regole di lavoro
 

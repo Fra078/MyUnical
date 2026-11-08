@@ -21,3 +21,5 @@ __pycache__
 *.jks
 *.keystore
 /keystore.properties
+/app/release
+/CLAUDE.local.md
