@@ -41,6 +41,10 @@ sealed interface AppRoute : NavKey {
     @Serializable
     data class ContactDetail(val contactId: String) : AppRoute
 
+    /** An Esse3 page shown signed in; [url] is one of `Esse3Links`. */
+    @Serializable
+    data class Esse3Web(val url: String) : AppRoute
+
     /** [courseRowId] is the libretto row (adsceId) of the current career. */
     @Serializable
     data class CourseDetail(val courseRowId: Long) : AppRoute

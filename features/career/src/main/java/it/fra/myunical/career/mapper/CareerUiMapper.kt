@@ -1,6 +1,5 @@
 package it.fra.myunical.career.mapper
 
-import it.fra.myunical.career.models.CareerOption
 import it.fra.myunical.career.models.ExamFilter
 import it.fra.myunical.career.models.ExamGroup
 import it.fra.myunical.career.models.ExamRecord
@@ -11,8 +10,6 @@ import it.fra.myunical.domain.model.career.BookingState
 import it.fra.myunical.domain.model.career.CareerData
 import it.fra.myunical.domain.model.career.CareerOverview
 import it.fra.myunical.domain.model.career.ExamSession
-import it.fra.myunical.domain.model.general.CareerTrackModel
-import it.fra.myunical.domain.model.general.statusLabel
 import it.fra.myunical.domain.model.general.Course
 import it.fra.myunical.domain.model.general.ExamResult
 import java.time.Instant
@@ -37,14 +34,6 @@ fun CareerOverview.toUiModel() = OverviewUiModel(
     arithmeticAverage = arithmeticAverage.formatAverage(),
     graduationBase = graduationBase.formatAverage(),
     passedLabel = "$passedCount di $totalCount esami superati"
-)
-
-fun CareerTrackModel.toOption(selectedMatId: Int?) = CareerOption(
-    matId = matId,
-    name = name.toTitleCase(),
-    status = statusLabel,
-    matricola = matricola,
-    isSelected = matId == selectedMatId
 )
 
 fun CareerData.toExamGroups(filter: ExamFilter, sort: ExamSortOption, query: String): List<ExamGroup> {

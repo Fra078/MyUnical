@@ -20,7 +20,7 @@ Il client di login (`AuthRemoteDataSourceImpl`) manda invece le credenziali da v
 
 - `adsceId` è l'id della riga del libretto ed è il `courseRowId` della route `CourseDetail`.
 - Valori codificati Esse3 (stati, tipi attività LEZ/ESE/LAB...) in `network/mapper/Esse3Values.kt`.
-- Le pagine web Esse3 aperte nel browser sono in `core/ui/.../Esse3Links.kt`.
+- Le pagine web Esse3 sono in `core/ui/.../Esse3Links.kt` e si aprono nell'app già autenticate (Basic auth su `/auth/*`, vedi "Pagine Esse3 nell'app" in `features.md`).
 
 ## Storage portale — `https://storage.portale.unical.it/api/`
 

@@ -3,7 +3,7 @@ package it.fra.myunical.career.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import it.fra.myunical.career.mapper.toExamGroups
-import it.fra.myunical.career.mapper.toOption
+import it.fra.myunical.career.mapper.toTitleCase
 import it.fra.myunical.career.mapper.toUiModel
 import it.fra.myunical.career.models.CareerIntent
 import it.fra.myunical.career.models.CareerSection
@@ -13,7 +13,6 @@ import it.fra.myunical.career.models.ExamSortOption
 import it.fra.myunical.domain.model.career.CareerData
 import it.fra.myunical.domain.usecase.GetCareerDataUseCase
 import it.fra.myunical.domain.usecase.GetCurrentUserInfoUseCase
-import it.fra.myunical.domain.usecase.SetCurrentCareerUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -24,11 +23,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class CareerViewModel(
     private val getCareerData: GetCareerDataUseCase,
-    private val setCurrentCareer: SetCurrentCareerUseCase,
     getCurrentUserInfo: GetCurrentUserInfoUseCase
 ) : ViewModel() {
 
@@ -62,8 +59,7 @@ class CareerViewModel(
             isLoading = !load.loaded,
             isRefreshing = refreshing,
             hasError = load.hasError,
-            careerName = careers.firstOrNull { it.matId == data?.career?.matId }?.let { it.toOption(it.matId).name },
-            careers = careers.map { it.toOption(data?.career?.matId) },
+            careerName = careers.firstOrNull { it.matId == data?.career?.matId }?.name?.toTitleCase(),
             overview = data?.overview?.toUiModel(),
             section = controls.section,
             filter = controls.filter,
@@ -80,7 +76,6 @@ class CareerViewModel(
             is CareerIntent.SetFilter -> controls.update { it.copy(filter = intent.filter) }
             is CareerIntent.SetSort -> controls.update { it.copy(sort = intent.sort) }
             is CareerIntent.SetQuery -> controls.update { it.copy(query = intent.query) }
-            is CareerIntent.SwitchCareer -> viewModelScope.launch { setCurrentCareer(intent.matId) }
             CareerIntent.Refresh -> {
                 isRefreshing.value = true
                 getCareerData.refresh()

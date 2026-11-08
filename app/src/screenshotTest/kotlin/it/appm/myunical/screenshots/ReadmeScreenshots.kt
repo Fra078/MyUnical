@@ -19,7 +19,6 @@ import it.fra.myunical.canteen.models.CanteenUiState
 import it.fra.myunical.canteen.models.CourseUiModel
 import it.fra.myunical.canteen.models.DishUiModel
 import it.fra.myunical.canteen.presentation.CanteenScreen
-import it.fra.myunical.career.models.CareerOption
 import it.fra.myunical.career.models.CareerUiState
 import it.fra.myunical.career.models.ExamGroup
 import it.fra.myunical.career.models.ExamRecord
@@ -132,7 +131,6 @@ fun CareerScreenshot() = Phone {
             state = CareerUiState(
                 isLoading = false,
                 careerName = "Ingegneria Informatica",
-                careers = listOf(CareerOption(1, "Ingegneria Informatica", "Attiva", "204512", true)),
                 overview = OverviewUiModel(114, 180, 0.63f, "27,68", "27,76", "101,51", "15 di 23 esami superati"),
                 examGroups = listOf(
                     ExamGroup(

@@ -29,7 +29,7 @@ vengono cancellati, altrimenti dopo il logout il login riappariva in caricamento
 - `DepartmentNoticesSection`: ultimi 3 avvisi del dipartimento sotto il carosello (nascosta se il
   dipartimento è ignoto o non ci sono avvisi), "Vedi tutti" apre la scheda del dipartimento;
 - `NewsCarousel`, `QuickLinkSection` (azioni rapide in `models/QuickLink.kt`, ognuna con un `Accent`:
-  Esse3, Documenti = certificati Esse3 nel browser, Webmail, Biblioteche, Mappa; tutte aprono un Custom Tab);
+  Esse3, Documenti = certificati Esse3, Webmail, Biblioteche, Mappa). Nessun pulsante nella top bar: il portale si apre dall'azione rapida Esse3. I link passano da `LocalLinkOpener` (vedi "Pagine Esse3 nell'app");
 - `ProfileSheet`: profilo, cambio carriera e voci di menu (`ProfileDestination`). Studente: Libretto,
   Appelli, Bacheca esiti, Piano di studi, regolamenti del corso, Tasse. Servizi: Documenti e certificati
   (Esse3), Diritto allo studio (pagina unical.it), Rubrica, Portale. Campus: Webmail, Mensa (schermata
@@ -39,13 +39,23 @@ vengono cancellati, altrimenti dopo il logout il login riappariva in caricamento
   (ultimo) e "Regolamento della tua immatricolazione" (coorte), oppure una sola voce se coincidono.
 
 ## Carriera (`features/career`)
-- `CareerScreen`: libretto con filtri (`ExamFilter`) e ordinamento (`ExamSortOption`), appelli e
+- `CareerScreen`: il sottotitolo mostra la carriera corrente; il cambio carriera è solo nel `ProfileSheet` della Home. Libretto con filtri (`ExamFilter`) e ordinamento (`ExamSortOption`), appelli e
   prenotazioni. Dati da `GetCareerDataUseCase` (singleton, cache per carriera, `refresh()` incrementa
   la generazione).
 - `presentation/detail/CourseDetailScreen`: dettaglio esame del libretto (`AppRoute.CourseDetail(adsceId)`).
   Mostra subito i dati del libretto, poi carica la pagina pubblica del corso (`CatalogState`): fatti,
   carico di lavoro, docenti, sezioni HTML, link Teams. Esami a moduli/gruppi: chip per scegliere l'unità
   (`UnitOption`, etichette in `mapper/CourseDetailUiMapper.kt`). Logica di ricerca in `apis.md`.
+
+## Pagine Esse3 nell'app (`app/.../ui/screen/esse3/Esse3WebScreen.kt`)
+Esse3 accetta l'autenticazione Basic (401 + `WWW-Authenticate: Basic realm="ESSE3"` su `/auth/*`), che un Custom Tab
+non può inviare. `AppNavigation` fornisce `LocalLinkOpener` (`core/ui/LinkOpener.kt`; le feature usano
+`rememberLinkOpener()`): gli URL che `Esse3Links.isEsse3` riconosce aprono la route `Esse3Web(url)`, una WebView con
+header `Authorization` sulla prima richiesta (le credenziali da `GetSavedCredentialsUseCase`) e
+`onReceivedHttpAuthRequest` per i redirect; tutto il resto resta in Custom Tab. Le credenziali vanno solo
+all'host Esse3, i link ad altri siti escono in Custom Tab, i download usano `DownloadManager` con cookie e header, i
+cookie vengono cancellati alla chiusura. Chi apre un link Esse3 deve usare il
+opener, non `openInCustomTab`.
 
 ## Orario (`features/schedule`)
 - Un "provider" (`ScheduleProvider`) è un orario configurato dall'utente: corso di laurea (`cdsCode`,

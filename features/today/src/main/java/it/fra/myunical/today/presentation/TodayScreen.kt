@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
@@ -66,8 +65,7 @@ import it.fra.myunical.today.models.StudentHeaderInfo
 import it.fra.myunical.today.models.TuitionState
 import it.fra.myunical.today.models.UpcomingCommitment
 import it.fra.myunical.today.models.UpcomingCommitmentState
-import it.fra.myunical.ui.Esse3Links
-import it.fra.myunical.ui.components.openInCustomTab
+import it.fra.myunical.ui.rememberLinkOpener
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -84,7 +82,7 @@ fun TodayScreen(
     onOpenCanteen: () -> Unit,
     viewModel: TodayScreenViewModel = koinViewModel()
 ){
-    val context = LocalContext.current
+    val openLink = rememberLinkOpener()
     val studentInfo = viewModel.studentInfo.collectAsStateWithLifecycle().value
     val upcomingCommitment = viewModel.upcomingCommitment.collectAsStateWithLifecycle().value
     val tuitionState = viewModel.tuitionState.collectAsStateWithLifecycle().value
@@ -102,8 +100,7 @@ fun TodayScreen(
         notices = news,
         departmentNotices = departmentNotices,
         onAvatarClick = onOpenProfile,
-        onOpenPortalClick = { context.openInCustomTab(Esse3Links.HOME) },
-        onQuickLinkClick = { context.openInCustomTab(it.destinationUrl) },
+        onQuickLinkClick = { openLink(it.destinationUrl) },
         onNoticeClick = { onOpenNewsDetail(it.id) },
         onViewAllNoticesClick = onOpenNews,
         onViewAllDepartmentNoticesClick = onOpenDepartmentNews,
@@ -128,7 +125,6 @@ fun TodayScreen(
     modifier: Modifier = Modifier,
     departmentNotices: DepartmentNotices? = null,
     onAvatarClick: () -> Unit = {},
-    onOpenPortalClick: () -> Unit = {},
     onQuickLinkClick: (QuickLink) -> Unit = {},
     onNoticeClick: (NoticeUiModel) -> Unit = {},
     onViewAllNoticesClick: () -> Unit = {},
@@ -170,11 +166,6 @@ fun TodayScreen(
                             size = 40.dp,
                             contentDescription = "Apri il menù del profilo"
                         )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onOpenPortalClick) {
-                        Icon(Icons.Rounded.Language, contentDescription = "Apri il portale Esse3")
                     }
                 },
                 scrollBehavior = scrollBehavior

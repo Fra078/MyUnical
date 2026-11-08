@@ -1,5 +1,6 @@
 package it.fra.myunical.career.presentation.detail
 
+import it.fra.myunical.ui.rememberLinkOpener
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +60,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -85,7 +85,6 @@ import it.fra.myunical.ui.Esse3Links
 import it.fra.myunical.ui.components.EmptyState
 import it.fra.myunical.ui.components.GroupHeader
 import it.fra.myunical.ui.components.GroupedListItem
-import it.fra.myunical.ui.components.openInCustomTab
 import it.fra.myunical.ui.theme.extendedColors
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -98,14 +97,14 @@ fun CourseDetailScreen(
     viewModel: CourseDetailViewModel = koinViewModel(key = "course_$courseRowId") { parametersOf(courseRowId) }
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+    val openLink = rememberLinkOpener()
     CourseDetailScreen(
         state = state,
         onBack = onBack,
         onRetry = viewModel::retry,
         onSelectUnit = viewModel::selectUnit,
         onOpenContact = onOpenContact,
-        onOpenUrl = { context.openInCustomTab(it) }
+        onOpenUrl = { openLink(it) }
     )
 }
 

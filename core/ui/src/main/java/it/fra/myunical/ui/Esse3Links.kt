@@ -2,7 +2,11 @@ package it.fra.myunical.ui
 
 /** Pages of the Esse3 web portal; the ones under /auth ask for the web login first. */
 object Esse3Links {
-    private const val BASE = "https://unical.esse3.cineca.it"
+    const val HOST = "unical.esse3.cineca.it"
+    private const val BASE = "https://$HOST"
+
+    /** True for pages of the Esse3 web portal, the only ones the saved credentials may be sent to. */
+    fun isEsse3(url: String): Boolean = url.startsWith("https://$HOST/")
 
     const val HOME = "$BASE/Home.do"
     const val TAXES = "$BASE/auth/studente/Tasse/ListaFatture.do"

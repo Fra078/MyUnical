@@ -1,5 +1,6 @@
 package it.fra.myunical.taxes.presentation
 
+import it.fra.myunical.ui.rememberLinkOpener
 import android.content.ClipData
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -73,7 +74,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -92,7 +92,6 @@ import it.fra.myunical.taxes.models.TaxesUiState
 import it.fra.myunical.ui.Esse3Links
 import it.fra.myunical.ui.components.EmptyState
 import it.fra.myunical.ui.components.ShapeBadge
-import it.fra.myunical.ui.components.openInCustomTab
 import it.fra.myunical.ui.components.rememberGroupedItemShape
 import it.fra.myunical.ui.theme.extendedColors
 import kotlinx.coroutines.launch
@@ -104,12 +103,12 @@ fun TaxesScreen(
     viewModel: TaxesViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+    val openLink = rememberLinkOpener()
     TaxesScreen(
         state = state,
         onIntent = viewModel::onIntent,
         onBack = onBack,
-        onOpenPortal = { context.openInCustomTab(Esse3Links.TAXES) }
+        onOpenPortal = { openLink(Esse3Links.TAXES) }
     )
 }
 

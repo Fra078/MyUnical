@@ -42,7 +42,7 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
   `Main` contiene le tab (`MainTab`: HOME, CAREER, SCHEDULE) gestite da `MainScreen`.
 - Le altre schermate sono route a pieno schermo: `ScheduleProviders`, `ScheduleProviderEditor(providerId?)`,
   `Taxes`, `News(openDepartment)`, `NewsDetail(newsId: String)`, `Directory`, `ContactDetail(contactId)`,
-  `CourseDetail(courseRowId)`, `Canteen`.
+  `CourseDetail(courseRowId)`, `Canteen`, `Esse3Web(url)` (WebView autenticata, vedi `features.md`).
 - `AppNavigation.kt`: back stack con `rememberNavBackStack`, `entry<AppRoute.X>`; le callback
   `onOpenX` scendono da `MainScreen` alle tab (es. `TodayScreen`).
 - Transizioni in `NavTransitions.kt`; shared element tra card e schermate tramite

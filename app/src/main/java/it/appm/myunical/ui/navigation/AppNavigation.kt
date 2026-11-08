@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -15,6 +16,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
 import androidx.navigation3.ui.NavDisplay
+import it.appm.myunical.ui.screen.esse3.Esse3WebScreen
 import it.appm.myunical.ui.screen.main.MainScreen
 import it.fra.myunical.canteen.presentation.CanteenScreen
 import it.fra.myunical.career.presentation.detail.CourseDetailScreen
@@ -25,10 +27,13 @@ import it.fra.myunical.news.presentation.list.NewsListScreen
 import it.fra.myunical.schedule.presentation.editor.ScheduleProviderEditorScreen
 import it.fra.myunical.schedule.presentation.providers.ScheduleProvidersScreen
 import it.fra.myunical.taxes.presentation.TaxesScreen
+import it.fra.myunical.ui.Esse3Links
+import it.fra.myunical.ui.LocalLinkOpener
 import it.fra.myunical.ui.animation.LocalNavVisibilityScope
 import it.fra.myunical.ui.animation.LocalSharedCornerRegistry
 import it.fra.myunical.ui.animation.LocalSharedTransitionScope
 import it.fra.myunical.ui.animation.SharedCornerRegistry
+import it.fra.myunical.ui.components.openInCustomTab
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -40,12 +45,18 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     }
 
     val cornerRegistry = remember { SharedCornerRegistry() }
+    val context = LocalContext.current
+    // Esse3 pages open signed in inside the app, any other link in a Custom Tab
+    val openLink = remember<(String) -> Unit>(context) {
+        { url -> if (Esse3Links.isEsse3(url)) backStack.add(AppRoute.Esse3Web(url)) else context.openInCustomTab(url) }
+    }
 
     // Whatever the screens leave uncovered while they animate shows the theme, not the window
     SharedTransitionLayout(modifier.background(MaterialTheme.colorScheme.background)) {
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
-            LocalSharedCornerRegistry provides cornerRegistry
+            LocalSharedCornerRegistry provides cornerRegistry,
+            LocalLinkOpener provides openLink
         ) {
             NavDisplay(
                 backStack = backStack,
@@ -113,6 +124,9 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                             onBack = ::pop,
                             onOpenContact = { backStack.add(AppRoute.ContactDetail(it)) }
                         )
+                    }
+                    entry<AppRoute.Esse3Web> { route ->
+                        Esse3WebScreen(url = route.url, onBack = ::pop)
                     }
                     entry<AppRoute.ContactDetail> { route ->
                         ContactDetailScreen(contactId = route.contactId, onBack = ::pop)

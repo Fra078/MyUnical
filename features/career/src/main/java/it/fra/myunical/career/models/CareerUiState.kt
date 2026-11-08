@@ -8,7 +8,6 @@ data class CareerUiState(
     /** Last load failed; previous data, if any, is still shown. */
     val hasError: Boolean = false,
     val careerName: String? = null,
-    val careers: List<CareerOption> = emptyList(),
     val overview: OverviewUiModel? = null,
     val section: CareerSection = CareerSection.LIBRETTO,
     val filter: ExamFilter = ExamFilter.ALL,
@@ -19,19 +18,10 @@ data class CareerUiState(
     val sessions: List<SessionUiModel>? = emptyList()
 ) {
     val hasContent: Boolean get() = overview != null
-    val canSwitchCareer: Boolean get() = careers.size > 1
     val openSessionsCount: Int get() = sessions.orEmpty().count { it.state == BookingState.OPEN }
 }
 
 enum class CareerSection(val label: String) { LIBRETTO("Libretto"), SESSIONS("Appelli") }
-
-data class CareerOption(
-    val matId: Int,
-    val name: String,
-    val status: String,
-    val matricola: String,
-    val isSelected: Boolean
-)
 
 data class OverviewUiModel(
     val earnedCredits: Int,
@@ -70,6 +60,5 @@ sealed interface CareerIntent {
     data class SetFilter(val filter: ExamFilter) : CareerIntent
     data class SetSort(val sort: ExamSortOption) : CareerIntent
     data class SetQuery(val query: String) : CareerIntent
-    data class SwitchCareer(val matId: Int) : CareerIntent
     data object Refresh : CareerIntent
 }

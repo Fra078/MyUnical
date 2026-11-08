@@ -18,6 +18,7 @@ import it.fra.myunical.domain.usecase.GetMonthlyScheduleUseCase
 import it.fra.myunical.domain.usecase.GetNextLessonUseCase
 import it.fra.myunical.domain.usecase.GetNextMealUseCase
 import it.fra.myunical.domain.usecase.GetProfilePhotoUrlUseCase
+import it.fra.myunical.domain.usecase.GetSavedCredentialsUseCase
 import it.fra.myunical.domain.usecase.GetStudyPathsUseCase
 import it.fra.myunical.domain.usecase.GetTaxSummaryUseCase
 import it.fra.myunical.domain.usecase.LoginUseCase
@@ -35,6 +36,7 @@ import org.koin.dsl.module
 val domainModule = module {
     factoryOf(::LoginUseCase)
     factoryOf(::LogoutUseCase)
+    factoryOf(::GetSavedCredentialsUseCase)
     factoryOf(::GetAuthStateUseCase)
     factoryOf(::SaveCredentialsUseCase)
     factoryOf(::GetCurrentCareerUseCase)

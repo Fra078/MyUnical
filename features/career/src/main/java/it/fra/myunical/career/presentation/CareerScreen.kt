@@ -1,8 +1,8 @@
 package it.fra.myunical.career.presentation
 
+import it.fra.myunical.ui.rememberLinkOpener
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,7 +29,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.automirrored.rounded.Sort
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.CloudOff
@@ -85,7 +84,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -94,7 +92,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.fra.myunical.career.models.CareerIntent
-import it.fra.myunical.career.models.CareerOption
 import it.fra.myunical.career.models.CareerSection
 import it.fra.myunical.career.models.CareerUiState
 import it.fra.myunical.career.models.ExamFilter
@@ -107,7 +104,6 @@ import it.fra.myunical.domain.model.career.BookingState
 import it.fra.myunical.ui.Esse3Links
 import it.fra.myunical.ui.components.EmptyState
 import it.fra.myunical.ui.components.ShapeBadge
-import it.fra.myunical.ui.components.openInCustomTab
 import it.fra.myunical.ui.components.rememberGroupedItemShape
 import it.fra.myunical.ui.theme.Accent
 import it.fra.myunical.ui.theme.extendedColors
@@ -124,11 +120,11 @@ fun CareerScreen(
     viewModel: CareerViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+    val openLink = rememberLinkOpener()
     CareerScreen(
         state = state,
         onIntent = viewModel::onIntent,
-        onOpenPortal = { context.openInCustomTab(it) },
+        onOpenPortal = { openLink(it) },
         onOpenCourse = onOpenCourse,
         reselectSignal = reselectSignal
     )
@@ -148,7 +144,6 @@ fun CareerScreen(
     val listState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
     var showSortSheet by rememberSaveable { mutableStateOf(false) }
-    var showCareerSheet by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(reselectSignal) {
         if (reselectSignal > 0) listState.animateScrollToItem(0)
@@ -168,16 +163,6 @@ fun CareerScreen(
             onDismiss = { showSortSheet = false }
         )
     }
-    if (showCareerSheet) {
-        CareerPickerSheet(
-            careers = state.careers,
-            onSelect = {
-                onIntent(CareerIntent.SwitchCareer(it))
-                showCareerSheet = false
-            },
-            onDismiss = { showCareerSheet = false }
-        )
-    }
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -185,22 +170,11 @@ fun CareerScreen(
             LargeFlexibleTopAppBar(
                 title = { Text("Carriera", fontWeight = FontWeight.Bold) },
                 subtitle = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable(enabled = state.canSwitchCareer) { showCareerSheet = true }
-                    ) {
-                        Text(
-                            text = state.careerName.orEmpty(),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f, fill = false)
-                        )
-                        if (state.canSwitchCareer) {
-                            Icon(Icons.Rounded.ArrowDropDown, contentDescription = "Cambia carriera")
-                        }
-                    }
+                    Text(
+                        text = state.careerName.orEmpty(),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 },
                 actions = {
                     if (state.section == CareerSection.LIBRETTO) {
@@ -736,55 +710,6 @@ private fun SortBottomSheet(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CareerPickerSheet(
-    careers: List<CareerOption>,
-    onSelect: (Int) -> Unit,
-    onDismiss: () -> Unit
-) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        dragHandle = { BottomSheetDefaults.DragHandle() }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 32.dp)
-                .selectableGroup(),
-            verticalArrangement = Arrangement.spacedBy(2.dp)
-        ) {
-            Text(
-                "Cambia carriera",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-            Text(
-                "La carriera scelta viene usata anche per Home e Tasse.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = 8.dp, bottom = 12.dp)
-            )
-            careers.forEachIndexed { index, career ->
-                SheetOption(
-                    index = index,
-                    count = careers.size,
-                    selected = career.isSelected,
-                    title = career.name,
-                    subtitle = "${career.status} · Matr. ${career.matricola}",
-                    onClick = { onSelect(career.matId) },
-                    leading = {
-                        Icon(Icons.Rounded.School, contentDescription = null)
-                    }
-                )
-            }
-        }
-    }
-}
-
 @Composable
 private fun SheetOption(
     index: Int,
@@ -827,10 +752,6 @@ private fun CareerScreenPreview() {
             state = CareerUiState(
                 isLoading = false,
                 careerName = "Ingegneria Informatica",
-                careers = listOf(
-                    CareerOption(1, "Telecommunication Engineering", "Attiva", "204512", false),
-                    CareerOption(2, "Ingegneria Informatica", "Titolo conseguito", "123456", true)
-                ),
                 overview = OverviewUiModel(114, 180, 0.63f, "27,68", "27,76", "101,51", "15 di 23 esami superati"),
                 examGroups = listOf(
                     ExamGroup(

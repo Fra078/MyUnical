@@ -1,5 +1,6 @@
 package it.fra.myunical.today.composables
 
+import it.fra.myunical.ui.rememberLinkOpener
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -46,7 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -61,7 +61,6 @@ import it.fra.myunical.today.presentation.TodayScreenViewModel
 import it.fra.myunical.ui.Esse3Links
 import it.fra.myunical.ui.components.GroupHeader
 import it.fra.myunical.ui.components.GroupedListItem
-import it.fra.myunical.ui.components.openInCustomTab
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -133,7 +132,7 @@ fun ProfileMenu(
     onOpenCanteen: () -> Unit,
     viewModel: TodayScreenViewModel = koinViewModel()
 ) {
-    val context = LocalContext.current
+    val openLink = rememberLinkOpener()
     val profile by viewModel.profile.collectAsStateWithLifecycle()
     val regulations by viewModel.regulations.collectAsStateWithLifecycle()
     ProfileSheet(
@@ -144,7 +143,7 @@ fun ProfileMenu(
         onSelectCareer = viewModel::selectCareer,
         onNavigate = { destination ->
             when (destination) {
-                is ProfileDestination.Web -> context.openInCustomTab(destination.url)
+                is ProfileDestination.Web -> openLink(destination.url)
                 ProfileDestination.Taxes -> onOpenTaxes()
                 ProfileDestination.Directory -> onOpenDirectory()
                 ProfileDestination.Canteen -> onOpenCanteen()
