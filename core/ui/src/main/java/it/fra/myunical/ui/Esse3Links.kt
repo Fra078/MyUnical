@@ -8,7 +8,8 @@ object Esse3Links {
     /** True for pages of the Esse3 web portal, the only ones the saved credentials may be sent to. */
     fun isEsse3(url: String): Boolean = url.startsWith("https://$HOST/")
 
-    const val HOME = "$BASE/Home.do"
+    /** Signs in and lands on the student area; the public Home.do would show the logged-out page. */
+    const val HOME = "$BASE/auth/Logon.do"
     const val TAXES = "$BASE/auth/studente/Tasse/ListaFatture.do"
     const val EXAM_SESSIONS = "$BASE/auth/studente/Appelli/AppelliF.do"
     const val EXAM_BOOKINGS = "$BASE/auth/studente/Appelli/BachecaPrenotazioni.do"
