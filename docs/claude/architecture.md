@@ -39,7 +39,7 @@ features/<x>/src/main/java/it/fra/myunical/<x>/
 ## Navigazione (Navigation 3)
 
 - `app/.../ui/navigation/AppRoute.kt`: `sealed interface AppRoute : NavKey`, tutte `@Serializable`.
-  `Main` contiene le tab (`MainTab`: HOME, CAREER, SCHEDULE) gestite da `MainScreen`.
+  `Main` contiene le tab (`MainTab`: HOME, CAREER, SCHEDULE) gestite da `MainScreen` (stato = solo la tab corrente: il back da Carriera/Orario torna a Home, da Home esce).
 - Le altre schermate sono route a pieno schermo: `ScheduleProviders`, `ScheduleProviderEditor(providerId?)`,
   `Taxes`, `News(openDepartment)`, `NewsDetail(newsId: String)`, `Directory`, `ContactDetail(contactId)`,
   `CourseDetail(courseRowId)`, `Canteen`, `Esse3Web(url)` (WebView autenticata, vedi `features.md`).
