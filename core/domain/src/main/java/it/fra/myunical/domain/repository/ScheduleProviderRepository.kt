@@ -11,4 +11,6 @@ interface ScheduleProviderRepository {
 
     /** True when the user removed the automatic schedule of [careerMatId], so it must not be recreated. */
     suspend fun isCareerScheduleDismissed(careerMatId: Int): Boolean
+
+    suspend fun setCareerScheduleDismissed(careerMatId: Int, dismissed: Boolean)
 }

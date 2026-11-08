@@ -33,7 +33,6 @@ class ScheduleProviderRepositoryImpl(
         dataStore.edit { preferences ->
             val providers = preferences.readProviders()
             val dataModel = item.toDataModel()
-            item.careerMatId?.let { preferences.writeDismissed(preferences.readDismissed() - it) }
             val index = providers.indexOfFirst { it.id == item.id }
             preferences.writeProviders(
                 if (index == -1) providers + dataModel
@@ -44,14 +43,19 @@ class ScheduleProviderRepositoryImpl(
 
     override suspend fun removeProvider(id: String) {
         dataStore.edit { preferences ->
-            val providers = preferences.readProviders()
-            providers.find { it.id == id }?.careerMatId?.let { preferences.writeDismissed(preferences.readDismissed() + it) }
-            preferences.writeProviders(providers.filterNot { it.id == id })
+            preferences.writeProviders(preferences.readProviders().filterNot { it.id == id })
         }
     }
 
     override suspend fun isCareerScheduleDismissed(careerMatId: Int): Boolean =
         careerMatId in dataStore.data.first().readDismissed()
+
+    override suspend fun setCareerScheduleDismissed(careerMatId: Int, dismissed: Boolean) {
+        dataStore.edit { preferences ->
+            val current = preferences.readDismissed()
+            preferences.writeDismissed(if (dismissed) current + careerMatId else current - careerMatId)
+        }
+    }
 
     private fun Preferences.readDismissed(): Set<Int> =
         this[DISMISSED_KEY]?.let { json.decodeFromString<Set<Int>>(it) }.orEmpty()
@@ -69,7 +73,7 @@ class ScheduleProviderRepositoryImpl(
 
     private companion object {
         val PROVIDERS_KEY = stringPreferencesKey("providers")
-        val DISMISSED_KEY = stringPreferencesKey("dismissed_career_schedules")
+        val DISMISSED_KEY = stringPreferencesKey("career_schedules_removed_by_user")
     }
 
 }

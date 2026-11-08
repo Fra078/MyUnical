@@ -5,6 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import it.appm.myunical.ui.navigation.AppNavigation
@@ -17,6 +21,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : ComponentActivity() {
 
     private val getAuthState: GetAuthStateUseCase by inject()
+    private val sessionStores by lazy { ViewModelProvider(this)[SessionViewModelStores::class.java] }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +35,14 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MyUnicalApp(authState: AuthState){
+        val owner = remember(authState) { SessionViewModelStoreOwner(sessionStores.storeFor(authState), this) }
         AppTheme {
-            when(authState){
-                AuthState.Authenticated -> AppNavigation()
-                AuthState.Unauthenticated -> LoginScreen()
-                AuthState.Unknown -> Unit
+            CompositionLocalProvider(LocalViewModelStoreOwner provides owner) {
+                when (authState) {
+                    AuthState.Authenticated -> AppNavigation()
+                    AuthState.Unauthenticated -> LoginScreen()
+                    AuthState.Unknown -> Unit
+                }
             }
         }
     }

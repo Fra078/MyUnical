@@ -54,6 +54,7 @@ class GetNextLessonUseCaseTest {
             override suspend fun upsertProvider(item: ScheduleProvider) = Unit
             override suspend fun removeProvider(id: String) = Unit
             override suspend fun isCareerScheduleDismissed(careerMatId: Int) = false
+            override suspend fun setCareerScheduleDismissed(careerMatId: Int, dismissed: Boolean) = Unit
         }
         return GetNextLessonUseCase(repository, GetMonthlyScheduleUseCase(dataSource))
     }

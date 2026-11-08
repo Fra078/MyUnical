@@ -10,7 +10,9 @@ la carriera corrente è in `UserPreferenceRepository` (`Get/SetCurrentCareerUseC
 `LoginViewModel` ha due passi (`LoginStep`): credenziali e scelta della carriera. Con una sola carriera
 (o una sola attiva) entra subito; altrimenti elenca le carriere (attive per prime) e il tasto indietro
 torna alle credenziali. Gli errori sono `LoginError` (credenziali, rete, server), tradotti nella UI.
-Il salvataggio delle credenziali fa passare `MainActivity` a `AppNavigation`.
+Il salvataggio delle credenziali fa passare `MainActivity` a `AppNavigation`. I ViewModel stanno in uno
+store per stato di autenticazione (`SessionViewModelStores`): al cambio di stato quelli dell'altro stato
+vengono cancellati, altrimenti dopo il logout il login riappariva in caricamento con le vecchie credenziali.
 
 ## Home (`features/today`)
 `TodayScreenViewModel` combina più sorgenti, ognuna con stato proprio:
@@ -50,8 +52,10 @@ Il salvataggio delle credenziali fa passare `MainActivity` a `AppNavigation`.
   `career-<matId>` (`ScheduleProvider.careerMatId`) allineato alla carriera: `CareerScheduleBuilder` prende il
   regolamento della coorte (`findDegreeProgram`), sceglie il percorso con più esami non superati del libretto
   e traccia quegli esami. Non tocca orari modificati a mano (il salvataggio dell'editor azzera `careerMatId`),
-  non ricrea quello rimosso (`isCareerScheduleDismissed`) e non si crea se esiste già un orario manuale
-  dello stesso corso (evita lezioni doppie).
+  non ricrea quello rimosso dall'utente (lo segna `ScheduleProvidersViewModel.remove`, prima di cancellarlo;
+  l'annulla lo toglie) e non si crea se esiste già un orario manuale dello stesso corso (evita lezioni doppie;
+  questa rimozione non conta come scelta dell'utente). Osserva carriera e orari salvati insieme, quindi
+  reagisce subito se l'utente cancella l'orario manuale.
 - Colori dei corsi: `components/CourseColor.kt`.
 
 ## Tasse (`features/taxes`)

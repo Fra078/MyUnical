@@ -1,5 +1,6 @@
 package it.fra.myunical.domain.usecase
 
+import it.fra.myunical.domain.model.career.CareerData
 import it.fra.myunical.domain.model.degreeexplorer.DegreeProgram
 import it.fra.myunical.domain.model.degreeexplorer.StudyPath
 import it.fra.myunical.domain.model.general.Course
@@ -11,7 +12,7 @@ import it.fra.myunical.domain.repository.ScheduleProviderRepository
 import it.fra.myunical.domain.sources.UnicalStorageDataSource
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.combine
 import java.util.Locale
 
 /**
@@ -24,23 +25,27 @@ class SyncCareerScheduleUseCase(
     private val builder: CareerScheduleBuilder,
     private val providerRepository: ScheduleProviderRepository
 ) {
-    /** Suspends for as long as the career is observed; failures are ignored and retried on the next emission. */
+    /**
+     * Suspends for as long as the career and the stored schedules are observed: a schedule removed or
+     * edited elsewhere is taken into account at once. Failures are ignored and retried on the next change.
+     */
     suspend operator fun invoke() {
-        getCareerData().collectLatest { result ->
+        var syncedData: CareerData? = null
+        combine(getCareerData(), providerRepository.getProviders(), ::Pair).collectLatest { (result, providers) ->
             val data = result.getOrNull() ?: return@collectLatest
             val matId = data.career.matId
             val id = scheduleId(matId)
-            val existing = providerRepository.getProvider(id)
+            val existing = providers.find { it.id == id }
             if (existing != null && existing.careerMatId == null) return@collectLatest
+            val cdsCode = resolveCdsCode(data.career) ?: return@collectLatest
             // The student already follows this degree course by hand: a second schedule would repeat every lesson
-            val manual = providerRepository.getProviders().first()
-                .any { it.careerMatId == null && it.id != id && it.cdsCode == data.career.cdsCode }
-            if (manual) {
+            if (providers.any { it.careerMatId == null && it.id != id && it.cdsCode == cdsCode }) {
                 if (existing != null) providerRepository.removeProvider(id)
                 return@collectLatest
             }
             if (existing == null && providerRepository.isCareerScheduleDismissed(matId)) return@collectLatest
-            val cdsCode = resolveCdsCode(data.career) ?: return@collectLatest
+            // Already built from this libretto: other schedules changing is no reason to download it again
+            if (existing != null && data === syncedData) return@collectLatest
             val cohort = data.courses.cohortYear() ?: return@collectLatest
             val provider = try {
                 builder.build(id, matId, cdsCode, cohort, data.courses)
@@ -49,6 +54,7 @@ class SyncCareerScheduleUseCase(
             } catch (e: Exception) {
                 null
             } ?: return@collectLatest
+            syncedData = data
             if (provider != existing) providerRepository.upsertProvider(provider)
         }
     }

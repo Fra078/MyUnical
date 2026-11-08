@@ -18,10 +18,17 @@ class ScheduleProvidersViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     fun remove(provider: ScheduleProvider) {
-        viewModelScope.launch { providerRepository.removeProvider(provider.id) }
+        viewModelScope.launch {
+            // Marked first, or the career sync could recreate the schedule in between
+            provider.careerMatId?.let { providerRepository.setCareerScheduleDismissed(it, true) }
+            providerRepository.removeProvider(provider.id)
+        }
     }
 
     fun restore(provider: ScheduleProvider) {
-        viewModelScope.launch { providerRepository.upsertProvider(provider) }
+        viewModelScope.launch {
+            providerRepository.upsertProvider(provider)
+            provider.careerMatId?.let { providerRepository.setCareerScheduleDismissed(it, false) }
+        }
     }
 }
