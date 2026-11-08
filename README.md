@@ -68,6 +68,11 @@ features/       login, today (Home), career, schedule, taxes, news, directory, c
 
 Una descrizione più dettagliata di moduli, API e schermate è in [`docs/claude/`](docs/claude).
 
+## Installare l'app
+
+L'APK firmato dell'ultima versione è nella sezione **[Releases](../../releases)**. Dopo il download
+Android chiede di consentire l'installazione da sorgenti sconosciute.
+
 ## Compilare ed eseguire
 
 Servono Android Studio (o JDK 17+ e Android SDK 37) e un dispositivo con **Android 13** o superiore.
@@ -82,6 +87,26 @@ Test unitari:
 ```sh
 ./gradlew :core:domain:test :core:datastore:testDebugUnitTest :core:network:testDebugUnitTest
 ```
+
+### Release
+
+`./gradlew :app:assembleRelease` produce `app/build/outputs/apk/release/app-release.apk`, ridotto con R8
+(circa 5 MB). La firma legge `keystore.properties` nella radice del progetto (non è nel repository):
+
+```properties
+storeFile=/percorso/della/chiave.jks
+storePassword=...
+keyAlias=...
+keyPassword=...
+```
+
+Senza quel file il build usa la chiave di debug: va bene per provarlo, non per pubblicarlo.
+
+Per pubblicare una versione: alza `versionCode` e `versionName` in `app/build.gradle.kts`, committa, poi
+`git tag v1.1 && git push origin v1.1`. Il workflow `.github/workflows/release.yml` compila l'APK firmato e lo
+allega alla release. Servono quattro *secrets* nel repository (Settings → Secrets and variables → Actions):
+`RELEASE_KEYSTORE_BASE64` (`base64 -w0 chiave.jks`), `RELEASE_KEYSTORE_PASSWORD`, `RELEASE_KEY_ALIAS`
+e `RELEASE_KEY_PASSWORD`.
 
 ### Screenshot
 

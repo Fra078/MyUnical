@@ -29,6 +29,12 @@ sh ./gradlew :core:domain:test :core:datastore:testDebugUnitTest :core:network:t
 sh ./gradlew :app:assembleDebug --offline
 ```
 
+Release: `sh ./gradlew :app:assembleRelease` (R8 attivo, firma da `keystore.properties` o da variabili
+`RELEASE_*`, altrimenti chiave di debug). La chiave vera è in `~/.android-keys/myunical-release.jks`, fuori
+dal repository e da non perdere: senza, gli aggiornamenti non si installano sopra le versioni già
+distribuite. Con la chiave di debug il release si installa sopra il debug senza perdere i dati (con quella
+vera serve prima disinstallare). Pubblicazione: tag `v*` → `.github/workflows/release.yml`.
+
 Screenshot del README (`docs/screenshots/`): preview con dati inventati in
 `app/src/screenshotTest/.../ReadmeScreenshots.kt`, generate con `sh ./gradlew :app:updateDebugScreenshotTest`
 e copiate a mano (istruzioni nel README). Mai dati reali negli screenshot o nelle preview: la repo è pubblica.

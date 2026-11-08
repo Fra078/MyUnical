@@ -19,3 +19,10 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Navigation 3 restores the back stack by looking up the serializer of each route from its class
+-keep class it.appm.myunical.ui.navigation.AppRoute { *; }
+-keep class it.appm.myunical.ui.navigation.AppRoute$* { *; }
+-keepclassmembers class it.appm.myunical.ui.navigation.AppRoute$* {
+    *** Companion;
+    kotlinx.serialization.KSerializer serializer(...);
+}

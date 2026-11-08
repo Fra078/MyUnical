@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -25,9 +26,31 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // Release key: keystore.properties (local, ignored by git) or the CI environment variables
+    val keystoreProperties = Properties().apply {
+        rootProject.file("keystore.properties").takeIf { it.exists() }?.reader()?.use(::load)
+    }
+    fun signingValue(property: String, environment: String): String? =
+        keystoreProperties.getProperty(property) ?: System.getenv(environment)
+    val releaseKeyFile = signingValue("storeFile", "RELEASE_KEYSTORE_FILE")
+
+    signingConfigs {
+        if (releaseKeyFile != null) {
+            create("release") {
+                storeFile = file(releaseKeyFile)
+                storePassword = signingValue("storePassword", "RELEASE_KEYSTORE_PASSWORD")
+                keyAlias = signingValue("keyAlias", "RELEASE_KEY_ALIAS")
+                keyPassword = signingValue("keyPassword", "RELEASE_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            // Without a key the release build is signed with the debug one: fine to try it, not to publish
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -16,3 +16,8 @@ local.properties
 /menus/pages
 /tools/canteen/.venv
 __pycache__
+
+# Release signing: never commit keys or passwords
+*.jks
+*.keystore
+/keystore.properties
