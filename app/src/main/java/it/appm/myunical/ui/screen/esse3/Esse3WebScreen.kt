@@ -61,8 +61,9 @@ fun Esse3WebScreen(url: String, onBack: () -> Unit, modifier: Modifier = Modifie
     var title by remember { mutableStateOf("") }
     var progress by remember { mutableFloatStateOf(0f) }
     var webView by remember { mutableStateOf<WebView?>(null) }
+    var canGoBack by remember { mutableStateOf(false) }
 
-    BackHandler(enabled = webView?.canGoBack() == true) { webView?.goBack() }
+    BackHandler(enabled = canGoBack) { webView?.goBack() }
 
     Scaffold(
         modifier = modifier,
@@ -86,6 +87,7 @@ fun Esse3WebScreen(url: String, onBack: () -> Unit, modifier: Modifier = Modifie
                     onTitle = { title = it },
                     onProgress = { progress = it },
                     onCreated = { webView = it },
+                    onCanGoBack = { canGoBack = it },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -107,6 +109,7 @@ private fun Esse3WebView(
     onTitle: (String) -> Unit,
     onProgress: (Float) -> Unit,
     onCreated: (WebView) -> Unit,
+    onCanGoBack: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -143,10 +146,12 @@ private fun Esse3WebView(
 
                     override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                         onTitle("")
+                        onCanGoBack(view.canGoBack())
                     }
 
                     override fun onPageFinished(view: WebView, url: String) {
                         onTitle(view.title.orEmpty().removePrefix("Esse3 - "))
+                        onCanGoBack(view.canGoBack())
                     }
 
                     override fun onReceivedHttpAuthRequest(view: WebView, handler: HttpAuthHandler, host: String, realm: String?) {

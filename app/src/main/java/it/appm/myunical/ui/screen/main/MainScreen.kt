@@ -20,11 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import it.appm.myunical.ui.navigation.MainTab
 import it.appm.myunical.ui.navigation.fadeThrough
@@ -47,34 +44,18 @@ fun MainScreen(
     onOpenCanteen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    // Preserves tab history across configuration changes
-    val tabBackStack = rememberSaveable(
-        saver = listSaver(
-            save = { stateList -> stateList.map { it.name } },
-            restore = { savedList ->
-                // Tabs may have been renamed between app versions
-                savedList.mapNotNull { name -> MainTab.entries.firstOrNull { it.name == name } }
-                    .ifEmpty { listOf(MainTab.HOME) }
-                    .toMutableStateList()
-            }
-        )
-    ) {
-        mutableStateListOf(MainTab.HOME)
-    }
-
-    val currentTab = tabBackStack.last()
+    // Saved by name: tabs may have been renamed between app versions
+    var currentTabName by rememberSaveable { mutableStateOf(MainTab.HOME.name) }
+    val currentTab = MainTab.entries.firstOrNull { it.name == currentTabName } ?: MainTab.HOME
     // Tapping the selected Career tab again scrolls it back to the top
     var careerReselections by rememberSaveable { mutableIntStateOf(0) }
 
-    // Navigates back through tab history before delegating to root backstack
-    BackHandler(enabled = tabBackStack.size > 1) {
-        tabBackStack.removeAt(tabBackStack.lastIndex)
-    }
+    // Back from any other tab goes to Home; from Home it leaves the app
+    BackHandler(enabled = currentTab != MainTab.HOME) { currentTabName = MainTab.HOME.name }
 
     fun selectTab(targetTab: MainTab) {
         if (targetTab != currentTab) {
-            tabBackStack.remove(targetTab)
-            tabBackStack.add(targetTab)
+            currentTabName = targetTab.name
         } else if (targetTab == MainTab.CAREER) {
             careerReselections++
         }
