@@ -105,7 +105,8 @@ Senza quel file il build usa la chiave di debug: va bene per provarlo, non per p
 
 Per pubblicare una versione: alza `versionCode` e `versionName` in `app/build.gradle.kts`, committa, poi
 `git tag v1.1 && git push origin v1.1`. Il workflow `.github/workflows/release.yml` compila l'APK firmato e lo
-allega alla release. Servono quattro *secrets* nel repository (Settings → Secrets and variables → Actions):
+allega alla release insieme a `mapping.txt` di R8 (serve a decifrare gli stack trace offuscati). Prima
+controlla che il tag corrisponda a `versionName` (`v1.1` ↔ `"1.1"`) ed esegue i test unitari. Servono quattro *secrets* nel repository (Settings → Secrets and variables → Actions):
 `RELEASE_KEYSTORE_BASE64` (`base64 -w0 chiave.jks`), `RELEASE_KEYSTORE_PASSWORD`, `RELEASE_KEY_ALIAS`
 e `RELEASE_KEY_PASSWORD`.
 
