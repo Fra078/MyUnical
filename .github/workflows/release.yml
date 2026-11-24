@@ -1,6 +1,6 @@
 name: Release
 
-# Pushing a tag such as v1.0 builds the signed APK and attaches it to a GitHub release
+# Pushing a tag such as v1.0 builds the signed, R8-optimized APK and attaches it to a GitHub release
 on:
   push:
     tags: ["v*"]
@@ -21,6 +21,33 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      # Without the key the build would fail later with an obscure error (or, worse, use another key)
+      - name: Check the signing secrets
+        env:
+          KEYSTORE: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+        run: |
+          for name in KEYSTORE STORE_PASSWORD ALIAS KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Missing signing secret ($name): see the Release section of the README"
+              exit 1
+            fi
+          done
+
+      # A tag that disagrees with versionName means the version bump was forgotten
+      - name: Check the version
+        run: |
+          version=$(sed -n 's/^ *versionName = "\(.*\)"/\1/p' app/build.gradle.kts)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match versionName \"$version\" in app/build.gradle.kts"
+            exit 1
+          fi
+
+      - name: Run the unit tests
+        run: sh ./gradlew :core:domain:test :core:datastore:testDebugUnitTest :core:network:testDebugUnitTest
+
       - name: Decode the signing key
         run: echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
 
@@ -32,11 +59,16 @@ jobs:
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: sh ./gradlew :app:assembleRelease
 
-      - name: Name the APK after the tag
-        run: cp app/build/outputs/apk/release/app-release.apk "MyUnical-${GITHUB_REF_NAME}.apk"
+      # The R8 mapping turns obfuscated stack traces from users back into readable ones
+      - name: Name the files after the tag
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk "MyUnical-${GITHUB_REF_NAME}.apk"
+          cp app/build/outputs/mapping/release/mapping.txt "MyUnical-${GITHUB_REF_NAME}-mapping.txt"
 
       - name: Publish the release
         uses: softprops/action-gh-release@v2
         with:
-          files: MyUnical-*.apk
+          files: |
+            MyUnical-*.apk
+            MyUnical-*-mapping.txt
           generate_release_notes: true
